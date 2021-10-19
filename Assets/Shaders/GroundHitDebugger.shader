@@ -1,4 +1,4 @@
-Shader "Unlit/GroundHitDebugger"
+Shader "Unlit/Debug/GroundHitDebugger"
 {
     Properties
     {

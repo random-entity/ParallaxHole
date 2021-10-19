@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_GroundHitDebugger
-  m_Shader: {fileID: 4800000, guid: b5e77d0d5e8ad4e498ab2a1fbf3811f4, type: 3}
+  m_Name: Unlit Vertex Projection
+  m_Shader: {fileID: 4800000, guid: 266c99ee644354f4e855ec959674fcc4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -18,9 +18,12 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
-    m_Floats:
-    - _x: 0.5
-    - _y: 0.5
-    m_Colors: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 2ef8c4b4f369147069f65bb90edcd02f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _Eye: {r: 0, g: 2, b: 0, a: 1}
   m_BuildTextureStacks: []
