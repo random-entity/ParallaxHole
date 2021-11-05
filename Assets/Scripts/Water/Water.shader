@@ -6,6 +6,7 @@ Shader "Random Entity/Water"
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
+        _WaterSurfaceY ("Water Surface Y", Float) = -0.25
     }
     SubShader
     {
@@ -28,28 +29,35 @@ Shader "Random Entity/Water"
         half _Metallic;
         fixed4 _Color;
 
-        uniform float4 _WaveSourcesInfo[100]; // xy = waveSource position xz, z = timeSinceEnabled / maxTime (0 ~ 1), w = gameObject.isActiveInHierarchy
+        // array size should match WaveSourceManager.size
+        uniform float4 _WaveSourcesData[25]; // xy = waveSource position xz, z = timeSinceEnabled / maxTime (0 ~ 1), w = gameObject.isActiveInHierarchy
+        uniform float _WaterSurfaceY;
 
         void vert (inout appdata_full data){
             float3 pos = data.vertex.xyz;
             float3 worldPos = mul(unity_ObjectToWorld, pos);
             
-            for(int i = 0; i < 100; i++) {
-                float4 waveSourceInfo = _WaveSourcesInfo[i];
-                if(waveSourceInfo.w != 1) continue;
+            float waveY = 0;
+            int activeSourceCount = 0;
+
+            for(int i = 0; i < 25; i++) { // max index should match WaveSourceManager.size
+                float4 waveSourceData = _WaveSourcesData[i];
+                if(waveSourceData.w != 1) continue;
                 else {
-                    float3 waveSourcePos = float3(waveSourceInfo.x, 0, waveSourceInfo.z);
-                    float progress = waveSourceInfo.z;
+                    float3 waveSourcePos = float3(waveSourceData.x, _WaterSurfaceY, waveSourceData.y);
+                    float progress = waveSourceData.z;
 
                     float3 dir = worldPos - waveSourcePos;
                     float sqrDist = dot(dir, dir);
                     float dist = sqrt(sqrDist);
 
-                    float yOffset = 0.1 * progress * sin(UNITY_PI * dist + progress) / max(0.25, sqrDist);
-                    worldPos.y += yOffset;
+                    waveY += 0.5 * (1 + cos(UNITY_PI * progress)) * sin(2 * UNITY_PI * (2 * dist - 4 * progress)) / (1 + 16 * sqrDist);
+                    activeSourceCount++;
                 }
             }
 
+            if(activeSourceCount > 1) waveY /= sqrt((float)activeSourceCount);
+            worldPos.y += waveY;
             data.vertex.xyz = mul(unity_WorldToObject, worldPos);
         }
 

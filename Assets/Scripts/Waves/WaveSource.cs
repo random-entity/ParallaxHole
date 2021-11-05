@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WaveSource : MonoBehaviour
 {
-    private static readonly float maxTime = 4f;
+    private static readonly float maxTime = 8f;
     [SerializeField] private float timeSinceEnabled; // 0에서 시작하는 게 있는 게 파동 계산에 편하니까
 
     public float GetProgress()
@@ -26,7 +26,7 @@ public class WaveSource : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public Vector4 GetFloat4Info()
+    public Vector4 GetDataFloat4()
     {
         return new Vector4
         (

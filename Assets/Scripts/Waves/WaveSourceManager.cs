@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WaveSourceManager : MonoBehaviour
 {
-    private int size = 100; // Water.shader의 _WaveSources array size와 동일해야 함.
+    private static int size = 25; // Water.shader의 _WaveSources array size와 동일해야 함.
     [SerializeField] private WaveSource waveSourcePrefab;
     public Queue<WaveSource> waveSourceQueue;
-    [SerializeField] private HeadTracker headTracker;
+    [SerializeField] private SimulationHeadTracker headTracker;
     [SerializeField] private float headSqrSpeedThreshold;
     [SerializeField] private float speedCheckInterval = 0.05f;
     [SerializeField] Material waterMaterial;
@@ -27,9 +27,9 @@ public class WaveSourceManager : MonoBehaviour
         StartCoroutine(checkHeadSqrSpeedAndSpawn());
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        waterMaterial.SetVectorArray("_WaveSourcesInfo", getFloat4InfoArray());
+        waterMaterial.SetVectorArray("_WaveSourcesData", getDataFloat4Array());
     }
 
     public void Spawn(Vector3 position)
@@ -48,20 +48,20 @@ public class WaveSourceManager : MonoBehaviour
         {
             if (headTracker.GetSqrSpeed() > headSqrSpeedThreshold)
             {
-                Spawn(headTracker.headPosition);
+                Spawn(headTracker.EyePosition);
             }
             yield return new WaitForSeconds(speedCheckInterval);
         }
     }
 
-    private Vector4[] getFloat4InfoArray()
+    private Vector4[] getDataFloat4Array()
     {
         Vector4[] arr = new Vector4[size];
 
         int index = 0;
         foreach (WaveSource waveSource in waveSourceQueue)
         {
-            arr[index++] = waveSource.GetFloat4Info();
+            arr[index++] = waveSource.GetDataFloat4();
         }
 
         return arr;

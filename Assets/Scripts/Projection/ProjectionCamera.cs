@@ -11,7 +11,7 @@ public class ProjectionCamera : MonoBehaviour
 
     [Header("Projection plane")]
     public ProjectionPlane projectionPlane;
-    public bool NearPlaneIsProjectionPlane;
+    public bool ProjectionPlaneIsNearPlane;
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class ProjectionCamera : MonoBehaviour
 
         float d = -Vector3.Dot(va, vn);
 
-        if (NearPlaneIsProjectionPlane) cam.nearClipPlane = d;
+        if (ProjectionPlaneIsNearPlane) cam.nearClipPlane = d;
         float n = cam.nearClipPlane;
         float f = cam.farClipPlane;
 
@@ -59,9 +59,6 @@ public class ProjectionCamera : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (projectionPlane != null)
-        {
-            setMatrices();
-        }
+        setMatrices();
     }
 }
