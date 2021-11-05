@@ -13,8 +13,14 @@ public class WaveSource : MonoBehaviour
 
     private void OnEnable()
     {
+        WaveSourceManager.activeWaveSourceCount++;
         timeSinceEnabled = 0f;
         StartCoroutine(CountdownDisable());
+    }
+    private void OnDisable()
+    {
+        timeSinceEnabled = maxTime;
+        WaveSourceManager.activeWaveSourceCount--;
     }
     private IEnumerator CountdownDisable()
     {
@@ -31,9 +37,9 @@ public class WaveSource : MonoBehaviour
         return new Vector4
         (
             transform.position.x,
+            WaterSurfaceY.waterSurfaceY,
             transform.position.z,
-            timeSinceEnabled / maxTime,
-            gameObject.activeInHierarchy ? 1f : 0f
+            GetProgress()
         );
     }
 

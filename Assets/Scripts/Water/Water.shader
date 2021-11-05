@@ -6,7 +6,8 @@ Shader "Random Entity/Water"
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
-        _WaterSurfaceY ("Water Surface Y", Float) = -0.25
+        _WaveAmp ("Wave Amplitude", Range(0,1)) = 0.5
+        _ActiveWaveSourceCountSmooth ("Active Wave Source Count Smooth", Float) = 1
     }
     SubShader
     {
@@ -30,12 +31,13 @@ Shader "Random Entity/Water"
         fixed4 _Color;
 
         // array size should match WaveSourceManager.size
-        uniform float4 _WaveSourcesData[25]; // xy = waveSource position xz, z = timeSinceEnabled / maxTime (0 ~ 1), w = gameObject.isActiveInHierarchy
-        uniform float _WaterSurfaceY;
+        uniform float4 _WaveSourcesData[25]; // xyz = waveSource position xyz, w = timeSinceEnabled / maxTime (0 ~ 1)
+        uniform float _WaveAmp;
+        uniform float _ActiveWaveSourceCountSmooth;
 
-        void sinWave(float3 waveSourceData, inout float sinWaveY, float worldPos) {
-            float3 waveSourcePos = float3(waveSourceData.x, _WaterSurfaceY, waveSourceData.y);
-            float progress = waveSourceData.z;
+        void sinWave(float4 waveSourceData, inout float sinWaveY, float3 worldPos) {
+            float3 waveSourcePos = waveSourceData.xyz;
+            float progress = waveSourceData.w;
 
             float3 dir = worldPos - waveSourcePos;
             float sqrDist = dot(dir, dir);
@@ -49,20 +51,14 @@ Shader "Random Entity/Water"
             float3 worldPos = mul(unity_ObjectToWorld, pos);
             
             float sinWaveY = 0;
-            int activeSourceCount = 0;
 
             for(int i = 0; i < 25; i++) { // max index should match WaveSourceManager.size
-                float4 waveSourceData = _WaveSourcesData[i];
-                if(waveSourceData.w != 1) continue;
-                else {
-                    sinWave(waveSourceData.xyz, sinWaveY, worldPos);
-                    activeSourceCount++;
-                }
+                sinWave(_WaveSourcesData[i], sinWaveY, worldPos);
             }
 
-            if(activeSourceCount > 1) sinWaveY /= sqrt((float)activeSourceCount);
+            sinWaveY *= _WaveAmp / sqrt(_ActiveWaveSourceCountSmooth);
             worldPos.y += sinWaveY;
-            data.vertex.xyz = mul(unity_WorldToObject, worldPos);
+            data.vertex = mul(unity_WorldToObject, worldPos);
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)

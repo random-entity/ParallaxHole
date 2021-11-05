@@ -2,13 +2,9 @@ using UnityEngine;
 
 public class WaterSurfaceY : MonoBehaviour
 {
-    [SerializeField] private Material waterMaterial;
-    private void Awake()
+    public static float waterSurfaceY;
+    private void FixedUpdate()
     {
-        waterMaterial.SetFloat("_WaterSurfaceY", transform.position.y);
+        waterSurfaceY = transform.position.y;
     }
-    // private void FixedUpdate()
-    // {
-    //     waterMaterial.SetFloat("_WaterSurfaceY", transform.position.y);
-    // }
 }

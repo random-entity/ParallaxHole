@@ -24,9 +24,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _ActiveWaveSourceCountSmooth: 16.092964
     - _Glossiness: 1
     - _Metallic: 0
     - _WaterSurfaceY: -0.25
+    - _WaveAmp: 0.5
     m_Colors:
     - _Color: {r: 0.4672481, g: 0.7924528, b: 0.72679484, a: 0.21176471}
   m_BuildTextureStacks: []

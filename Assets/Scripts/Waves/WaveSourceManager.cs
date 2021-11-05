@@ -7,6 +7,8 @@ public class WaveSourceManager : MonoBehaviour
     private static int size = 25; // Water.shader의 _WaveSources array size와 동일해야 함.
     [SerializeField] private WaveSource waveSourcePrefab;
     public Queue<WaveSource> waveSourceQueue;
+    public static int activeWaveSourceCount = 0; // WaveSource.OnEnable(), OnDisable()에서 increment, decrement
+    private static float activeWaveSourceCountSmooth = 1f;
     [SerializeField] private SimulationHeadTracker headTracker;
     [SerializeField] private float headSqrSpeedThreshold;
     [SerializeField] private float speedCheckInterval = 0.05f;
@@ -27,9 +29,13 @@ public class WaveSourceManager : MonoBehaviour
         StartCoroutine(checkHeadSqrSpeedAndSpawn());
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         waterMaterial.SetVectorArray("_WaveSourcesData", getDataFloat4Array());
+
+        activeWaveSourceCountSmooth = Mathf.Lerp(activeWaveSourceCountSmooth, (float)activeWaveSourceCount, 0.001f);
+        activeWaveSourceCountSmooth = Mathf.Max(activeWaveSourceCountSmooth, 1f);
+        waterMaterial.SetFloat("_ActiveWaveSourceCountSmooth", activeWaveSourceCountSmooth);
     }
 
     public void Spawn(Vector3 position)
