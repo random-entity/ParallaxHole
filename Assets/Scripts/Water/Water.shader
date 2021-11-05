@@ -40,26 +40,46 @@ Shader "Random Entity/Water"
         fixed4 _Color;
 
         // array size should match WaveSourceManager.size
-        uniform float4 _WaveSourcesData[25]; // xyz = waveSource position xyz, w = timeSinceEnabled / maxTime (0 ~ 1)
+        uniform float4 _WaveSourcesData[200]; // xyz = waveSource position xyz, w = timeSinceEnabled / maxTime (0 ~ 1)
         uniform float _WaveAmp;
         uniform float _ActiveWaveSourceCountSmooth;
 
-        void sinWave(inout float sinWaveY, float3 worldDirFromWaveSource, float progress) {            
+        void sinWave(inout float sinWaveY, float3 worldDirFromWaveSource, float progress) {         
+            if(progress >= 1) return;
+
             float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
             float dist = sqrt(sqrDist);
 
+            // 1. simplest
+            // sinWaveY += 0.5 * (1 + cos(UNITY_PI * progress)) * sin(2 * UNITY_PI * (2 * dist - 4 * progress)) / (1 + 8 * sqrDist);
 
+            // 2. thoughtful
+            // float peakAmpProgress = min(0.1 * dist, 0.9);
+            // float ampByDistAndTime;
+            // if(progress < peakAmpProgress) {
+            //     ampByDistAndTime = 0.5 * (1 - cos(UNITY_PI * progress / peakAmpProgress));
+            // } else {
+            //     ampByDistAndTime = 0.5 * (1 + cos(UNITY_PI * (progress - peakAmpProgress) / (1 - peakAmpProgress)));
+            // }
+            // sinWaveY += ampByDistAndTime * sin(2 * UNITY_PI * (2 * dist - 4 * progress)) / (1 + 8 * sqrDist);
 
-
-
-            sinWaveY += 0.5 * (1 + cos(UNITY_PI * progress)) * sin(2 * UNITY_PI * (2 * dist - 4 * progress)) / (1 + 8 * sqrDist);
+            // 3. simpler thoughtful
+            float waveStartProgress = abs(0.1 * (dist - 0.1));
+            float progressTrimmed = progress - waveStartProgress;
+            if(progressTrimmed > 0) {
+                float amp = sin(2 * UNITY_PI * 2 * progressTrimmed);
+                float damp = 0.5 * (1 + cos(UNITY_PI * progress));
+                sinWaveY += amp * damp * sin(2 * UNITY_PI * (4 * dist - 4 * progress)) / (1 + 8 * sqrDist);
+            }
 
             // to do : tangent/bitangent/normal setting
         }
 
         void gertsnerWave(inout float3 gertsnerWaveXYZ, float3 worldDirFromWaveSource, float progress) {
             float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
-            float dist = sqrt(sqrDist);
+            float dist = sqrt(sqrt(sqrDist));
+
+
         }
 
         void vert (inout appdata_full data){
@@ -69,7 +89,7 @@ Shader "Random Entity/Water"
             float sinWaveY = 0;
             float3 gertsnerWaveXYZ = 0;
 
-            for(int i = 0; i < 25; i++) { // max index should match WaveSourceManager.size
+            for(int i = 0; i < 200; i++) { // max index should match WaveSourceManager.size
                 float4 waveSourceData = _WaveSourcesData[i];
                 float3 waveSourceWorldPos = waveSourceData.xyz;
                 float progress = waveSourceData.w;

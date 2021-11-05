@@ -281,7 +281,7 @@ Transform:
   m_GameObject: {fileID: 223302249}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.25, z: 0}
-  m_LocalScale: {x: 0.03, y: 1, z: 0.03}
+  m_LocalScale: {x: 0.015, y: 1, z: 0.015}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -298,7 +298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0939ae89ff8cb4da9a367458fe34e08f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterMaterial: {fileID: 2100000, guid: 2804a63deb1f54e3f8ffb7463830957c, type: 2}
 --- !u!1 &613871023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,7 +1522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26a4063acb32d4babb69e859eb46c96a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Size: {x: 3, y: 3}
+  Size: {x: 2, y: 2}
   AspectRatio: {x: 1, y: 1}
   LockAspectRatio: 1
   DrawGizmo: 1
@@ -1571,7 +1570,7 @@ Transform:
   m_GameObject: {fileID: 1835982166}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 10, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaveSourceManager : MonoBehaviour
 {
-    private static int size = 25; // Water.shader의 _WaveSources array size와 동일해야 함.
+    private static int size = 200; // Water.shader의 _WaveSources array size와 동일해야 함.
     [SerializeField] private WaveSource waveSourcePrefab;
     public Queue<WaveSource> waveSourceQueue;
     public static int activeWaveSourceCount = 0; // WaveSource.OnEnable(), OnDisable()에서 increment, decrement
@@ -33,7 +33,7 @@ public class WaveSourceManager : MonoBehaviour
     {
         waterMaterial.SetVectorArray("_WaveSourcesData", getDataFloat4Array());
 
-        activeWaveSourceCountSmooth = Mathf.Lerp(activeWaveSourceCountSmooth, (float)activeWaveSourceCount, 0.001f);
+        activeWaveSourceCountSmooth = Mathf.Lerp(activeWaveSourceCountSmooth, (float)activeWaveSourceCount, 0.02f);
         activeWaveSourceCountSmooth = Mathf.Max(activeWaveSourceCountSmooth, 1f);
         waterMaterial.SetFloat("_ActiveWaveSourceCountSmooth", activeWaveSourceCountSmooth);
     }
