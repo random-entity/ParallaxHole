@@ -2,19 +2,29 @@ Shader "Random Entity/Water"
 {
     Properties
     {
-        [Header(Default Surface Shader Properties)] [Space]
+        [Header(Default Surface Shader Properties)] 
+        [Space]
         _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
-        [Header(Wave Mixer)] [Space]
-        _WaveMix ("0 Full Sine, 1 Full Gerstner", Range(0,1)) = 0
+        [Header(Wave Mixer)] 
+        [Space]
+        _WaveMix ("Wave Mix", Range(0,1)) = 0 // 0 = full sine, 1 = full gerstner
+        
+        [Header(WaveSource Properties (from WaveSourceManager))]
+        [Space]
+        _ActiveWaveSourceCountSmooth ("Active Wave Source Count Smooth", Float) = 1 // wave source 개수 많아지면 그만큼 나누기 위함, 쌩 값으로 받는 것보다 네제곱근 정도가 자연스러워 보여서 4제곱근 때려서 보내 줌.
+        _WaveSourceMaxTime ("Wave Source MaxTime", Float) = 8 // WaveSourceManager.Awake()에서 시작할 때 딱 한 번만(!) 보내 줌. 어디에서 보내주기가 애매한 데이터라 그냥 그렇게 해.
 
-        [Header(Sine Wave Properties)] [Space]
-        _WaveAmp ("Wave Amplitude", Range(0,1)) = 0.5
-        _ActiveWaveSourceCountSmooth ("Active Wave Source Count Smooth", Float) = 1
-
+        [Header(Sine Wave Properties)] 
+        [Space]
+        _SineWaveAmp ("Sine Wave Amplitude", Range(0,1)) = 0.15
+        _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.25
+        _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
+        _SineWaveDistanceDamp ("1 + a dist^2", Range(1, 16)) = 8
+        
         // [Header(Gerstner Wave Properties)]
         
     }
@@ -39,55 +49,60 @@ Shader "Random Entity/Water"
         half _Metallic;
         fixed4 _Color;
 
+        // WaveSource Properties
         // array size should match WaveSourceManager.size
         uniform float4 _WaveSourcesData[200]; // xyz = waveSource position xyz, w = timeSinceEnabled / maxTime (0 ~ 1)
-        uniform float _WaveAmp;
         uniform float _ActiveWaveSourceCountSmooth;
+        uniform float _WaveSourceMaxTime;
 
-        void sinWave(inout float sinWaveY, float3 worldDirFromWaveSource, float progress) {         
+        // Sine Wave Properties
+        uniform float _SineWaveAmp;
+        uniform float _SineWaveLength;
+        uniform float _SineWaveSpeed;
+        uniform float _SineWaveDistanceDamp;
+
+        void sineWave(inout float3 displacement, inout float3 tangent, inout float3 bitangent, float3 worldDirFromWaveSource, float progress) {         
             if(progress >= 1) return;
 
             float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
             float dist = sqrt(sqrDist);
 
-            // 1. simplest
-            // sinWaveY += 0.5 * (1 + cos(UNITY_PI * progress)) * sin(2 * UNITY_PI * (2 * dist - 4 * progress)) / (1 + 8 * sqrDist);
+            float time = progress * _WaveSourceMaxTime;
 
-            // 2. thoughtful
-            // float peakAmpProgress = min(0.1 * dist, 0.9);
-            // float ampByDistAndTime;
-            // if(progress < peakAmpProgress) {
-            //     ampByDistAndTime = 0.5 * (1 - cos(UNITY_PI * progress / peakAmpProgress));
-            // } else {
-            //     ampByDistAndTime = 0.5 * (1 + cos(UNITY_PI * (progress - peakAmpProgress) / (1 - peakAmpProgress)));
-            // }
-            // sinWaveY += ampByDistAndTime * sin(2 * UNITY_PI * (2 * dist - 4 * progress)) / (1 + 8 * sqrDist);
+            float startTime = 0.5 * dist / _SineWaveSpeed;
+            float timeSinceStart = time - startTime;
+            if(timeSinceStart < 0) return;
 
-            // 3. simpler thoughtful
-            float waveStartProgress = abs(0.1 * (dist - 0.1));
-            float progressTrimmed = progress - waveStartProgress;
-            if(progressTrimmed > 0) {
-                float amp = sin(2 * UNITY_PI * 2 * progressTrimmed);
-                float damp = 0.5 * (1 + cos(UNITY_PI * progress));
-                sinWaveY += amp * damp * sin(2 * UNITY_PI * (4 * dist - 4 * progress)) / (1 + 8 * sqrDist);
-            }
+            float localAmpByTime = saturate(128 * timeSinceStart);
+            float globalDampByTime = 0.5 * (1 + cos(UNITY_PI * progress));
+
+            float wave = cos(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength);
+            float globalAmpDivideByDist = 1 + _SineWaveDistanceDamp * sqrDist;
+            
+            displacement.y += globalDampByTime * localAmpByTime * wave / globalAmpDivideByDist;
 
             // to do : tangent/bitangent/normal setting
+
+            float3 waveDerivative = -sin(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength) * (2 * UNITY_PI / _SineWaveLength) * (worldDirFromWaveSource / dist);
+            float3 globalAmpDivideByDistDerivative = _SineWaveDistanceDamp * 2 * worldDirFromWaveSource;
+
+            float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDistDerivative * globalAmpDivideByDistDerivative);
+            tangent.y += yDerivatives.x;
+            bitangent.y += yDerivatives.z;
         }
 
-        void gertsnerWave(inout float3 gertsnerWaveXYZ, float3 worldDirFromWaveSource, float progress) {
-            float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
-            float dist = sqrt(sqrt(sqrDist));
+        // void gertsnerWave(inout float3 gertsnerWaveXYZ, float3 worldDirFromWaveSource, float progress) {
+        //     float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
+        //     float dist = sqrt(sqrDist);
+        // }
 
-
-        }
-
-        void vert (inout appdata_full data){
-            float3 pos = data.vertex.xyz;
-            float3 worldPos = mul(unity_ObjectToWorld, pos);
+        void vert (inout appdata_full data) {
+            float3 vertex = data.vertex.xyz;
+            float3 worldPos = mul(unity_ObjectToWorld, vertex);
             
-            float sinWaveY = 0;
-            float3 gertsnerWaveXYZ = 0;
+            float3 displacement = 0;
+            float3 tangent = float3(1, 0, 0);
+            float3 bitangent = float3(0, 0, 1);
 
             for(int i = 0; i < 200; i++) { // max index should match WaveSourceManager.size
                 float4 waveSourceData = _WaveSourcesData[i];
@@ -95,16 +110,23 @@ Shader "Random Entity/Water"
                 float progress = waveSourceData.w;
                 float3 worldDirFromWaveSource = worldPos - waveSourceWorldPos;
 
-                sinWave(sinWaveY, worldDirFromWaveSource, progress);
+                sineWave(displacement, tangent, bitangent, worldDirFromWaveSource, progress);
             }
 
-            sinWaveY *= _WaveAmp / sqrt(_ActiveWaveSourceCountSmooth);
-            worldPos.y += sinWaveY;
+            displacement *= _SineWaveAmp / _ActiveWaveSourceCountSmooth;
+            tangent = normalize(tangent);
+            bitangent = normalize(bitangent);
+            float3 normal = normalize(cross(tangent, bitangent));
+            // 상수 곱하기는 tangent 한테도 해줘야? 어차피 normalize하니까 그게 그거 아닌가
+            worldPos.y += displacement;
             data.vertex = mul(unity_WorldToObject, worldPos);
+            data.tangent = mul(unity_WorldToObject, tangent);
+            data.normal = mul(unity_WorldToObject, normal);
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
+            
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;

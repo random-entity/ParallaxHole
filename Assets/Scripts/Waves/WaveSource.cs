@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class WaveSource : MonoBehaviour
 {
-    private static readonly float maxTime = 8f;
+    public static readonly float MaxTime = 8f;
     [SerializeField] private float timeSinceEnabled; // 0에서 시작하는 게 있는 게 파동 계산에 편하니까
+    private MeshRenderer meshRenderer;
 
     public float GetProgress()
     {
-        return timeSinceEnabled / maxTime;
+        return timeSinceEnabled / MaxTime;
     }
 
     private void OnEnable()
@@ -19,12 +20,12 @@ public class WaveSource : MonoBehaviour
     }
     private void OnDisable()
     {
-        timeSinceEnabled = maxTime;
+        timeSinceEnabled = MaxTime;
         WaveSourceManager.activeWaveSourceCount--;
     }
     private IEnumerator CountdownDisable()
     {
-        while (timeSinceEnabled < maxTime)
+        while (timeSinceEnabled < MaxTime)
         {
             timeSinceEnabled += Time.deltaTime;
             yield return null;
@@ -43,8 +44,16 @@ public class WaveSource : MonoBehaviour
         );
     }
 
+    private void Awake()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
+
     private void Update()
     {
-        transform.localScale = Vector3.one * (1f - timeSinceEnabled / maxTime);
+        if (meshRenderer.enabled)
+        {
+            transform.localScale = Vector3.one * (1f - timeSinceEnabled / MaxTime);
+        }
     }
 }

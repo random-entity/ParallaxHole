@@ -12,7 +12,8 @@ public class WaveSourceManager : MonoBehaviour
     [SerializeField] private SimulationHeadTracker headTracker;
     [SerializeField] private float headSqrSpeedThreshold;
     [SerializeField] private float speedCheckInterval = 0.05f;
-    [SerializeField] Material waterMaterial;
+    [SerializeField] private MeshRenderer waterMeshRenderer;
+    private Material waterMaterial;
 
     private void Awake()
     {
@@ -27,15 +28,18 @@ public class WaveSourceManager : MonoBehaviour
         }
 
         StartCoroutine(checkHeadSqrSpeedAndSpawn());
+
+        waterMaterial = waterMeshRenderer.material;
+        waterMaterial.SetFloat("_WaveSourceMaxTime", WaveSource.MaxTime);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         waterMaterial.SetVectorArray("_WaveSourcesData", getDataFloat4Array());
 
         activeWaveSourceCountSmooth = Mathf.Lerp(activeWaveSourceCountSmooth, (float)activeWaveSourceCount, 0.02f);
         activeWaveSourceCountSmooth = Mathf.Max(activeWaveSourceCountSmooth, 1f);
-        waterMaterial.SetFloat("_ActiveWaveSourceCountSmooth", activeWaveSourceCountSmooth);
+        waterMaterial.SetFloat("_ActiveWaveSourceCountSmooth", Mathf.Pow(activeWaveSourceCountSmooth, 0.25f));
     }
 
     public void Spawn(Vector3 position)

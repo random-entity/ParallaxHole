@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Water
-  m_Shader: {fileID: 4800000, guid: 19446361dd3894ee58a9512e70144ad2, type: 3}
+  m_Name: SineWave
+  m_Shader: {fileID: 4800000, guid: 5da6e35241d3b481b85014a930300dbe, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -24,14 +24,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _ActiveWaveSourceCountSmooth: 2.759627
+    - _ActiveWaveSourceCountSmooth: 2.8743448
     - _Glossiness: 1
     - _Metallic: 0
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
-    - _SineWaveAmp: 0.15
-    - _SineWaveLength: 0.25
-    - _SineWaveSpeed: 0.5
+    - _SineWaveAmp: 0.5
     - _WaterSurfaceY: -0.25
     - _WaveAmp: 0.59
     - _WaveMix: 0

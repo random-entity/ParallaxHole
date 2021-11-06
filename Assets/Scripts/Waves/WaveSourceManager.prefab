@@ -45,6 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveSourcePrefab: {fileID: 2761851027120644302, guid: 79e48ec23b4b647df8aaea1add9c1d47, type: 3}
   headTracker: {fileID: 0}
-  headSqrSpeedThreshold: 0.0025
+  headSqrSpeedThreshold: 0.001
   speedCheckInterval: 0.025
-  waterMaterial: {fileID: 2100000, guid: 2804a63deb1f54e3f8ffb7463830957c, type: 2}
+  waterMeshRenderer: {fileID: 0}
