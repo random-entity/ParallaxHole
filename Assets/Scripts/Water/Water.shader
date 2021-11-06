@@ -96,8 +96,10 @@ Shader "Random Entity/Water"
             float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDist * globalAmpDivideByDist);
             yDerivatives *= finalAmp;
 
+            tangent.x += 1;
             tangent.y += yDerivatives.x;
             binormal.y += yDerivatives.z;
+            binormal.z += 1;
         }
 
         // void gertsnerWave(inout float3 gertsnerWaveXYZ, float3 worldDirFromWaveSource, float progress) {
@@ -127,7 +129,7 @@ Shader "Random Entity/Water"
 
             tangent = normalize(tangent);
             binormal = normalize(binormal);
-            float3 normal = normalize(cross(tangent, binormal));
+            float3 normal = normalize(cross(binormal, tangent));
             data.normal = mul(unity_WorldToObject, normal);
         }
 
