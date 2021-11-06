@@ -9,9 +9,9 @@ Shader "Random Entity/Water"
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
-        [Header(Wave Mixer)] 
-        [Space]
-        _WaveMix ("Wave Mix", Range(0,1)) = 0 // 0 = full sine, 1 = full gerstner
+        // [Header(Wave Mixer)] 
+        // [Space]
+        // _WaveMix ("Wave Mix", Range(0,1)) = 0 // 0 = full sine, 1 = full gerstner
         
         [Header(WaveSource Properties (from WaveSourceManager))]
         [Space]
@@ -20,13 +20,17 @@ Shader "Random Entity/Water"
 
         [Header(Sine Wave Properties)] 
         [Space]
-        _SineWaveAmp ("Sine Wave Amplitude", Range(0,1)) = 0.15
+        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.15
         _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.25
         _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
         _SineWaveDistanceDamp ("1 + a dist^2", Range(1, 16)) = 8
         
-        // [Header(Gerstner Wave Properties)]
-        
+        [Header(Gerstner Wave Properties)]
+        [Space]
+        _GSteepness ("Steepness", Range(0, 1)) = 0.5
+        _GWaveLength ("WaveLength", Float) = 0.5
+        _GSpeed ("Speed", Float) = 1
+        _GGravity ("Gravity", Float) = 9.8
     }
     SubShader
     {
@@ -60,6 +64,39 @@ Shader "Random Entity/Water"
         uniform float _SineWaveLength;
         uniform float _SineWaveSpeed;
         uniform float _SineWaveDistanceDamp;
+
+        // Gerstner Wave Properties
+        uniform float _GSteepness;
+        uniform float _GWaveLength;
+        uniform float _GSpeed;
+        uniform float _GGravity;
+
+        void GerstnerWave (inout float3 displacement, float3 vertexWorldPos, inout float3 tangent, inout float3 binormal, float3 worldDirFromWaveSource, float progress) {
+		    float steepness = _GSteepness;
+		    float wavelength = _GWaveLength;
+		    float k = 2 * UNITY_PI / wavelength;
+			float c = sqrt(_GGravity / k);
+			float2 d = normalize(worldDirFromWaveSource);
+            float3 p = vertexWorldPos;
+			float f = k * (dot(d, p.xz) - c * _Time.y);
+			float a = steepness / k;
+
+			tangent += float3(
+				-d.x * d.x * (steepness * sin(f)),
+				d.x * (steepness * cos(f)),
+				-d.x * d.y * (steepness * sin(f))
+			);
+			binormal += float3(
+				-d.x * d.y * (steepness * sin(f)),
+				d.y * (steepness * cos(f)),
+				-d.y * d.y * (steepness * sin(f))
+			);
+			displacement += float3(
+				d.x * (a * cos(f)),
+				a * sin(f),
+				d.y * (a * cos(f))
+			);
+		}
 
         void sineWave(inout float3 displacement, inout float3 tangent, inout float3 binormal, float3 worldDirFromWaveSource, float progress) {         
             if(progress >= 1) return;
@@ -96,16 +133,9 @@ Shader "Random Entity/Water"
             float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDist * globalAmpDivideByDist);
             yDerivatives *= finalAmp;
 
-            tangent.x += 1;
             tangent.y += yDerivatives.x;
             binormal.y += yDerivatives.z;
-            binormal.z += 1;
         }
-
-        // void gertsnerWave(inout float3 gertsnerWaveXYZ, float3 worldDirFromWaveSource, float progress) {
-        //     float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
-        //     float dist = sqrt(sqrDist);
-        // }
 
         void vert (inout appdata_full data) {
             float3 vertex = data.vertex.xyz;
@@ -122,6 +152,7 @@ Shader "Random Entity/Water"
                 float3 worldDirFromWaveSource = worldPos - waveSourceWorldPos;
 
                 sineWave(displacement, tangent, binormal, worldDirFromWaveSource, progress);
+                // GerstnerWave(displacement, worldPos, tangent, binormal, worldDirFromWaveSource, progress);
             }
 
             worldPos += displacement;
@@ -130,7 +161,8 @@ Shader "Random Entity/Water"
             tangent = normalize(tangent);
             binormal = normalize(binormal);
             float3 normal = normalize(cross(binormal, tangent));
-            data.normal = mul(unity_WorldToObject, normal);
+            data.tangent = mul(unity_WorldToObject, tangent);
+            data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)

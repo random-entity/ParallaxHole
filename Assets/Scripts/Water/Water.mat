@@ -25,11 +25,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ActiveWaveSourceCountSmooth: 2.759627
+    - _GGravity: 0.21
+    - _GSpeed: 0.01
+    - _GSteepness: 0.01
+    - _GWaveLength: 0.2
     - _Glossiness: 1
     - _Metallic: 0
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
     - _SineWaveAmp: 0.15
+    - _SineWaveDistanceDamp: 8
     - _SineWaveLength: 0.25
     - _SineWaveSpeed: 0.5
     - _WaterSurfaceY: -0.25
