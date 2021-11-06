@@ -61,7 +61,7 @@ Shader "Random Entity/Water"
         uniform float _SineWaveSpeed;
         uniform float _SineWaveDistanceDamp;
 
-        void sineWave(inout float3 displacement, inout float3 tangent, inout float3 bitangent, float3 worldDirFromWaveSource, float progress) {         
+        void sineWave(inout float3 displacement, inout float3 tangent, inout float3 binormal, float3 worldDirFromWaveSource, float progress) {         
             if(progress >= 1) return;
 
             float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
@@ -79,16 +79,25 @@ Shader "Random Entity/Water"
             float wave = cos(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength);
             float globalAmpDivideByDist = 1 + _SineWaveDistanceDamp * sqrDist;
             
-            displacement.y += globalDampByTime * localAmpByTime * wave / globalAmpDivideByDist;
+            float cpuAmp = _SineWaveAmp / _ActiveWaveSourceCountSmooth;
 
-            // to do : tangent/bitangent/normal setting
+            float finalAmp = cpuAmp * globalDampByTime * localAmpByTime;
+            float finalWave = wave / globalAmpDivideByDist;
 
+            // vertex displacement y = const(x, z) * function(x, z)
+            displacement.y += finalAmp * finalWave;
+
+            // tangent & binormal
+
+            // partial derivatives (by x => .x and z => .z) of the two functions that has x, z as parameters
             float3 waveDerivative = -sin(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength) * (2 * UNITY_PI / _SineWaveLength) * (worldDirFromWaveSource / dist);
             float3 globalAmpDivideByDistDerivative = _SineWaveDistanceDamp * 2 * worldDirFromWaveSource;
 
-            float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDistDerivative * globalAmpDivideByDistDerivative);
+            float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDist * globalAmpDivideByDist);
+            yDerivatives *= finalAmp;
+
             tangent.y += yDerivatives.x;
-            bitangent.y += yDerivatives.z;
+            binormal.y += yDerivatives.z;
         }
 
         // void gertsnerWave(inout float3 gertsnerWaveXYZ, float3 worldDirFromWaveSource, float progress) {
@@ -102,7 +111,7 @@ Shader "Random Entity/Water"
             
             float3 displacement = 0;
             float3 tangent = float3(1, 0, 0);
-            float3 bitangent = float3(0, 0, 1);
+            float3 binormal = float3(0, 0, 1);
 
             for(int i = 0; i < 200; i++) { // max index should match WaveSourceManager.size
                 float4 waveSourceData = _WaveSourcesData[i];
@@ -110,23 +119,20 @@ Shader "Random Entity/Water"
                 float progress = waveSourceData.w;
                 float3 worldDirFromWaveSource = worldPos - waveSourceWorldPos;
 
-                sineWave(displacement, tangent, bitangent, worldDirFromWaveSource, progress);
+                sineWave(displacement, tangent, binormal, worldDirFromWaveSource, progress);
             }
 
-            displacement *= _SineWaveAmp / _ActiveWaveSourceCountSmooth;
-            tangent = normalize(tangent);
-            bitangent = normalize(bitangent);
-            float3 normal = normalize(cross(tangent, bitangent));
-            // 상수 곱하기는 tangent 한테도 해줘야? 어차피 normalize하니까 그게 그거 아닌가
-            worldPos.y += displacement;
+            worldPos += displacement;
             data.vertex = mul(unity_WorldToObject, worldPos);
-            data.tangent = mul(unity_WorldToObject, tangent);
+
+            tangent = normalize(tangent);
+            binormal = normalize(binormal);
+            float3 normal = normalize(cross(tangent, binormal));
             data.normal = mul(unity_WorldToObject, normal);
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;
