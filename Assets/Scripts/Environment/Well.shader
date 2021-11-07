@@ -12,7 +12,6 @@ Shader "Random Entity/Well"
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
-        Cull Front
 
         CGPROGRAM
 

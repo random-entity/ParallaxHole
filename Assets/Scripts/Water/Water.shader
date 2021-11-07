@@ -11,7 +11,6 @@ Shader "Random Entity/Water"
 
         // [Header(Wave Mixer)] 
         // [Space]
-        // _WaveMix ("Wave Mix", Range(0,1)) = 0 // 0 = full sine, 1 = full gerstner
         
         [Header(Bound)]
         [Space]
@@ -24,11 +23,11 @@ Shader "Random Entity/Water"
 
         [Header(Sine Wave Properties)] 
         [Space]
-        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.2
+        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.15
         _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.2
         _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
-        _SineWaveDistanceDamp ("Distance Damp", Range(1, 32)) = 16
-        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,10)) = 9
+        _SineWaveDistanceDamp ("Distance Damp", Range(1, 32)) = 8
+        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,10)) = 4
 
         [Header(Gerstner Wave Properties)]
         [Space]
@@ -39,13 +38,16 @@ Shader "Random Entity/Water"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "RenderQueue"="Transparent" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
 
         CGPROGRAM
 
         #pragma surface surf Standard alpha vertex:vert
 
         #pragma target 3.0
+
+        #include "Waves.cginc"
+		#include "LookingThroughWater.cginc"
 
         sampler2D _MainTex;
 
@@ -56,114 +58,29 @@ Shader "Random Entity/Water"
         // Bound Properties
         uniform float _BoundRadius;
 
-        // WaveSource Properties
-        // array size should match WaveSourceManager.size
-        uniform float4 _WaveSourcesData[200]; // xyz = waveSource position xyz, w = timeSinceEnabled / maxTime (0 ~ 1)
-        uniform float _ActiveWaveSourceCountSmooth;
-        uniform float _WaveSourceMaxTime;
-
-        // Sine Wave Properties
-        uniform float _SineWaveAmp;
-        uniform float _SineWaveLength;
-        uniform float _SineWaveSpeed;
-        uniform float _SineWaveDistanceDamp;
-        uniform float _SineWaveHeightScale;
-
-        // Gerstner Wave Properties
-        uniform float _GSteepness;
-        uniform float _GWaveLength;
-        uniform float _GSpeed;
-        uniform float _GGravity;
-
         struct Input
         {
             float2 uv_MainTex;
             float distanceFromCenterWorld;
+            float4 screenPos;
         };
 
-        void GerstnerWave (inout float3 displacement, inout float3 tangent, inout float3 binormal, float3 vertexWorldPos, float3 worldDirFromWaveSource, float progress) {
-            if(progress > 1) return;
-
-		    float steepness = _GSteepness;
-		    float wavelength = _GWaveLength;
-		    float k = 2 * UNITY_PI / wavelength;
-			float c = sqrt(_GGravity / k);
-			float2 d = normalize(worldDirFromWaveSource);
-            float3 p = vertexWorldPos;
-			float f = k * (dot(d, p.xz) - c * (progress * _WaveSourceMaxTime));
-			float a = steepness / k;
-
-			tangent += float3(
-				-d.x * d.x * (steepness * sin(f)),
-				d.x * (steepness * cos(f)),
-				-d.x * d.y * (steepness * sin(f))
-			);
-			binormal += float3(
-				-d.x * d.y * (steepness * sin(f)),
-				d.y * (steepness * cos(f)),
-				-d.y * d.y * (steepness * sin(f))
-			);
-			displacement += float3(
-				d.x * (a * cos(f)),
-				a * sin(f),
-				d.y * (a * cos(f))
-			);
-		}
-
-        void sineWave(inout float3 displacement, inout float3 tangent, inout float3 binormal, float3 worldDirFromWaveSource, float progress) {         
-            if(progress >= 1) return;
-
-            float sqrDist = dot(worldDirFromWaveSource, worldDirFromWaveSource);
-            float dist = sqrt(sqrDist);
-
-            float time = progress * _WaveSourceMaxTime;
-
-            float startTime = 0.5 * dist / _SineWaveSpeed;
-            float timeSinceStart = time - startTime;
-            if(timeSinceStart < 0) return;
-
-            float localAmpByTime = saturate(128 * (timeSinceStart - 0.1));
-            float globalDampByTime = 0.5 * (1 + cos(UNITY_PI * progress));
-
-            float wave = cos(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength);
-            float globalAmpDivideByDist = 1 + _SineWaveDistanceDamp * sqrDist;
-            
-            float cpuAmp = _SineWaveAmp / _ActiveWaveSourceCountSmooth;
-
-            float finalAmp = cpuAmp * globalDampByTime * localAmpByTime;
-            float finalWave = wave / globalAmpDivideByDist;
-
-            // VERTEX DISPLACEMENT // y = const(x, z) * function(x, z) form
-            displacement.y += finalAmp * finalWave;
-
-            // TANGENT & BINORMAL SETTING
-            // partial derivatives (by x => .x and z => .z) of the two functions that has x, z as parameters
-            float3 waveDerivative = 
-                -sin(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength) 
-                * (2 * UNITY_PI / _SineWaveLength) 
-                * (worldDirFromWaveSource / dist);
-            float3 globalAmpDivideByDistDerivative = 
-                _SineWaveDistanceDamp * 2 
-                * worldDirFromWaveSource;
-            // quotient rule : (f/g)' = (f'g - fg')/g^2
-            float3 yDerivatives = 
-                (waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative) 
-                / (globalAmpDivideByDist * globalAmpDivideByDist);
-            // multiply constant coeff
-            yDerivatives *= finalAmp;
-            yDerivatives *= _SineWaveHeightScale;
-            // height scaling is important
-            
-            tangent.y += yDerivatives.x;
-            binormal.y += yDerivatives.z;
-        }
-
         void vert (inout appdata_full data, out Input o) {
+            //////////
+            // INIT //
+            //////////
             UNITY_INITIALIZE_OUTPUT(Input, o);
-
             float3 vertex = data.vertex.xyz;
             float3 worldPos = mul(unity_ObjectToWorld, vertex);
             
+            ///////////
+            // BOUND //
+            ///////////
+            o.distanceFromCenterWorld = length(worldPos); // projection plane의 center는 (0, 0, 0)이겠지
+
+            ///////////
+            // WAVES //
+            ///////////
             float3 displacement = 0;
             float3 tangent = float3(1, 0, 0);
             float3 binormal = float3(0, 0, 1);
@@ -186,18 +103,33 @@ Shader "Random Entity/Water"
             data.tangent = mul(unity_WorldToObject, tangent);
             data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
 
-            o.distanceFromCenterWorld = length(worldPos); // projection plane의 center는 (0, 0, 0)이겠지
+            /////////
+            // FOG //
+            /////////
+            
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             clip(_BoundRadius - IN.distanceFromCenterWorld);
 
+
+
+
+
+
+
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
+
+
+
+
+            o.Albedo = ColorBelowWater(IN.screenPos);
+            o.Alpha = 1;
         }
         ENDCG
     }

@@ -15,10 +15,11 @@ Shader "Random Entity/Hole"
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
+        ZWrite Off
 
         CGPROGRAM
 
-        #pragma surface surf Standard fullforwardshadows vertex:vert
+        #pragma surface surf Standard vertex:vert
 
         #pragma target 3.0
 

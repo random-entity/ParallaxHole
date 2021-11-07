@@ -16,6 +16,7 @@ public class ProjectionCamera : MonoBehaviour
     private void Awake()
     {
         cam = GetComponent<Camera>();
+        cam.depthTextureMode = DepthTextureMode.Depth;
     }
 
     private void setMatrices()

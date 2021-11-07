@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -30,14 +30,14 @@ Material:
     - _GSpeed: 0.01
     - _GSteepness: 0.01
     - _GWaveLength: 0.2
-    - _Glossiness: 0.5
+    - _Glossiness: 0
     - _Metallic: 0
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
     - _Radius: 1
     - _SineWaveAmp: 0.15
     - _SineWaveDistanceDamp: 8
-    - _SineWaveHeightScale: 1
+    - _SineWaveHeightScale: 4
     - _SineWaveLength: 0.2
     - _SineWaveSpeed: 0.5
     - _WaterSurfaceY: -0.25
@@ -45,5 +45,5 @@ Material:
     - _WaveMix: 0
     - _WaveSourceMaxTime: 6
     m_Colors:
-    - _Color: {r: 0.4672481, g: 0.7924528, b: 0.72679484, a: 0.49019608}
+    - _Color: {r: 0.07075471, g: 1, b: 0.8096727, a: 0.77254903}
   m_BuildTextureStacks: []
