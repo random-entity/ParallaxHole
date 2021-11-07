@@ -13,6 +13,10 @@ Shader "Random Entity/Water"
         // [Space]
         // _WaveMix ("Wave Mix", Range(0,1)) = 0 // 0 = full sine, 1 = full gerstner
         
+        [Header(Bound)]
+        [Space]
+        _BoundRadius ("Tube Radius", Range(0,2)) = 1
+
         [Header(WaveSource Properties (from WaveSourceManager))]
         [Space]
         _ActiveWaveSourceCountSmooth ("Active Wave Source Count Smooth", Float) = 1 // wave source 개수 많아지면 그만큼 나누기 위함, 쌩 값으로 받는 것보다 네제곱근 정도가 자연스러워 보여서 4제곱근 때려서 보내 줌.
@@ -20,11 +24,11 @@ Shader "Random Entity/Water"
 
         [Header(Sine Wave Properties)] 
         [Space]
-        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.15
-        _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.25
+        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.25
+        _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.2
         _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
-        _SineWaveDistanceDamp ("Distance Damp", Range(1, 16)) = 8
-        _SineWaveHeightScale ("Height Scale", Range(0.0000025,0.00004)) = 0.00001
+        _SineWaveDistanceDamp ("Distance Damp", Range(1, 32)) = 8
+        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,10)) = 2
 
         [Header(Gerstner Wave Properties)]
         [Space]
@@ -45,14 +49,12 @@ Shader "Random Entity/Water"
 
         sampler2D _MainTex;
 
-        struct Input
-        {
-            float2 uv_MainTex;
-        };
-
         half _Glossiness;
         half _Metallic;
         fixed4 _Color;
+
+        // Bound Properties
+        uniform float _BoundRadius;
 
         // WaveSource Properties
         // array size should match WaveSourceManager.size
@@ -73,14 +75,22 @@ Shader "Random Entity/Water"
         uniform float _GSpeed;
         uniform float _GGravity;
 
-        void GerstnerWave (inout float3 displacement, float3 vertexWorldPos, inout float3 tangent, inout float3 binormal, float3 worldDirFromWaveSource, float progress) {
+        struct Input
+        {
+            float2 uv_MainTex;
+            float distanceFromCenterWorld;
+        };
+
+        void GerstnerWave (inout float3 displacement, inout float3 tangent, inout float3 binormal, float3 vertexWorldPos, float3 worldDirFromWaveSource, float progress) {
+            if(progress > 1) return;
+
 		    float steepness = _GSteepness;
 		    float wavelength = _GWaveLength;
 		    float k = 2 * UNITY_PI / wavelength;
 			float c = sqrt(_GGravity / k);
 			float2 d = normalize(worldDirFromWaveSource);
             float3 p = vertexWorldPos;
-			float f = k * (dot(d, p.xz) - c * _Time.y);
+			float f = k * (dot(d, p.xz) - c * (progress * _WaveSourceMaxTime));
 			float a = steepness / k;
 
 			tangent += float3(
@@ -112,7 +122,7 @@ Shader "Random Entity/Water"
             float timeSinceStart = time - startTime;
             if(timeSinceStart < 0) return;
 
-            float localAmpByTime = saturate(128 * timeSinceStart);
+            float localAmpByTime = saturate(128 * (timeSinceStart - 0.1));
             float globalDampByTime = 0.5 * (1 + cos(UNITY_PI * progress));
 
             float wave = cos(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength);
@@ -123,29 +133,41 @@ Shader "Random Entity/Water"
             float finalAmp = cpuAmp * globalDampByTime * localAmpByTime;
             float finalWave = wave / globalAmpDivideByDist;
 
-            // vertex displacement y = const(x, z) * function(x, z)
+            // VERTEX DISPLACEMENT // y = const(x, z) * function(x, z) form
             displacement.y += finalAmp * finalWave;
 
-            // tangent & binormal
-
+            // TANGENT & BINORMAL SETTING
             // partial derivatives (by x => .x and z => .z) of the two functions that has x, z as parameters
-            float3 waveDerivative = -sin(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength) * (2 * UNITY_PI / _SineWaveLength) * (worldDirFromWaveSource / dist);
-            float3 globalAmpDivideByDistDerivative = _SineWaveDistanceDamp * 2 * worldDirFromWaveSource;
-
-            float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDist * globalAmpDivideByDist);
+            float3 waveDerivative = 
+                -sin(2 * UNITY_PI * (dist - _SineWaveSpeed * time) / _SineWaveLength) 
+                * (2 * UNITY_PI / _SineWaveLength) 
+                * (worldDirFromWaveSource / dist);
+            float3 globalAmpDivideByDistDerivative = 
+                _SineWaveDistanceDamp * 2 
+                * worldDirFromWaveSource;
+            // quotient rule : (f/g)' = (f'g - fg')/g^2
+            float3 yDerivatives = 
+                (waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative) 
+                / (globalAmpDivideByDist * globalAmpDivideByDist);
+            // multiply constant coeff
             yDerivatives *= finalAmp;
-
-            tangent.y += _SineWaveHeightScale * yDerivatives.x;
-            binormal.y += _SineWaveHeightScale * yDerivatives.z;
+            yDerivatives *= _SineWaveHeightScale;
+            // height scaling is important
+            
+            tangent.y += yDerivatives.x;
+            binormal.y += yDerivatives.z;
         }
 
-        void vert (inout appdata_full data) {
+        void vert (inout appdata_full data, out Input o) {
+            UNITY_INITIALIZE_OUTPUT(Input, o);
+
             float3 vertex = data.vertex.xyz;
             float3 worldPos = mul(unity_ObjectToWorld, vertex);
             
             float3 displacement = 0;
             float3 tangent = float3(1, 0, 0);
             float3 binormal = float3(0, 0, 1);
+            _SineWaveHeightScale /= 100000;
 
             for(int i = 0; i < 200; i++) { // max index should match WaveSourceManager.size
                 float4 waveSourceData = _WaveSourcesData[i];
@@ -160,8 +182,6 @@ Shader "Random Entity/Water"
             worldPos += displacement;
             data.vertex = mul(unity_WorldToObject, worldPos);
 
-            // tangent = normalize(tangent);
-            // binormal = normalize(binormal);
             float3 normal = normalize(cross(binormal, tangent));
             data.tangent = mul(unity_WorldToObject, tangent);
             data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
@@ -174,6 +194,7 @@ Shader "Random Entity/Water"
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
+            if(IN.distanceFromCenterWorld > _BoundRadius) {}
         }
         ENDCG
     }

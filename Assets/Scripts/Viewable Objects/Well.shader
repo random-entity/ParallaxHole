@@ -1,4 +1,4 @@
-Shader "Custom/NewSurfaceShader"
+Shader "Random Entity/Well"
 {
     Properties
     {

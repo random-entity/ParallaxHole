@@ -24,24 +24,26 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _ActiveWaveSourceCountSmooth: 2.759627
+    - _ActiveWaveSourceCountSmooth: 1
+    - _BoundRadius: 1
     - _GGravity: 0.21
     - _GSpeed: 0.01
     - _GSteepness: 0.01
     - _GWaveLength: 0.2
-    - _Glossiness: 1
+    - _Glossiness: 0.5
     - _Metallic: 0
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
-    - _SineWaveAmp: 0.15
+    - _Radius: 1
+    - _SineWaveAmp: 0.25
     - _SineWaveDistanceDamp: 8
-    - _SineWaveHeightScale: 0.00001
-    - _SineWaveLength: 0.25
+    - _SineWaveHeightScale: 2
+    - _SineWaveLength: 0.2
     - _SineWaveSpeed: 0.5
     - _WaterSurfaceY: -0.25
     - _WaveAmp: 0.59
     - _WaveMix: 0
-    - _WaveSourceMaxTime: 8
+    - _WaveSourceMaxTime: 6
     m_Colors:
     - _Color: {r: 0.4672481, g: 0.7924528, b: 0.72679484, a: 0.21176471}
   m_BuildTextureStacks: []
