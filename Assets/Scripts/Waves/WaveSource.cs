@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WaveSource : MonoBehaviour
 {
-    public static readonly float MaxTime = 8f;
+    public static readonly float MaxTime = 6f;
     [SerializeField] private float timeSinceEnabled; // 0에서 시작하는 게 있는 게 파동 계산에 편하니까
     private MeshRenderer meshRenderer;
 

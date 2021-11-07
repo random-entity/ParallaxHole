@@ -23,8 +23,9 @@ Shader "Random Entity/Water"
         _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.15
         _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.25
         _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
-        _SineWaveDistanceDamp ("1 + a dist^2", Range(1, 16)) = 8
-        
+        _SineWaveDistanceDamp ("Distance Damp", Range(1, 16)) = 8
+        _SineWaveHeightScale ("Height Scale", Range(0.0000025,0.00004)) = 0.00001
+
         [Header(Gerstner Wave Properties)]
         [Space]
         _GSteepness ("Steepness", Range(0, 1)) = 0.5
@@ -64,6 +65,7 @@ Shader "Random Entity/Water"
         uniform float _SineWaveLength;
         uniform float _SineWaveSpeed;
         uniform float _SineWaveDistanceDamp;
+        uniform float _SineWaveHeightScale;
 
         // Gerstner Wave Properties
         uniform float _GSteepness;
@@ -133,8 +135,8 @@ Shader "Random Entity/Water"
             float3 yDerivatives = waveDerivative * globalAmpDivideByDist - wave * globalAmpDivideByDistDerivative / (globalAmpDivideByDist * globalAmpDivideByDist);
             yDerivatives *= finalAmp;
 
-            tangent.y += yDerivatives.x;
-            binormal.y += yDerivatives.z;
+            tangent.y += _SineWaveHeightScale * yDerivatives.x;
+            binormal.y += _SineWaveHeightScale * yDerivatives.z;
         }
 
         void vert (inout appdata_full data) {
@@ -158,8 +160,8 @@ Shader "Random Entity/Water"
             worldPos += displacement;
             data.vertex = mul(unity_WorldToObject, worldPos);
 
-            tangent = normalize(tangent);
-            binormal = normalize(binormal);
+            // tangent = normalize(tangent);
+            // binormal = normalize(binormal);
             float3 normal = normalize(cross(binormal, tangent));
             data.tangent = mul(unity_WorldToObject, tangent);
             data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
