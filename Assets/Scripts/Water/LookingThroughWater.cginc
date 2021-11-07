@@ -1,8 +1,12 @@
+// https://catlikecoding.com/unity/tutorials/flow/looking-through-water/
+
 #if !defined(LOOKING_THROUGH_WATER_INCLUDED)
 #define LOOKING_THROUGH_WATER_INCLUDED
 
-sampler2D _CameraDepthTexture;
+sampler2D _CameraDepthTexture, _WaterBackground;
 float4 _CameraDepthTexture_TexelSize;
+float3 _WaterFogColor;
+float _WaterFogDensity;
 
 float3 ColorBelowWater (float4 screenPos) {
 	float2 uv = screenPos.xy / screenPos.w;	
@@ -14,7 +18,11 @@ float3 ColorBelowWater (float4 screenPos) {
     float backgroundDepth =	LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
     float surfaceDepth = UNITY_Z_0_FAR_FROM_CLIPSPACE(screenPos.z);
 	float depthDifference = backgroundDepth - surfaceDepth;
-	return depthDifference / 4;
+    //	return depthDifference / 4; // 아름다워 지우고 싶지 않아
+
+	float3 backgroundColor = tex2D(_WaterBackground, uv).rgb;
+	float fogFactor = exp2(-_WaterFogDensity * depthDifference);
+	return lerp(_WaterFogColor, backgroundColor, fogFactor);
 }
 
 #endif

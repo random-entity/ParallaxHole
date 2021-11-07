@@ -9,13 +9,14 @@ Shader "Random Entity/Water"
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
+        // [Header(Bound)]
+        // [Space]
+        // _BoundRadius ("Tube Radius", Range(0,2)) = 1
+        // Too many texture interpolators would be used for ForwardBase pass 에러 때문에 Properties 절약해야 함. 우물 반지름 1로 고정하는 걸로.
+
         // [Header(Wave Mixer)] 
         // [Space]
         
-        [Header(Bound)]
-        [Space]
-        _BoundRadius ("Tube Radius", Range(0,2)) = 1
-
         [Header(WaveSource Properties (from WaveSourceManager))]
         [Space]
         _ActiveWaveSourceCountSmooth ("Active Wave Source Count Smooth", Float) = 1 // wave source 개수 많아지면 그만큼 나누기 위함, 쌩 값으로 받는 것보다 네제곱근 정도가 자연스러워 보여서 4제곱근 때려서 보내 줌.
@@ -23,28 +24,30 @@ Shader "Random Entity/Water"
 
         [Header(Sine Wave Properties)] 
         [Space]
-        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.15
-        _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.2
-        _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
-        _SineWaveDistanceDamp ("Distance Damp", Range(1, 32)) = 8
-        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,10)) = 4
+        _SineWaveConfig ("x = Amp, y = Wavelength, z = Speed, w = Distance Damp", Vector) = (0.15, 0.2, 0.5, 8) // packing for room for others
+        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,40)) = 20
 
         [Header(Gerstner Wave Properties)]
         [Space]
-        _GSteepness ("Steepness", Range(0, 1)) = 0.5
-        _GWaveLength ("WaveLength", Float) = 0.5
-        _GSpeed ("Speed", Float) = 1
-        _GGravity ("Gravity", Float) = 9.8
+        _GerWaveConfig ("x = Steepness, y = Wavelength, z = Speed, w = Gravity", Vector) = (0.5, 0.5, 1, 9.8) // packing for room for others
+
+        [Header(Fog)]
+        [Space]
+		_WaterFogColor ("Water Fog Color", Color) = (0, 0, 0, 0)
+		_WaterFogDensity ("Water Fog Density", Range(0, 2)) = 0.15
     }
     SubShader
     {
         Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        LOD 200
+
+        GrabPass { "_WaterBackground" }
 
         CGPROGRAM
 
-        #pragma surface surf Standard alpha vertex:vert
+        #pragma surface surf Standard alpha finalcolor:ResetAlpha vertex:vert
 
-        #pragma target 3.0
+        #pragma target 4.0
 
         #include "Waves.cginc"
 		#include "LookingThroughWater.cginc"
@@ -54,9 +57,6 @@ Shader "Random Entity/Water"
         half _Glossiness;
         half _Metallic;
         fixed4 _Color;
-
-        // Bound Properties
-        uniform float _BoundRadius;
 
         struct Input
         {
@@ -102,22 +102,15 @@ Shader "Random Entity/Water"
             float3 normal = normalize(cross(binormal, tangent));
             data.tangent = mul(unity_WorldToObject, tangent);
             data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
-
-            /////////
-            // FOG //
-            /////////
-            
         }
+
+        void ResetAlpha (Input IN, SurfaceOutputStandard o, inout fixed4 color) { // finalcolor 함수. 아직 왜 들어가야 하는지 이해 안 감.
+			color.a = 1;
+		}
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            clip(_BoundRadius - IN.distanceFromCenterWorld);
-
-
-
-
-
-
+            clip(1 - IN.distanceFromCenterWorld);
 
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
@@ -125,11 +118,7 @@ Shader "Random Entity/Water"
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
 
-
-
-
-            o.Albedo = ColorBelowWater(IN.screenPos);
-            o.Alpha = 1;
+            o.Emission = ColorBelowWater(IN.screenPos) * (1 - c.a);
         }
         ENDCG
     }

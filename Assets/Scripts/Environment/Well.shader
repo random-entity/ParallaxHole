@@ -1,4 +1,5 @@
-Shader "Random Entity/Well"
+Shader "Random Entity/_Landfill/Well"
+// Tube mesh generate 후 저장 성공하여 이제 불필요 (cylinder 윗뚜껑 없애려고 worldPos.y으로 clip 하던 용도)
 {
     Properties
     {
