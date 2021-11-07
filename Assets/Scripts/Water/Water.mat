@@ -35,9 +35,9 @@ Material:
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
     - _Radius: 1
-    - _SineWaveAmp: 0.25
+    - _SineWaveAmp: 0.15
     - _SineWaveDistanceDamp: 8
-    - _SineWaveHeightScale: 2
+    - _SineWaveHeightScale: 1
     - _SineWaveLength: 0.2
     - _SineWaveSpeed: 0.5
     - _WaterSurfaceY: -0.25
@@ -45,5 +45,5 @@ Material:
     - _WaveMix: 0
     - _WaveSourceMaxTime: 6
     m_Colors:
-    - _Color: {r: 0.4672481, g: 0.7924528, b: 0.72679484, a: 0.21176471}
+    - _Color: {r: 0.4672481, g: 0.7924528, b: 0.72679484, a: 0.49019608}
   m_BuildTextureStacks: []

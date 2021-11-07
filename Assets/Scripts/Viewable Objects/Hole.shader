@@ -1,4 +1,4 @@
-Shader "Random Entity/Well"
+Shader "Random Entity/Hole"
 {
     Properties
     {
@@ -6,12 +6,15 @@ Shader "Random Entity/Well"
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
+
+        [Header(Bound)]
+        [Space]
+        _BoundRadius ("Tube Radius", Range(0,2)) = 1
     }
     SubShader
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
-        Cull Front
 
         CGPROGRAM
 
@@ -31,6 +34,8 @@ Shader "Random Entity/Well"
         half _Metallic;
         fixed4 _Color;
 
+        float _BoundRadius;
+
         void vert(inout appdata_full v, out Input o) {
             UNITY_INITIALIZE_OUTPUT(Input, o);
             float3 vertex = v.vertex.xyz;
@@ -40,7 +45,8 @@ Shader "Random Entity/Well"
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            clip(IN.worldPos.y >= 0 ? -1 : 1);
+            clip(length(IN.worldPos) > _BoundRadius ? 1 : -1);
+
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;

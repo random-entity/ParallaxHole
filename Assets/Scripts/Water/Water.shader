@@ -24,11 +24,11 @@ Shader "Random Entity/Water"
 
         [Header(Sine Wave Properties)] 
         [Space]
-        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.25
+        _SineWaveAmp ("Sine Wave Amplitude", Range(0, 1)) = 0.2
         _SineWaveLength ("Sine Wave Length (m)", Range(0.1, 2)) = 0.2
         _SineWaveSpeed ("Sine Wave Speed (m/s)", Range(0.1, 2)) = 0.5
-        _SineWaveDistanceDamp ("Distance Damp", Range(1, 32)) = 8
-        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,10)) = 2
+        _SineWaveDistanceDamp ("Distance Damp", Range(1, 32)) = 16
+        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,10)) = 9
 
         [Header(Gerstner Wave Properties)]
         [Space]
@@ -43,7 +43,7 @@ Shader "Random Entity/Water"
 
         CGPROGRAM
 
-        #pragma surface surf Standard vertex:vert
+        #pragma surface surf Standard alpha vertex:vert
 
         #pragma target 3.0
 
@@ -185,16 +185,19 @@ Shader "Random Entity/Water"
             float3 normal = normalize(cross(binormal, tangent));
             data.tangent = mul(unity_WorldToObject, tangent);
             data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
+
+            o.distanceFromCenterWorld = length(worldPos); // projection plane의 center는 (0, 0, 0)이겠지
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
+            clip(_BoundRadius - IN.distanceFromCenterWorld);
+
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
-            if(IN.distanceFromCenterWorld > _BoundRadius) {}
         }
         ENDCG
     }
