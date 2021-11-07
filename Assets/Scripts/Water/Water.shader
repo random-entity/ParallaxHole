@@ -35,6 +35,10 @@ Shader "Random Entity/Water"
         [Space]
 		_WaterFogColor ("Water Fog Color", Color) = (0, 0, 0, 0)
 		_WaterFogDensity ("Water Fog Density", Range(0, 2)) = 0.15
+
+        [Header(Refraction)]
+        [Space]
+        _RefractionStrength ("Refraction Strength", Range(0, 1)) = 0.25
     }
     SubShader
     {
@@ -118,7 +122,7 @@ Shader "Random Entity/Water"
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
 
-            o.Emission = ColorBelowWater(IN.screenPos) * (1 - c.a);
+            o.Emission = ColorBelowWater(IN.screenPos, o.Normal) * (1 - c.a);
         }
         ENDCG
     }
