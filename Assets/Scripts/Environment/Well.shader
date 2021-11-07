@@ -4,6 +4,7 @@ Shader "Random Entity/Well"
     {
         _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _Emission ("Emission", Range(0,1)) = 0.4
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
     }
@@ -27,6 +28,7 @@ Shader "Random Entity/Well"
             float3 worldPos;
         };
 
+        uniform float _Emission;
         half _Glossiness;
         half _Metallic;
         fixed4 _Color;
@@ -41,8 +43,10 @@ Shader "Random Entity/Well"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             clip(IN.worldPos.y >= 0 ? -1 : 1);
+
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
+            o.Emission = _Emission * o.Albedo;
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
