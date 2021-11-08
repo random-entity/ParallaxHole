@@ -25,7 +25,7 @@ Shader "Random Entity/Water"
         [Header(Sine Wave Properties)] 
         [Space]
         _SineWaveConfig ("x = Amp, y = Wavelength, z = Speed, w = Distance Damp", Vector) = (0.15, 0.2, 0.5, 8) // packing for room for others
-        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,40)) = 20
+        _SineWaveHeightScale ("Height Scale * 10^5", Range(0,100)) = 20
 
         [Header(Gerstner Wave Properties)]
         [Space]
@@ -35,6 +35,10 @@ Shader "Random Entity/Water"
         [Space]
 		_WaterFogColor ("Water Fog Color", Color) = (0, 0, 0, 0)
 		_WaterFogDensity ("Water Fog Density", Range(0, 2)) = 0.15
+
+        [Header(Refraction)]
+        [Space]
+        _RefractionStrength ("Refraction Strength", Range(0, 1)) = 0.25
     }
     SubShader
     {
@@ -45,7 +49,7 @@ Shader "Random Entity/Water"
 
         CGPROGRAM
 
-        #pragma surface surf Standard alpha finalcolor:ResetAlpha vertex:vert
+        #pragma surface surf Standard alpha vertex:vert finalcolor:ResetAlpha
 
         #pragma target 4.0
 
@@ -97,14 +101,26 @@ Shader "Random Entity/Water"
             }
 
             worldPos += displacement;
-            data.vertex = mul(unity_WorldToObject, worldPos);
+            float4 modelPos = mul(unity_WorldToObject, worldPos);
 
-            float3 normal = normalize(cross(binormal, tangent));
-            data.tangent = mul(unity_WorldToObject, tangent);
-            data.normal = mul(unity_WorldToObject, normal); // direction인데 point랑 똑같은 거 곱해도 되나?
+            // float3 worldPosPlusTangent = worldPos + tangent;
+            // float4 modelPosPlusTangent = mul(unity_WorldToObject, worldPosPlusTangent);
+            // float4 modelTangent = modelPosPlusTangent - modelPos;
+            float4 modelTangent = normalize(mul(unity_WorldToObject, float4(tangent, 0)));
+
+            float3 normal = cross(binormal, tangent);
+
+            // float3 worldPosPlusNormal = worldPos + normal;
+            // float4 modelPosPlusNormal = mul(unity_WorldToObject, worldPosPlusNormal);
+            // float4 modelNormal = modelPosPlusNormal - modelPos;
+            float4 modelNormal = normalize(mul(unity_WorldToObject, float4(normal, 0)));
+
+            data.vertex = modelPos;
+            data.tangent = modelTangent;
+            data.normal = modelNormal;
         }
 
-        void ResetAlpha (Input IN, SurfaceOutputStandard o, inout fixed4 color) { // finalcolor 함수. 아직 왜 들어가야 하는지 이해 안 감.
+        void ResetAlpha (Input IN, SurfaceOutputStandard o, inout fixed4 color) {
 			color.a = 1;
 		}
 
@@ -118,7 +134,7 @@ Shader "Random Entity/Water"
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
 
-            o.Emission = ColorBelowWater(IN.screenPos) * (1 - c.a);
+            o.Emission = ColorBelowWater(IN.screenPos, o.Normal) * (1 - c.a);
         }
         ENDCG
     }
