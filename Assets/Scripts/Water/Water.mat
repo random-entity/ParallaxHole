@@ -35,7 +35,7 @@ Material:
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
     - _Radius: 1
-    - _RefractionStrength: 0.15
+    - _RefractionStrength: 0.05
     - _SineWaveAmp: 0.15
     - _SineWaveDistanceDamp: 8
     - _SineWaveHeightScale: 40
