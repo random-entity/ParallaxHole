@@ -22,7 +22,7 @@ float2 AlignWithGrabTexel (float2 uv) {
 }
 
 float3 ColorBelowWater (float4 screenPos, float3 tangentSpaceNormal) {
-	float2 uvOffset = tangentSpaceNormal.zx * _RefractionStrength; // tangentSpaceNormal.xy를 .xz로 바꾸니까 된다.
+	float2 uvOffset = tangentSpaceNormal.xz * _RefractionStrength; // tangentSpaceNormal.xy를 .xz로 바꾸니까 된다.
 	uvOffset.y *= _CameraDepthTexture_TexelSize.z * abs(_CameraDepthTexture_TexelSize.y);
 	float2 uv = AlignWithGrabTexel((screenPos.xy + uvOffset) / screenPos.w);
 
@@ -30,11 +30,11 @@ float3 ColorBelowWater (float4 screenPos, float3 tangentSpaceNormal) {
 	float surfaceDepth = UNITY_Z_0_FAR_FROM_CLIPSPACE(screenPos.z);
 	float depthDifference = backgroundDepth - surfaceDepth;
 
-	if (depthDifference < 0) { // 이거 없애는 부분 부터 안 됨.
-		uv = AlignWithGrabTexel(screenPos.xy / screenPos.w);
-		backgroundDepth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
-		depthDifference = backgroundDepth - surfaceDepth;
-	}
+	uvOffset *= saturate(2 * depthDifference);
+
+	uv = AlignWithGrabTexel((screenPos.xy + uvOffset) / screenPos.w);
+	backgroundDepth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
+	depthDifference = backgroundDepth - surfaceDepth;
 
 	float3 backgroundColor = tex2D(_WaterBackground, uv).rgb;
 	float fogFactor = exp2(-_WaterFogDensity * depthDifference);
