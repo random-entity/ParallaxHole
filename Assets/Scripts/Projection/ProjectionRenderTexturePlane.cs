@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class ProjectionRenderTexturePlane : MonoBehaviour // must be child of projection plane
+public class ProjectionRenderTexturePlane : MonoBehaviour
 {
     [SerializeField] private ProjectionPlane projectionPlane;
 
