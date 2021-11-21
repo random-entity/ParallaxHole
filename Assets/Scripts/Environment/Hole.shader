@@ -14,7 +14,6 @@ Shader "Random Entity/Hole"
     SubShader
     {
         Tags { "RenderType"="Opaque" }
-        LOD 200
         ZWrite Off
 
         CGPROGRAM

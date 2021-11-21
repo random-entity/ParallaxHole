@@ -7,19 +7,19 @@ public class SimulationHeadTracker : MonoBehaviour
 // projection plane의 같은 local space position에 그 점이 있다고 했을 때 그 점의 world space를 산출해서
 // projection cam의 world position을 거기로 설정해준다.
 {
-    [SerializeField] private Transform projectionPlane;
-    [SerializeField] private Transform projectionRenderTexturePlane;
     [SerializeField] private Transform simulatedEye;
+    [SerializeField] private Transform projectionRenderTexturePlane;
+    [SerializeField] private Transform projectionPlane;
     [SerializeField] private Transform projectionCamera;
     public Vector3 EyePosition;
     private Vector3 prevEyePosition;
-    private Vector3 GetDeltaPosition()
+    private Vector3 getDeltaPosition()
     {
         return EyePosition - prevEyePosition;
     }
     public float GetSqrSpeed()
     {
-        return GetDeltaPosition().sqrMagnitude;
+        return getDeltaPosition().sqrMagnitude;
     }
 
     private void FixedUpdate()

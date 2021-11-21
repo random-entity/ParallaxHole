@@ -47,7 +47,7 @@ Material:
     - _WaveMix: 0
     - _WaveSourceMaxTime: 6
     m_Colors:
-    - _Color: {r: 0.3058824, g: 0.6627451, b: 0.53749794, a: 0.34901962}
+    - _Color: {r: 0, g: 1, b: 0.8635032, a: 0.34901962}
     - _GerWaveConfig: {r: 0.5, g: 0.5, b: 1, a: 9.8}
     - _SineWaveConfig: {r: 0.15, g: 0.2, b: 0.5, a: 8}
     - _WaterFogColor: {r: 0.08116765, g: 0.3076768, b: 0.9056604, a: 0.5882353}

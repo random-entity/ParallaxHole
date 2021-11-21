@@ -91,7 +91,6 @@ public class ProjectionPlane : MonoBehaviour
 
             m = Matrix4x4.zero;
 
-            // potential problem : Vector3 to Vector4
             m.SetColumn(0, DirRight);
             m.SetColumn(1, DirUp);
             m.SetColumn(2, DirNormal);

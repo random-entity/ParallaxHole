@@ -72,8 +72,13 @@
 ## 스크립트들 | Scripts
 - ### Parallax projection
   - #### ProjectionPlane.cs
+    - Vector2 Aspect ratio와 Vector2 Size(width, height) 관리
+    - Model matrix 관리
   - #### ProjectionCamera.cs
+    - Camera.projectionMatrix 계산해서 세팅 in LateUpdate()
+    - Model matrix는 projectionPlane에서 받아 옴
   - #### ProjectionRenderTexturePlane.cs
+    - projectionRenderTexturePlane과 projectionPlane과 사이즈 동일하게 유지
 
 - ### Water rendering
   - #### Water.shader
@@ -83,6 +88,7 @@
 - ### Wave Source
   - #### WaveSource.cs
   - #### WaveSourceManager.cs
+    - WaveSource들의 object pool (Queue) 관리
 
 - ### Getting Kinect data in Unity
   - #### Depth and color
