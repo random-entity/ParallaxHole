@@ -6,12 +6,20 @@ public class PlaneMeshGenerator : MonoBehaviour
 {
     private static readonly int width = 512;
     private static readonly int height = 424;
-    [SerializeField] private int resolution = 1;
-    [SerializeField] private float pitch = 0.01f;
+    private int downsample;
+    [SerializeField] private float pitch;
+    public static int vertexCount;
+    private MeshFilter meshFilter;
 
     private void Awake()
     {
-        GetComponent<MeshFilter>().mesh = generateMesh();
+        downsample = PointCloudConfig.downsample;
+
+        meshFilter = GetComponent<MeshFilter>();
+
+        meshFilter.mesh = generateMesh();
+
+        vertexCount = meshFilter.mesh.vertices.Length;
     }
 
     private Mesh generateMesh()
@@ -19,11 +27,11 @@ public class PlaneMeshGenerator : MonoBehaviour
         Mesh mesh = new Mesh();
         mesh.indexFormat = IndexFormat.UInt32;
 
-        int limitX = width / resolution + 1;
-        if (width % resolution == 0) limitX--;
+        int limitX = width / downsample + 1;
+        if (width % downsample == 0) limitX--;
 
-        int limitY = height / resolution;
-        if (height % resolution == 0) limitY--;
+        int limitY = height / downsample;
+        if (height % downsample == 0) limitY--;
 
         int vertexCount = limitX * limitY;
 
@@ -39,14 +47,14 @@ public class PlaneMeshGenerator : MonoBehaviour
                 int index = x + y * limitX;
 
                 vertices[index] = new Vector3(
-                    (x * resolution + 0.5f - width / 2) * pitch,
-                    (y * resolution + 0.5f - height / 2) * pitch,
+                    (x * downsample + 0.5f - width / 2) * pitch,
+                    (y * downsample + 0.5f - height / 2) * pitch,
                     0f
                 );
 
                 uv[index] = new Vector2(
-                    (x * resolution + 0.5f) / width,
-                    (y * resolution + 0.5f) / height
+                    (x * downsample + 0.5f) / width,
+                    (y * downsample + 0.5f) / height
                 );
             }
         }
@@ -68,7 +76,7 @@ public class PlaneMeshGenerator : MonoBehaviour
         }
 
         mesh.vertices = vertices;
-        mesh.uv = uv;
+        mesh.SetUVs(0, uv);
         mesh.triangles = triangles;
 
         mesh.RecalculateBounds();

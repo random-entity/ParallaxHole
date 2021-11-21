@@ -9,8 +9,8 @@ public class WaveSourceManager : MonoBehaviour
     public Queue<WaveSource> waveSourceQueue;
     public static int activeWaveSourceCount = 0; // WaveSource.OnEnable(), OnDisable()에서 increment, decrement
     private static float activeWaveSourceCountSmooth = 1f;
-    [SerializeField] private SimulationHeadTracker headTracker;
-    [SerializeField] private float headSqrSpeedThreshold;
+    [SerializeField] private HeadPositionManager headPositionManager;
+    [SerializeField] private float headSpeedThreshold;
     [SerializeField] private float speedCheckInterval = 0.05f;
     [SerializeField] private MeshRenderer waterMeshRenderer;
     private Material waterMaterial;
@@ -56,9 +56,9 @@ public class WaveSourceManager : MonoBehaviour
     {
         while (true)
         {
-            if (headTracker.GetSqrSpeed() > headSqrSpeedThreshold)
+            if (headPositionManager.GetSpeed() > headSpeedThreshold)
             {
-                Spawn(headTracker.EyePosition);
+                Spawn(headPositionManager.GetHeadPosUnitySpace());
             }
             yield return new WaitForSeconds(speedCheckInterval);
         }

@@ -3,24 +3,25 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class HeadPositionManager : MonoBehaviour
 {
-    [SerializeField] private Transform kinect;
-    public Vector3 HeadPosKinectSpace { private get; set; }
-    private Vector3 prevHeadPosKinectSpace;
-    [SerializeField] private Transform projectionRenderTexturePlane;
-    [SerializeField] private Transform projectionPlane;
+    [SerializeField] private SimulationHeadTracker simulationHeadTracker;
+    [SerializeField] private Transform unityKinect;
     [SerializeField] private Transform projectionCamera;
+    public Vector3 HeadPosKinectSpace { get; private set; }
+    private Vector3 prevHeadPosKinectSpace;
 
-    public float getSpeed()
+    public float GetSpeed()
     {
         Vector3 deltaPos = HeadPosKinectSpace - prevHeadPosKinectSpace;
         return deltaPos.magnitude / Time.fixedDeltaTime;
     }
+    public Vector3 GetHeadPosUnitySpace()
+    {
+        return unityKinect.TransformPoint(HeadPosKinectSpace);
+    }
     private void FixedUpdate()
     {
         prevHeadPosKinectSpace = HeadPosKinectSpace;
-
-        // HeadPos = simulatedHead.position - projectionRenderTexturePlane.position + projectionPlane.position;
-
-        // projectionCamera.position = HeadPos;
+        HeadPosKinectSpace = simulationHeadTracker.GetHeadPosKinectSpace();
+        projectionCamera.position = GetHeadPosUnitySpace();
     }
 }
