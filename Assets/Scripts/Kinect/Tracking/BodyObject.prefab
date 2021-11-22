@@ -45,4 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
   boneMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
-  jointScale: 0.1
+  jointScale: 0.05

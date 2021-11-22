@@ -8,6 +8,28 @@ public class KinectBodyTracker : MonoBehaviour
     [SerializeField] private BodyObject bodyObjectPrefab;
     private Dictionary<ulong, BodyObject> bodyObjects = new Dictionary<ulong, BodyObject>();
 
+    public Vector3 GetHeadPosition()
+    {
+        if (bodyObjects != null)
+        {
+            Debug.Log("GetHeadPosition() : bodyObjects == null");
+            return Vector3.zero;
+        }
+        else if (bodyObjects.Count == 0)
+        {
+            Debug.Log("GetHeadPosition() : bodyObjects.Count == 0\nNo tracked body");
+            return Vector3.zero;
+        }
+        else if (bodyObjects.Count >= 2)
+        {
+            Debug.Log("GetHeadPosition() : bodyObjects.Count >= 2\nTwo or more tracked body");
+        }
+
+        return Vector3.zero;
+
+        // return bodyObjects[bodyObjects.Keys.]
+    }
+
     private void FixedUpdate()
     {
         Kinect.Body[] currFrameBodiesData = bodySourceManager.GetData();

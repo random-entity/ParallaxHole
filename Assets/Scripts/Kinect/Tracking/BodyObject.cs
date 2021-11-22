@@ -7,16 +7,22 @@ public class BodyObject : MonoBehaviour
     public Kinect.Body body;
     private Dictionary<Kinect.JointType, Transform> jointTransforms;
     [SerializeField] private Material jointMaterial, boneMaterial;
-    public float jointScale;
+    [SerializeField] private float jointScale;
 
     private void FixedUpdate()
     {
         updateJointsPosition();
     }
 
+    public Vector3 GetHeadPosition()
+    {
+        return getVector3PositionFromJoint(body.Joints[Kinect.JointType.Head]);
+    }
+
     public void InitializeBodyObject(Kinect.Body body)
     {
         this.body = body;
+        gameObject.name = "BodyObject ID: " + body.TrackingId;
 
         jointTransforms = new Dictionary<Kinect.JointType, Transform>();
 
@@ -25,14 +31,26 @@ public class BodyObject : MonoBehaviour
             GameObject jointObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             jointObject.GetComponent<MeshRenderer>().material = jointMaterial;
 
+            bool isHead = (int)jointType == 3;
+            bool isFinger = (int)jointType >= 21;
+
+            if (isHead)
+            {
+                jointObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+
             LineRenderer lineRenderer = jointObject.AddComponent<LineRenderer>();
             lineRenderer.material = boneMaterial;
             lineRenderer.positionCount = 2;
-            lineRenderer.startWidth = 0.025f;
-            lineRenderer.endWidth = 0.05f;
+            lineRenderer.startWidth = 0.0125f;
+            lineRenderer.endWidth = 0.025f;
 
             jointObject.name = jointType.ToString();
-            jointObject.transform.localScale = Vector3.one * jointScale;
+
+            Vector3 localScale = Vector3.one * jointScale;
+            if (isFinger) localScale *= 0.25f;
+            if (isHead) localScale *= 2f;
+            jointObject.transform.localScale = localScale;
             jointObject.transform.parent = transform;
 
             jointTransforms.Add(jointType, jointObject.transform);
