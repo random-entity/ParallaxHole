@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(MeshFilter))]
-public class PlaneMeshGeneratorTek : MonoBehaviour
+public class PlaneMeshGenerator : MonoBehaviour
 {
     public static int vertexCount;
     private void Awake()
@@ -42,9 +42,9 @@ public class PlaneMeshGeneratorTek : MonoBehaviour
                 int index = x + y * limitX;
 
                 vertices[index] = new Vector3(
-                    (x * downsample + 0.5f - width / 2) * pitch,
-                    (y * downsample + 0.5f - height / 2) * pitch,
-                    0f
+                    (x * downsample + 0.5f - width * 0.5f) * pitch,
+                    (y * downsample + 0.5f - height * 0.5f) * pitch,
+                    365.6f * pitch
                 );
 
                 depthUV[index] = new Vector2(

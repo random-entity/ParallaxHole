@@ -2,60 +2,62 @@ using System;
 using UnityEngine;
 using Windows.Kinect;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class PointCloudSetDepth : MonoBehaviour
 {
     private KinectSensor sensor;
-    private DepthFrameReader reader;
-    private ushort[] data;
-    private byte[] rawData;
+    private DepthFrameReader depthReader;
+    private ushort[] depthData;
+    private byte[] rawDepthData;
     private Texture2D depthTexture;
-    private Material material;
+    private Material pointCloudMaterial;
 
     private void Start()
     {
         sensor = KinectSensor.GetDefault();
-
         if (sensor != null)
         {
-            reader = sensor.DepthFrameSource.OpenReader();
-            FrameDescription frameDesc = sensor.DepthFrameSource.FrameDescription;
-            data = new ushort[frameDesc.LengthInPixels];
-            rawData = new byte[frameDesc.LengthInPixels * 2];
-            depthTexture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.R16, false);
+            depthReader = sensor.DepthFrameSource.OpenReader();
+            FrameDescription depthFrameDesc = sensor.DepthFrameSource.FrameDescription;
+            depthData = new ushort[depthFrameDesc.LengthInPixels];
+            rawDepthData = new byte[depthFrameDesc.LengthInPixels * 2];
+            depthTexture = new Texture2D(depthFrameDesc.Width, depthFrameDesc.Height, TextureFormat.R16, false);
+
+            if (!sensor.IsOpen)
+            {
+                sensor.Open();
+            }
         }
 
-        if (!sensor.IsOpen)
-        {
-            sensor.Open();
-        }
+        pointCloudMaterial = GetComponent<MeshRenderer>().material;
+        if (pointCloudMaterial.shader.name != "Random Entity/PointCloud") Debug.LogWarning("MeshRenderer's material not set to PointCloud material");
 
-        material = GetComponent<MeshRenderer>().material;
-        material.SetTexture("_DepthTexture", depthTexture);
+        pointCloudMaterial.SetTexture("_DepthTexture", depthTexture);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        DepthFrame frame = reader.AcquireLatestFrame();
-        FrameDescription frameDesc = sensor.DepthFrameSource.FrameDescription;
+        DepthFrame depthFrame = depthReader.AcquireLatestFrame();
+        FrameDescription depthFrameDesc = sensor.DepthFrameSource.FrameDescription;
 
-        if (frame != null)
+        if (depthFrame != null)
         {
-            frame.CopyFrameDataToArray(data);
-            Buffer.BlockCopy(data, 0, rawData, 0, data.Length * 2);
-            depthTexture.LoadRawTextureData(rawData);
+            depthFrame.CopyFrameDataToArray(depthData);
+            Buffer.BlockCopy(depthData, 0, rawDepthData, 0, depthData.Length * 2);
+            depthTexture.LoadRawTextureData(rawDepthData);
             depthTexture.Apply();
 
-            frame.Dispose();
-            frame = null;
+            depthFrame.Dispose();
+            depthFrame = null;
         }
     }
 
     private void OnApplicationQuit()
     {
-        if (reader != null)
+        if (depthReader != null)
         {
-            reader.Dispose();
-            reader = null;
+            depthReader.Dispose();
+            depthReader = null;
         }
 
         if (sensor != null)

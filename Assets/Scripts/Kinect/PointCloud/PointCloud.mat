@@ -32,7 +32,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _BrightnessScale: 2
+    - _DepthScale: 1.1
     - _Displacement: 0.01
+    - _Pitch: 0.01
     m_Colors:
+    - _BrightnessScale: {r: 1.5, g: 1.5, b: 1.5, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

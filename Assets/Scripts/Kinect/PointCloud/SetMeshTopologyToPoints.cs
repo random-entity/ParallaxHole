@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
-public class ToPointCloud : MonoBehaviour
+public class SetMeshTopologyToPoints : MonoBehaviour
 {
     private void Start()
     {
