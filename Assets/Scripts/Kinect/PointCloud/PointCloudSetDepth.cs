@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Windows.Kinect;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class PointCloudSetDepth : MonoBehaviour
 {
     private KinectSensor sensor;
@@ -29,7 +30,7 @@ public class PointCloudSetDepth : MonoBehaviour
         }
 
         pointCloudMaterial = GetComponent<MeshRenderer>().material;
-        if (pointCloudMaterial.shader.name != "PointCloud") Debug.LogWarning("MeshRenderer's material not set to PointCloud material");
+        if (pointCloudMaterial.shader.name != "Random Entity/PointCloud") Debug.LogWarning("MeshRenderer's material not set to PointCloud material");
 
         pointCloudMaterial.SetTexture("_DepthTexture", depthTexture);
     }

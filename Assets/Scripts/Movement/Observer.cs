@@ -1,10 +1,10 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class FreeMovement : MonoBehaviour
+public class Observer : MonoBehaviour
 {
+    [SerializeField] private Camera cam;
     [SerializeField] private float speed = 2f;
-    [SerializeField] private Camera playerCamera;
     [SerializeField] private float lookSpeed = 2.0f;
     [SerializeField] private float lookXLimit = 90f;
 
@@ -42,7 +42,7 @@ public class FreeMovement : MonoBehaviour
         // Player and Camera rotation
         rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
         rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        cam.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
     }
 }

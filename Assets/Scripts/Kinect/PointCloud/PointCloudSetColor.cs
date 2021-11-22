@@ -1,44 +1,39 @@
 using UnityEngine;
 using Windows.Kinect;
 
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
 public class PointCloudSetColor : MonoBehaviour
 {
     private KinectSensor sensor;
     private CoordinateMapper mapper;
     [SerializeField] private MultiSourceManager multiSourceManager;
-    private Mesh mesh;
-    private Material material;
-    private Texture2D colorTexture;
     private Vector2[] colorUV;
-
+    private Mesh pointCloudMesh;
+    private Material pointCloudMaterial;
     private void Start()
     {
         sensor = KinectSensor.GetDefault();
         if (sensor != null)
         {
             mapper = sensor.CoordinateMapper;
-
-            var colorFrameDesc = sensor.ColorFrameSource.FrameDescription;
-            colorTexture = new Texture2D(colorFrameDesc.Width, colorFrameDesc.Height);
-
             if (!sensor.IsOpen) sensor.Open();
         }
 
-
         colorUV = new Vector2[PlaneMeshGenerator.vertexCount];
 
-        mesh = GetComponent<MeshFilter>().mesh;
-        material = GetComponent<MeshRenderer>().material;
+        pointCloudMesh = GetComponent<MeshFilter>().mesh;
+        pointCloudMaterial = GetComponent<MeshRenderer>().material;
     }
 
     private void FixedUpdate()
     {
         if (sensor == null) return;
 
-        material.SetTexture("_ColorTexture", multiSourceManager.GetColorTexture());
+        pointCloudMaterial.SetTexture("_ColorTexture", multiSourceManager.GetColorTexture());
 
         setColorUV(multiSourceManager.GetDepthData(), multiSourceManager.ColorWidth, multiSourceManager.ColorHeight);
-        mesh.SetUVs(1, colorUV);
+        pointCloudMesh.SetUVs(1, colorUV);
     }
 
     private void setColorUV(ushort[] depthData, int colorWidth, int colorHeight)
@@ -65,6 +60,17 @@ public class PointCloudSetColor : MonoBehaviour
 
                 colorUV[downsampledIndex] = new Vector2(colorSpacePoint.X / colorWidth, colorSpacePoint.Y / colorHeight);
             }
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (mapper != null) mapper = null;
+
+        if (sensor != null)
+        {
+            if (sensor.IsOpen) sensor.Close();
+            sensor = null;
         }
     }
 }
