@@ -44,7 +44,7 @@ public class PlaneMeshGenerator : MonoBehaviour
                 vertices[index] = new Vector3(
                     (x * downsample + 0.5f - width * 0.5f) * pitch,
                     (y * downsample + 0.5f - height * 0.5f) * pitch,
-                    0f
+                    365.6f * pitch
                 );
 
                 depthUV[index] = new Vector2(
