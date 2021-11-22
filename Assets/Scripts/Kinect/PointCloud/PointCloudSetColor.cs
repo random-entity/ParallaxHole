@@ -15,24 +15,25 @@ public class PointCloudSetColor : MonoBehaviour
 
     private void Start()
     {
+        downsample = PointCloudConfig.downsample;
+        vertexCount = PlaneMeshGeneratorTek.vertexCount;
+
+        colorUV = new Vector2[512 * 424];
+
+        mesh = GetComponent<MeshFilter>().mesh;
+        material = GetComponent<MeshRenderer>().material;
+
         sensor = KinectSensor.GetDefault();
         if (sensor != null)
         {
             mapper = sensor.CoordinateMapper;
 
-            var frameDesc = sensor.ColorFrameSource.FrameDescription;
-            colorTexture = new Texture2D(frameDesc.Width, frameDesc.Height);
+            var colorFrameDesc = sensor.ColorFrameSource.FrameDescription;
+            colorTexture = new Texture2D(colorFrameDesc.Width, colorFrameDesc.Height);
 
             if (!sensor.IsOpen) sensor.Open();
         }
 
-        mesh = GetComponent<MeshFilter>().mesh;
-        material = GetComponent<MeshRenderer>().material;
-
-        downsample = PointCloudConfig.downsample;
-        vertexCount = PlaneMeshGenerator.vertexCount;
-
-        colorUV = new Vector2[vertexCount];
     }
 
     private void FixedUpdate()

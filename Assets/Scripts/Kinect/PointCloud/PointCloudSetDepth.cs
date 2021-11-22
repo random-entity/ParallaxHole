@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using Windows.Kinect;
 
-[RequireComponent(typeof(PlaneMeshGenerator))]
 public class PointCloudSetDepth : MonoBehaviour
 {
     private KinectSensor sensor;

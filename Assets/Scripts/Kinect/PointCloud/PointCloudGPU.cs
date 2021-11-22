@@ -1,8 +1,6 @@
 using UnityEngine;
 using Windows.Kinect;
 
-[RequireComponent(typeof(PlaneMeshGenerator))]
-[RequireComponent(typeof(ToPointCloud))]
 public class PointCloudGPU : MonoBehaviour
 {
     #region Kinect

@@ -2,41 +2,36 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(MeshFilter))]
-public class PlaneMeshGenerator : MonoBehaviour
+public class PlaneMeshGeneratorTek : MonoBehaviour
 {
-    private static readonly int width = 512;
-    private static readonly int height = 424;
-    private int downsample;
-    [SerializeField] private float pitch;
     public static int vertexCount;
-    private MeshFilter meshFilter;
-
     private void Awake()
     {
-        downsample = PointCloudConfig.downsample;
-
-        meshFilter = GetComponent<MeshFilter>();
-
+        MeshFilter meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = generateMesh();
-
         vertexCount = meshFilter.mesh.vertices.Length;
     }
 
     private Mesh generateMesh()
     {
+        int width = PointCloudConfig.depthWidth;
+        int height = PointCloudConfig.depthHeight;
+        int downsample = PointCloudConfig.downsample;
+        float pitch = PointCloudConfig.pitch;
+
         Mesh mesh = new Mesh();
         mesh.indexFormat = IndexFormat.UInt32;
 
         int limitX = width / downsample + 1;
         if (width % downsample == 0) limitX--;
 
-        int limitY = height / downsample;
+        int limitY = height / downsample + 1;
         if (height % downsample == 0) limitY--;
 
         int vertexCount = limitX * limitY;
 
         Vector3[] vertices = new Vector3[vertexCount];
-        Vector2[] uv = new Vector2[vertexCount];
+        Vector2[] depthUV = new Vector2[vertexCount];
 
         int[] triangles = new int[(limitX - 1) * (limitY - 1) * 6];
 
@@ -52,7 +47,7 @@ public class PlaneMeshGenerator : MonoBehaviour
                     0f
                 );
 
-                uv[index] = new Vector2(
+                depthUV[index] = new Vector2(
                     (x * downsample + 0.5f) / width,
                     (y * downsample + 0.5f) / height
                 );
@@ -76,11 +71,11 @@ public class PlaneMeshGenerator : MonoBehaviour
         }
 
         mesh.vertices = vertices;
-        mesh.SetUVs(0, uv);
+        mesh.SetUVs(0, depthUV);
         mesh.triangles = triangles;
 
-        mesh.RecalculateBounds();
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
 
         return mesh;
     }

@@ -28,6 +28,7 @@ Shader "Random Entity/PointCloud"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float2 uv_color : TEXCOORD1;
             };
 
             struct v2f
@@ -39,6 +40,10 @@ Shader "Random Entity/PointCloud"
 
             sampler2D _DepthTexture;
             float4 _DepthTexture_ST;
+
+            sampler2D _ColorTexture;
+
+
             float _Displacement;
             fixed4 _Color;
 
@@ -56,7 +61,8 @@ Shader "Random Entity/PointCloud"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _DepthTexture);
 
-                o.col = float4(d % 1, 1, 1, 1);
+                // o.col = float4(frac(d * 0.25), 0, 1, 1);
+                o.col = tex2Dlod(_ColorTexture, float4(v.uv_color, 0, 0));
 
                 return o;
             }

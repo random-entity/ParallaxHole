@@ -53,7 +53,7 @@ Shader "Unlit/KinectDepth"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
-                o.col = float4(d % 1, 1, 1, 1);
+                o.col = float4(frac(d * 0.25), 0, 1, 1);
 
                 return o;
             }
