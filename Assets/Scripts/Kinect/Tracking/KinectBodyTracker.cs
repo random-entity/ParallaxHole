@@ -7,27 +7,26 @@ public class KinectBodyTracker : MonoBehaviour
     [SerializeField] private BodySourceManager bodySourceManager;
     [SerializeField] private BodyObject bodyObjectPrefab;
     private Dictionary<ulong, BodyObject> bodyObjects = new Dictionary<ulong, BodyObject>();
+    [SerializeField] private List<ulong> orderedListOfBodyIds = new List<ulong>();
 
-    public Vector3 GetHeadPosition()
+    public Vector3 GetHeadPositionKinectSpace()
     {
-        if (bodyObjects != null)
+        if (bodyObjects == null)
         {
             Debug.Log("GetHeadPosition() : bodyObjects == null");
             return Vector3.zero;
         }
         else if (bodyObjects.Count == 0)
         {
-            Debug.Log("GetHeadPosition() : bodyObjects.Count == 0\nNo tracked body");
+            Debug.Log("GetHeadPosition() : bodyObjects.Count == 0 : No tracked body");
             return Vector3.zero;
         }
         else if (bodyObjects.Count >= 2)
         {
-            Debug.Log("GetHeadPosition() : bodyObjects.Count >= 2\nTwo or more tracked body");
+            Debug.Log("GetHeadPosition() : bodyObjects.Count >= 2 : Two or more tracked body");
         }
 
-        return Vector3.zero;
-
-        // return bodyObjects[bodyObjects.Keys.]
+        return bodyObjects[orderedListOfBodyIds[0]].GetHeadPositionKinectSpace();
     }
 
     private void FixedUpdate()
@@ -53,6 +52,8 @@ public class KinectBodyTracker : MonoBehaviour
             {
                 Destroy(bodyObjects[prevFrameTrackedBodyId].gameObject);
                 bodyObjects.Remove(prevFrameTrackedBodyId);
+
+                orderedListOfBodyIds.Remove(prevFrameTrackedBodyId);
             }
         }
 
@@ -63,9 +64,13 @@ public class KinectBodyTracker : MonoBehaviour
             if (body != null && body.IsTracked && !bodyObjects.ContainsKey(body.TrackingId))
             {
                 BodyObject bodyObject = Instantiate(bodyObjectPrefab);
+                bodyObject.transform.SetParent(transform);
+
                 bodyObject.InitializeBodyObject(body);
 
                 bodyObjects[body.TrackingId] = bodyObject;
+
+                orderedListOfBodyIds.Add(body.TrackingId);
             }
         }
     }

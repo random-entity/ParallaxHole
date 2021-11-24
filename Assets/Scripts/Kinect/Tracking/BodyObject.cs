@@ -9,17 +9,17 @@ public class BodyObject : MonoBehaviour
     [SerializeField] private Material jointMaterial, boneMaterial;
     [SerializeField] private float jointScale;
 
+    public Vector3 GetHeadPositionKinectSpace()
+    {
+        return getVector3PositionFromJoint(body.Joints[Kinect.JointType.Head]);
+    }
+
     private void FixedUpdate()
     {
         updateJointsPosition();
     }
 
-    public Vector3 GetHeadPosition()
-    {
-        return getVector3PositionFromJoint(body.Joints[Kinect.JointType.Head]);
-    }
-
-    public void InitializeBodyObject(Kinect.Body body)
+    public void InitializeBodyObject(Kinect.Body body) // This method is called by KinectBodyTracker.cs whenever new body is tracked
     {
         this.body = body;
         gameObject.name = "BodyObject ID: " + body.TrackingId;
@@ -62,23 +62,24 @@ public class BodyObject : MonoBehaviour
         for (Kinect.JointType jointType = Kinect.JointType.SpineBase; jointType <= Kinect.JointType.ThumbRight; jointType++)
         {
             Kinect.Joint sourceJoint = body.Joints[jointType];
+
             Kinect.Joint? targetJoint = null;
             if (boneMap.ContainsKey(jointType)) targetJoint = body.Joints[boneMap[jointType]];
 
             Transform jointTransform = jointTransforms[jointType];
             jointTransform.localPosition = getVector3PositionFromJoint(sourceJoint);
 
-            LineRenderer lr = jointTransform.GetComponent<LineRenderer>();
+            LineRenderer lineRenderer = jointTransform.GetComponent<LineRenderer>();
             if (targetJoint.HasValue)
             {
-                lr.SetPosition(0, jointTransform.localPosition);
-                lr.SetPosition(1, getVector3PositionFromJoint(targetJoint.Value));
-                lr.startColor = getColorFromState(sourceJoint.TrackingState);
-                lr.endColor = getColorFromState(targetJoint.Value.TrackingState);
+                lineRenderer.SetPosition(0, jointTransform.position);
+                lineRenderer.SetPosition(1, getVector3PositionFromJoint(targetJoint.Value) + jointTransform.position - jointTransform.localPosition);
+                lineRenderer.startColor = getColorFromState(sourceJoint.TrackingState);
+                lineRenderer.endColor = getColorFromState(targetJoint.Value.TrackingState);
             }
             else
             {
-                lr.enabled = false;
+                lineRenderer.enabled = false;
             }
         }
     }

@@ -33,7 +33,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BrightnessScale: 2
-    - _DepthScale: 1.1
+    - _DepthScale: 1.03
     - _Displacement: 0.01
     - _Pitch: 0.01
     m_Colors:

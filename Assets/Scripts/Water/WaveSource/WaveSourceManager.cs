@@ -58,7 +58,7 @@ public class WaveSourceManager : MonoBehaviour
         {
             if (headPositionManager.GetSpeed() > headSpeedThreshold)
             {
-                Spawn(headPositionManager.GetHeadPosUnitySpace());
+                Spawn(headPositionManager.GetHeadPosUnityWorldSpace());
             }
             yield return new WaitForSeconds(speedCheckInterval);
         }
