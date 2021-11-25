@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9192499001077845528}
   - component: {fileID: 9192499001077845527}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BodyObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,3 +46,4 @@ MonoBehaviour:
   jointMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
   boneMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
   jointScale: 0.05
+  doRenderJoints: 1

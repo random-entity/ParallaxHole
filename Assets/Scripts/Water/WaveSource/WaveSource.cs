@@ -47,13 +47,14 @@ public class WaveSource : MonoBehaviour
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        transform.localScale = Vector3.one * 0.25f;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (meshRenderer.enabled)
         {
-            transform.localScale = Vector3.one * (1f - timeSinceEnabled / MaxTime);
+            transform.localScale = Vector3.one * 0.25f * (1f - timeSinceEnabled / MaxTime);
         }
     }
 }

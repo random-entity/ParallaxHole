@@ -35,20 +35,20 @@ Material:
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
     - _Radius: 1
-    - _RefractionStrength: 0.05
+    - _RefractionStrength: 0.025
     - _SineWaveAmp: 0.15
     - _SineWaveDistanceDamp: 8
     - _SineWaveHeightScale: 40
     - _SineWaveLength: 0.2
     - _SineWaveSpeed: 0.5
-    - _WaterFogDensity: 1
+    - _WaterFogDensity: 0.2
     - _WaterSurfaceY: -0.25
     - _WaveAmp: 0.59
     - _WaveMix: 0
     - _WaveSourceMaxTime: 6
     m_Colors:
-    - _Color: {r: 0, g: 1, b: 0.8635032, a: 0.34901962}
+    - _Color: {r: 0, g: 1, b: 0.8635032, a: 0.14901961}
     - _GerWaveConfig: {r: 0.5, g: 0.5, b: 1, a: 9.8}
-    - _SineWaveConfig: {r: 0.15, g: 0.2, b: 0.5, a: 8}
+    - _SineWaveConfig: {r: 0.1, g: 0.1, b: 0.4, a: 16}
     - _WaterFogColor: {r: 0.08116765, g: 0.3076768, b: 0.9056604, a: 0.5882353}
   m_BuildTextureStacks: []

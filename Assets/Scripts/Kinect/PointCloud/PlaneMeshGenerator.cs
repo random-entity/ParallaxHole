@@ -75,7 +75,8 @@ public class PlaneMeshGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 1000f);
 
         return mesh;
     }

@@ -175,7 +175,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e3d5d509e209c449dacb0cb6f841a5f7, type: 2}
+  - {fileID: 2100000, guid: a9aa90fa6b1501f4fa92f3f9fad803c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -420,8 +420,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 4
+  m_Intensity: 5.67
+  m_Range: 1.39
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -514,6 +514,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &458348830 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1188945646022478736, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
+  m_PrefabInstance: {fileID: 1188945647277370421}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &595297771 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1188945647832013820, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
+  m_PrefabInstance: {fileID: 1188945647277370421}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &613871023
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,7 +656,7 @@ Camera:
     m_Bits: 64
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -697,7 +707,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -790,7 +800,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &756444798
 GameObject:
@@ -1035,6 +1045,119 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823100600}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &859217698
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 859217699}
+  - component: {fileID: 859217701}
+  - component: {fileID: 859217700}
+  m_Layer: 0
+  m_Name: Unity Underwater Kinect Mesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &859217699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859217698}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_Children: []
+  m_Father: {fileID: 871106661}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &859217700
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859217698}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &859217701
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859217698}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &871106660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 871106661}
+  m_Layer: 0
+  m_Name: Unity Underwater Kinect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &871106661
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871106660}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: -1}
+  m_LocalPosition: {x: 0, y: -1.3, z: -1.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 859217699}
+  - {fileID: 1841264701}
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &917784697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,24 +1598,36 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046560091}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 10, y: 1.2, z: 1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 968700309}
   m_Father: {fileID: 0}
   m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &1051171768
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1154549492}
+    m_TransformParent: {fileID: 871106661}
     m_Modifications:
+    - target: {fileID: 6290982284923303346, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6290982284923303346, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6290982284923303346, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1500,7 +1635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1512,15 +1647,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1670,7 +1805,6 @@ Transform:
   m_Children:
   - {fileID: 1159669483}
   - {fileID: 1054784417}
-  - {fileID: 1841264701}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1787,7 +1921,7 @@ Transform:
   - {fileID: 1547836017}
   - {fileID: 1102428665}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1291011958
 GameObject:
@@ -1986,7 +2120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629458303194569903, guid: 5312f766c50c1624fb396c71038e9f6e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6629458303194569903, guid: 5312f766c50c1624fb396c71038e9f6e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2174,6 +2308,9 @@ MonoBehaviour:
   useRealKinect: 1
   kinectBodyTracker: {fileID: 289206668}
   simulationHeadTracker: {fileID: 1046560092}
+  simPlayerFollowRealHead: 1
+  simPlayer: {fileID: 458348830}
+  simPlayerCamera: {fileID: 595297771}
   unityRealKinectTransform: {fileID: 1154549492}
   projectionCamera: {fileID: 963194228}
 --- !u!4 &1752323334
@@ -2598,7 +2735,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1188945646022478741, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Sim Player
       objectReference: {fileID: 0}
     - target: {fileID: 1188945646100566014, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
       propertyPath: m_MotionVectors
@@ -2619,6 +2756,14 @@ PrefabInstance:
     - target: {fileID: 1188945646100566014, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
       propertyPath: m_ReflectionProbeUsage
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1188945647832013811, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
+      propertyPath: m_Name
+      value: Sim Player Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1188945647832013821, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
+      propertyPath: m_TargetDisplay
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}

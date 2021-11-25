@@ -6,6 +6,9 @@ public class HeadPositionManager : MonoBehaviour
     [SerializeField] private bool useRealKinect;
     [SerializeField] private KinectBodyTracker kinectBodyTracker;
     [SerializeField] private SimulationHeadTracker simulationHeadTracker;
+    [SerializeField] private bool simPlayerFollowRealHead;
+    [SerializeField] private Transform simPlayer;
+    [SerializeField] private Transform simPlayerCamera;
     [SerializeField] private Transform unityRealKinectTransform;
     [SerializeField] private Transform projectionCamera;
     public Vector3 HeadPositionKinectSpace { get; private set; }
@@ -22,6 +25,8 @@ public class HeadPositionManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        simPlayer.GetComponent<PlayerMovement>().enabled = !simPlayerFollowRealHead;
+
         prevHeadPositionKinectSpace = HeadPositionKinectSpace;
 
         if (useRealKinect)
@@ -31,14 +36,21 @@ public class HeadPositionManager : MonoBehaviour
             if (headPositionKinectSpaceCandidate != Vector3.zero)
             {
                 HeadPositionKinectSpace = headPositionKinectSpaceCandidate;
+
+                if (simPlayerFollowRealHead)
+                {
+                    simPlayer.position = simulationHeadTracker.transform.TransformPoint(HeadPositionKinectSpace) + Vector3.up;
+                    simPlayerCamera.LookAt(new Vector3(10f, 0f, 0f));
+                }
             }
         }
         else
         {
+            simPlayer.GetComponent<PlayerMovement>().enabled = true;
+
             HeadPositionKinectSpace = simulationHeadTracker.GetHeadPositionKinectSpace();
         }
 
         projectionCamera.position = GetHeadPositionUnityWorldSpace();
-        Debug.Log(GetHeadPositionUnityWorldSpace());
     }
 }

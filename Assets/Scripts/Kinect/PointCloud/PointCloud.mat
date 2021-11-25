@@ -37,6 +37,7 @@ Material:
     - _Displacement: 0.01
     - _Pitch: 0.01
     m_Colors:
+    - _Bounds: {r: 2, g: -1, b: 1, a: 4}
     - _BrightnessScale: {r: 1.5, g: 1.5, b: 1.5, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

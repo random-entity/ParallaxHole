@@ -8,7 +8,7 @@ Shader "Random Entity/PointCloud"
         _Pitch ("Pitch", Float) = 0.01
         _DepthScale ("Depth Scale", Range(0, 2)) = 1
 
-        _Bounds ("Bounds X, Y, Z near, Z far", Vector) = (2, 2, 0.5, 2.5)
+        _Bounds ("Bounds: x = X far, y = Y bottom, z = Y top, w = Z far", Vector) = (2, 2, 0.5, 2.5)
 
         _BrightnessScale ("Brightness Scale", Vector) = (2, 2, 2, 1)
     }
@@ -69,8 +69,8 @@ Shader "Random Entity/PointCloud"
             {
                 float doClip = 1;
                 if(abs(i.kinectSpacePos.x) > _Bounds.x) doClip = -1;
-                if(abs(i.kinectSpacePos.y) > _Bounds.y) doClip = -1;
-                if(i.kinectSpacePos.z < _Bounds.z) doClip = -1;
+                if(-i.kinectSpacePos.y < _Bounds.y) doClip = -1;
+                if(-i.kinectSpacePos.y > _Bounds.z) doClip = -1;
                 if(i.kinectSpacePos.z > _Bounds.w) doClip = -1;
 
                 clip(doClip);

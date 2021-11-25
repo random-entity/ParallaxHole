@@ -8,6 +8,7 @@ public class BodyObject : MonoBehaviour
     private Dictionary<Kinect.JointType, Transform> jointTransforms;
     [SerializeField] private Material jointMaterial, boneMaterial;
     [SerializeField] private float jointScale;
+    [SerializeField] private bool doRenderJoints;
 
     public Vector3 GetHeadPositionKinectSpace()
     {
@@ -17,6 +18,15 @@ public class BodyObject : MonoBehaviour
     private void FixedUpdate()
     {
         updateJointsPosition();
+    }
+
+    private void setRenderJointsEnabled(bool on)
+    {
+        foreach (var jointType in jointTransforms.Keys)
+        {
+            jointTransforms[jointType].GetComponent<MeshRenderer>().enabled = on;
+            jointTransforms[jointType].GetComponent<LineRenderer>().enabled = on;
+        }
     }
 
     public void InitializeBodyObject(Kinect.Body body) // This method is called by KinectBodyTracker.cs whenever new body is tracked
@@ -53,8 +63,11 @@ public class BodyObject : MonoBehaviour
             jointObject.transform.localScale = localScale;
             jointObject.transform.parent = transform;
 
+            jointObject.layer = 7; // "Debugger";
             jointTransforms.Add(jointType, jointObject.transform);
         }
+
+        setRenderJointsEnabled(doRenderJoints);
     }
 
     private void updateJointsPosition()
