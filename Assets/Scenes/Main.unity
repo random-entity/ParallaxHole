@@ -697,7 +697,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -790,7 +790,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &756444798
 GameObject:
@@ -1288,7 +1288,7 @@ GameObject:
   - component: {fileID: 968700308}
   - component: {fileID: 968700307}
   m_Layer: 0
-  m_Name: Simulation Kinect
+  m_Name: Simulation Head Tracker Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1350,12 +1350,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 968700306}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 2.35, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.2, z: 0.4}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_Father: {fileID: 1046560093}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1044017032
 GameObject:
@@ -1449,7 +1449,7 @@ GameObject:
   - component: {fileID: 1046560093}
   - component: {fileID: 1046560092}
   m_Layer: 0
-  m_Name: Simulation Head Tracker
+  m_Name: Simulation Kinect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1468,7 +1468,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulationHead: {fileID: 1579459530}
-  simulationKinect: {fileID: 968700309}
 --- !u!4 &1046560093
 Transform:
   m_ObjectHideFlags: 0
@@ -1477,11 +1476,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046560091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 10, y: 1.2, z: 1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 968700309}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1051171768
 PrefabInstance:
@@ -1500,7 +1500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6770841713306054828, guid: a4f1fe2e966b0894baa5f21c7bc6a988, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1573,10 +1573,10 @@ Transform:
   m_GameObject: {fileID: 1102428664}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 10, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 1, z: 4}
   m_Children: []
   m_Father: {fileID: 1199765170}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1102428666
 MeshCollider:
@@ -1651,7 +1651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1154549492}
   m_Layer: 0
-  m_Name: Unity Kinect
+  m_Name: Unity Real Kinect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1665,7 +1665,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1154549491}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 1.2, z: 2}
+  m_LocalPosition: {x: 0, y: 1.2, z: 1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1159669483}
@@ -1686,7 +1686,7 @@ GameObject:
   - component: {fileID: 1159669485}
   - component: {fileID: 1159669484}
   m_Layer: 0
-  m_Name: Unity Kinect Mesh
+  m_Name: Unity Real Kinect Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1784,10 +1784,10 @@ Transform:
   m_Children:
   - {fileID: 1509332502}
   - {fileID: 19865472}
-  - {fileID: 1102428665}
   - {fileID: 1547836017}
+  - {fileID: 1102428665}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1291011958
 GameObject:
@@ -1986,7 +1986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629458303194569903, guid: 5312f766c50c1624fb396c71038e9f6e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6629458303194569903, guid: 5312f766c50c1624fb396c71038e9f6e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2135,7 +2135,7 @@ Transform:
   - {fileID: 918348551}
   - {fileID: 1363849235}
   m_Father: {fileID: 1199765170}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1579459530 stripped
 Transform:
@@ -2171,10 +2171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a512b3cadc860d42951db49e39d1f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isReal: 1
+  useRealKinect: 1
   kinectBodyTracker: {fileID: 289206668}
   simulationHeadTracker: {fileID: 1046560092}
-  simulationPlayer: {fileID: 1952686054}
+  unityRealKinectTransform: {fileID: 1154549492}
   projectionCamera: {fileID: 963194228}
 --- !u!4 &1752323334
 Transform:
@@ -2188,7 +2188,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1783128200
 GameObject:
@@ -2420,17 +2420,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846645709}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1952686054 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1188945646022478740, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
-  m_PrefabInstance: {fileID: 1188945647277370421}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45bc09ca6124b4693b76800711ad92b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2043383793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2565,7 +2554,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1188945646022478736, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1188945646022478736, guid: 3f840c6ebbc4de140bef875ba10cb16e, type: 3}
       propertyPath: m_LocalPosition.x

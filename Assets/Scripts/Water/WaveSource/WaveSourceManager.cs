@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class WaveSourceManager : MonoBehaviour
 {
-    private static int size = 200; // Water.shader의 _WaveSources array size와 동일해야 함.
+    private static int objectPoolSize = 200; // Water.shader의 _WaveSources array size와 동일해야 함.
     [SerializeField] private WaveSource waveSourcePrefab;
     public Queue<WaveSource> waveSourceQueue;
     public static int activeWaveSourceCount = 0; // WaveSource.OnEnable(), OnDisable()에서 increment, decrement
     private static float activeWaveSourceCountSmooth = 1f;
     [SerializeField] private HeadPositionManager headPositionManager;
     [SerializeField] private float headSpeedThreshold;
-    [SerializeField] private float speedCheckInterval = 0.05f;
+    [SerializeField] private float speedCheckInterval;
     [SerializeField] private MeshRenderer waterMeshRenderer;
     private Material waterMaterial;
 
@@ -19,7 +19,7 @@ public class WaveSourceManager : MonoBehaviour
     {
         waveSourceQueue = new Queue<WaveSource>();
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < objectPoolSize; i++)
         {
             WaveSource waveSource = Instantiate(waveSourcePrefab);
             waveSource.gameObject.SetActive(false);
@@ -27,13 +27,13 @@ public class WaveSourceManager : MonoBehaviour
             waveSourceQueue.Enqueue(waveSource);
         }
 
-        StartCoroutine(checkHeadSqrSpeedAndSpawn());
-
         waterMaterial = waterMeshRenderer.material;
         waterMaterial.SetFloat("_WaveSourceMaxTime", WaveSource.MaxTime);
+
+        StartCoroutine(checkHeadSpeedAndSpawn());
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         waterMaterial.SetVectorArray("_WaveSourcesData", getDataFloat4Array());
 
@@ -42,23 +42,23 @@ public class WaveSourceManager : MonoBehaviour
         waterMaterial.SetFloat("_ActiveWaveSourceCountSmooth", Mathf.Pow(activeWaveSourceCountSmooth, 0.25f));
     }
 
-    public void Spawn(Vector3 position)
+    private void spawn(Vector3 worldPosition)
     {
         WaveSource waveSource = waveSourceQueue.Dequeue();
         waveSourceQueue.Enqueue(waveSource); // 다시 맨 뒤에 놓기. empty queue에 dequeue 불렀다가 InvalidOperation exception 뜨지 않게.
         if (waveSource.gameObject.activeInHierarchy) waveSource.gameObject.SetActive(false);
 
-        waveSource.transform.position = position;
+        waveSource.transform.position = worldPosition;
         waveSource.gameObject.SetActive(true);
     }
 
-    private IEnumerator checkHeadSqrSpeedAndSpawn()
+    private IEnumerator checkHeadSpeedAndSpawn()
     {
         while (true)
         {
             if (headPositionManager.GetSpeed() > headSpeedThreshold)
             {
-                Spawn(headPositionManager.GetHeadPosUnityWorldSpace());
+                spawn(headPositionManager.GetHeadPositionUnityWorldSpace());
             }
             yield return new WaitForSeconds(speedCheckInterval);
         }
@@ -66,14 +66,14 @@ public class WaveSourceManager : MonoBehaviour
 
     private Vector4[] getDataFloat4Array()
     {
-        Vector4[] arr = new Vector4[size];
+        Vector4[] data = new Vector4[objectPoolSize];
 
         int index = 0;
         foreach (WaveSource waveSource in waveSourceQueue)
         {
-            arr[index++] = waveSource.GetDataFloat4();
+            data[index++] = waveSource.GetDataFloat4();
         }
 
-        return arr;
+        return data;
     }
 }

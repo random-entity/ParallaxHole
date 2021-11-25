@@ -8,6 +8,8 @@ Shader "Random Entity/PointCloud"
         _Pitch ("Pitch", Float) = 0.01
         _DepthScale ("Depth Scale", Range(0, 2)) = 1
 
+        _Bounds ("Bounds X, Y, Z near, Z far", Vector) = (2, 2, 0.5, 2.5)
+
         _BrightnessScale ("Brightness Scale", Vector) = (2, 2, 2, 1)
     }
     SubShader
@@ -35,12 +37,14 @@ Shader "Random Entity/PointCloud"
             {
                 float4 vertex : SV_POSITION;
                 float4 col : COLOR;
+                float3 kinectSpacePos : TEXCOORD0;
             };
 
             sampler2D _DepthTexture;
             sampler2D _ColorTexture;
             float _Pitch;
             float _DepthScale;
+            float4 _Bounds;
             float4 _BrightnessScale;
 
             v2f vert (appdata v)
@@ -56,12 +60,21 @@ Shader "Random Entity/PointCloud"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.col = tex2Dlod(_ColorTexture, float4(v.uv_color, 0, 0));
+                o.kinectSpacePos = v.vertex.xyz;
                                 
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
+                float doClip = 1;
+                if(abs(i.kinectSpacePos.x) > _Bounds.x) doClip = -1;
+                if(abs(i.kinectSpacePos.y) > _Bounds.y) doClip = -1;
+                if(i.kinectSpacePos.z < _Bounds.z) doClip = -1;
+                if(i.kinectSpacePos.z > _Bounds.w) doClip = -1;
+
+                clip(doClip);
+
                 fixed4 col = i.col;
                 
                 return saturate(col * _BrightnessScale);
