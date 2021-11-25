@@ -85,7 +85,7 @@ Material:
     - _WaveSourceMaxTime: 8
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.93484026, g: 1, b: 0.4575472, a: 1}
+    - _Color: {r: 0.81951237, g: 1, b: 0.45882356, a: 0.1764706}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GerWaveConfig: {r: 0.5, g: 0.5, b: 1, a: 9.8}
     - _SineWaveConfig: {r: 0.15, g: 0.2, b: 0.5, a: 8}

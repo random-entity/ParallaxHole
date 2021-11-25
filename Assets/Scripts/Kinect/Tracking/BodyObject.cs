@@ -73,7 +73,7 @@ public class BodyObject : MonoBehaviour
             if (targetJoint.HasValue)
             {
                 lineRenderer.SetPosition(0, jointTransform.position);
-                lineRenderer.SetPosition(1, getVector3PositionFromJoint(targetJoint.Value) + jointTransform.position - jointTransform.localPosition);
+                lineRenderer.SetPosition(1, transform.TransformPoint(getVector3PositionFromJoint(targetJoint.Value)));
                 lineRenderer.startColor = getColorFromState(sourceJoint.TrackingState);
                 lineRenderer.endColor = getColorFromState(targetJoint.Value.TrackingState);
             }

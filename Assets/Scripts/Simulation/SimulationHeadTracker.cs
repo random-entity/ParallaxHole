@@ -4,10 +4,9 @@ using UnityEngine;
 public class SimulationHeadTracker : MonoBehaviour
 {
     [SerializeField] private Transform simulationHead;
-    [SerializeField] private Transform simulationKinect;
 
-    public Vector3 GetHeadPosKinectSpace()
+    public Vector3 GetHeadPositionKinectSpace()
     {
-        return simulationKinect.InverseTransformPoint(simulationHead.position);
+        return transform.InverseTransformPoint(simulationHead.position);
     }
 }

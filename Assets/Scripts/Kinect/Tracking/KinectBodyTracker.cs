@@ -63,7 +63,7 @@ public class KinectBodyTracker : MonoBehaviour
         {
             if (body != null && body.IsTracked && !bodyObjects.ContainsKey(body.TrackingId))
             {
-                BodyObject bodyObject = Instantiate(bodyObjectPrefab);
+                BodyObject bodyObject = Instantiate(bodyObjectPrefab, transform);
                 bodyObject.transform.SetParent(transform);
 
                 bodyObject.InitializeBodyObject(body);

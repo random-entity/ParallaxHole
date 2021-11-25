@@ -3,10 +3,10 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class HeadPositionManager : MonoBehaviour
 {
-    [SerializeField] private bool isReal;
+    [SerializeField] private bool useRealKinect;
     [SerializeField] private KinectBodyTracker kinectBodyTracker;
     [SerializeField] private SimulationHeadTracker simulationHeadTracker;
-    [SerializeField] private PlayerMovement simulationPlayer;
+    [SerializeField] private Transform unityRealKinectTransform;
     [SerializeField] private Transform projectionCamera;
     public Vector3 HeadPositionKinectSpace { get; private set; }
     private Vector3 prevHeadPositionKinectSpace;
@@ -16,31 +16,29 @@ public class HeadPositionManager : MonoBehaviour
         Vector3 deltaPos = HeadPositionKinectSpace - prevHeadPositionKinectSpace;
         return deltaPos.magnitude / Time.fixedDeltaTime;
     }
-    public Vector3 GetHeadPosUnityWorldSpace()
+    public Vector3 GetHeadPositionUnityWorldSpace()
     {
-        return kinectBodyTracker.transform.TransformPoint(HeadPositionKinectSpace);
+        return unityRealKinectTransform.TransformPoint(HeadPositionKinectSpace);
     }
     private void FixedUpdate()
     {
         prevHeadPositionKinectSpace = HeadPositionKinectSpace;
 
-        if (isReal)
+        if (useRealKinect)
         {
             Vector3 headPositionKinectSpaceCandidate = kinectBodyTracker.GetHeadPositionKinectSpace();
 
             if (headPositionKinectSpaceCandidate != Vector3.zero)
             {
                 HeadPositionKinectSpace = headPositionKinectSpaceCandidate;
-
-                // simulationPlayer.transform.position = simulationHeadTracker.transform.TransformPoint(headPositionKinectSpaceCandidate);
-                // simulationPlayer.playerCamera.transform.LookAt(new Vector3(10f, 0, 0));
             }
         }
         else
         {
-            HeadPositionKinectSpace = simulationHeadTracker.GetHeadPosKinectSpace();
+            HeadPositionKinectSpace = simulationHeadTracker.GetHeadPositionKinectSpace();
         }
 
-        projectionCamera.position = GetHeadPosUnityWorldSpace();
+        projectionCamera.position = GetHeadPositionUnityWorldSpace();
+        Debug.Log(GetHeadPositionUnityWorldSpace());
     }
 }
