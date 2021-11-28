@@ -6,6 +6,7 @@ public class MeshCloud : MonoBehaviour
     public struct PointMesh
     {
         public Vector3 position;
+        
         public PointMesh(Vector3 pos)
         {
             position = pos;

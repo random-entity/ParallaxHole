@@ -1,0 +1,51 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+float halfSize;
+
+struct Point
+{
+    float3 position;
+};
+
+struct Vertex
+{
+    float3 position;
+    float2 uv;
+};
+
+RWStructuredBuffer<Point> pointsBuffer;
+RWStructuredBuffer<Vertex> verticesBuffer;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    Point p = pointsBuffer[id.x];
+
+	int vertexIndex = id.x * 6;
+	//Triangle 1 - bottom-left, top-left, top-right   
+	verticesBuffer[vertexIndex].position.x = p.position.x-halfSize;
+	verticesBuffer[vertexIndex].position.y = p.position.y-halfSize;
+	verticesBuffer[vertexIndex].position.z = p.position.z;
+
+	verticesBuffer[vertexIndex+1].position.x = p.position.x-halfSize;
+	verticesBuffer[vertexIndex+1].position.y = p.position.y+halfSize;
+	verticesBuffer[vertexIndex+1].position.z = p.position.z;
+
+	verticesBuffer[vertexIndex+2].position.x = p.position.x+halfSize;
+	verticesBuffer[vertexIndex+2].position.y = p.position.y+halfSize;
+	verticesBuffer[vertexIndex+2].position.z = p.position.z;
+
+	//Triangle 2 - bottom-left, top-right, bottom-right
+	verticesBuffer[vertexIndex+3].position.x = p.position.x-halfSize;
+	verticesBuffer[vertexIndex+3].position.y = p.position.y-halfSize;
+	verticesBuffer[vertexIndex+3].position.z = p.position.z;
+
+	verticesBuffer[vertexIndex+4].position.x = p.position.x+halfSize;
+	verticesBuffer[vertexIndex+4].position.y = p.position.y+halfSize;
+	verticesBuffer[vertexIndex+4].position.z = p.position.z;
+
+	verticesBuffer[vertexIndex+5].position.x = p.position.x+halfSize;
+	verticesBuffer[vertexIndex+5].position.y = p.position.y-halfSize;
+	verticesBuffer[vertexIndex+5].position.z = p.position.z;
+}
