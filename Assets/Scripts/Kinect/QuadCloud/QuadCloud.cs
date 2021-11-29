@@ -6,7 +6,7 @@ public class QuadCloud : MonoBehaviour
     private struct Point
     {
         public Vector3 position;
-        // public Vector4 color;
+        public Vector4 color;
     }
 
     private struct Vertex
@@ -15,7 +15,7 @@ public class QuadCloud : MonoBehaviour
         public Vector2 uv;
     }
 
-    const int SIZE_POINT = 3 * sizeof(float);
+    const int SIZE_POINT = 7 * sizeof(float);
     const int SIZE_VERTEX = 5 * sizeof(float);
     #endregion
 
@@ -39,10 +39,10 @@ public class QuadCloud : MonoBehaviour
 
     private void Start()
     {
-        Init();
+        InitShader();
     }
 
-    private void Init()
+    private void InitShader()
     {
         kernelIdCSMain = computeShader.FindKernel("CSMain");
 
@@ -58,7 +58,7 @@ public class QuadCloud : MonoBehaviour
 
         Vector3 pos = new Vector3();
 
-        int index;
+        int vertexIndex;
 
         for (int i = 0; i < pointsActualCount; i++)
         {
@@ -67,17 +67,18 @@ public class QuadCloud : MonoBehaviour
             pos *= Random.value;
             pos *= 0.5f;
 
-            pointsArray[i].position.Set(pos.x, pos.y, pos.z + 3);
+            pointsArray[i].position.Set(pos.x, pos.y, pos.z);
+            pointsArray[i].color.Set(0f, 1f, 0f, 0.5f);
 
-            index = i * 6;
+            vertexIndex = i * 6;
             //Triangle 1 - bottom-left, top-left, top-right
-            vertexArray[index].uv.Set(0, 0);
-            vertexArray[index + 1].uv.Set(0, 1);
-            vertexArray[index + 2].uv.Set(1, 1);
-            //Triangle 2 - bottom-left, top-right, bottom-right  // // 
-            vertexArray[index + 3].uv.Set(0, 0);
-            vertexArray[index + 4].uv.Set(1, 1);
-            vertexArray[index + 5].uv.Set(1, 0);
+            vertexArray[vertexIndex].uv.Set(0, 0);
+            vertexArray[vertexIndex + 1].uv.Set(0, 1);
+            vertexArray[vertexIndex + 2].uv.Set(1, 1);
+            //Triangle 2 - bottom-left, top-right, bottom-right
+            vertexArray[vertexIndex + 3].uv.Set(0, 0);
+            vertexArray[vertexIndex + 4].uv.Set(1, 1);
+            vertexArray[vertexIndex + 5].uv.Set(1, 0);
         }
 
         // create compute buffers
@@ -91,6 +92,7 @@ public class QuadCloud : MonoBehaviour
         computeShader.SetBuffer(kernelIdCSMain, "verticesBuffer", verticesBuffer);
         computeShader.SetFloat("halfSize", quadSize * 0.5f);
 
+        quadMaterial.SetBuffer("pointsBuffer", pointsBuffer);
         quadMaterial.SetBuffer("verticesBuffer", verticesBuffer);
     }
 
@@ -110,11 +112,6 @@ public class QuadCloud : MonoBehaviour
 
     private void Update()
     {
-        // Send datas to the compute computeShader
-        computeShader.SetFloat("deltaTime", Time.deltaTime);
-        // computeShader.SetFloats("mousePosition", mousePosition2D);
-
-        // Update the Particles
         computeShader.Dispatch(kernelIdCSMain, groupSizeX, 1, 1);
     }
 }
