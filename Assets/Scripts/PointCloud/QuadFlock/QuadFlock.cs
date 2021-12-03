@@ -148,6 +148,7 @@ public class QuadFlock : MonoBehaviour
 
         computeShader.SetBuffer(kernelHandleCSMain, "quoidBuffer", quoidBuffer);
         computeShader.SetBuffer(kernelHandleCSMain, "vertexBuffer", vertexBuffer);
+        quoidFlockMaterial.SetBuffer("quoidBuffer", quoidBuffer);
         quoidFlockMaterial.SetBuffer("vertexBuffer", vertexBuffer);
 
         SetComputeShaderProperties();

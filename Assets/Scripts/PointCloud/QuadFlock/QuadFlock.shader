@@ -22,6 +22,14 @@ Shader "Random Entity/Point Cloud/QuadFlock"
 
             #pragma target 5.0
 
+            struct Quoid {
+                float3 position;
+                float3 direction;
+                float noise;
+            };
+
+            StructuredBuffer<Quoid> quoidBuffer;
+
 			struct Vertex {
 				float3 position;
 				float2 uv;
@@ -62,7 +70,7 @@ Shader "Random Entity/Point Cloud/QuadFlock"
 
                 int vertexIndex = instance_id * 6 + vertex_id;
 
-                o.position = UnityObjectToClipPos(float4(vertexBuffer[vertexIndex].position, 1));
+                o.position = UnityObjectToClipPos(float4(quoidBuffer[instance_id].position + 0.5 * float3(getUVFromVertexId(vertex_id), 0), 1));
                 o.uv = getUVFromVertexId(vertex_id); // UVFromVertexId[vertex_id]; // getUVFromVertexId(vertex_id); //vertexBuffer[vertexIndex].uv;
 
                 return o;
