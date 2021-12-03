@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class QuadFlock : MonoBehaviour
 {
-    #region Structs, Arrays, Buffers
+    #region Kinect Frame
     [SerializeField] private Vector2Int frameGridSize;
+    private int pointCount => frameGridSize.x * frameGridSize.y;
+    #endregion
+
+    #region Structs, Arrays, Buffers
+    #region Quoid
     private struct Quoid
     {
         private Vector3 position;
@@ -18,11 +23,18 @@ public class QuadFlock : MonoBehaviour
         }
     }
     const int SIZE_QUOID = 7 * sizeof(float);
-    private int quoidCount => frameGridSize.x * frameGridSize.y;
     private Quoid[] quoidArray;
     private ComputeBuffer quoidBuffer;
-    private Vector3[] originalPositionArray;
-    private ComputeBuffer originalPositionBuffer;
+    #endregion
+    #region KinectPoint
+    private struct KinectPoint {
+        public Vector3 cameraSpacePosition;
+        public Vector2 uv_color;
+    }
+    const int SIZE_KINECTPOINT = 5 * sizeof(float);
+    private KinectPoint[] kinectPointArray;
+    private ComputeBuffer kinectPointBuffer;
+    #endregion
     #endregion
 
     #region Compute shader
@@ -68,7 +80,7 @@ public class QuadFlock : MonoBehaviour
     private void OnRenderObject()
     {
         quoidFlockMaterial.SetPass(0);
-        Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, quoidCount);
+        Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, pointCount);
     }
     private void OnDestroy()
     {
@@ -82,8 +94,8 @@ public class QuadFlock : MonoBehaviour
 
     private void InitQuoids()
     {
-        quoidArray = new Quoid[quoidCount]; // private int quoidCount => frameGridSize.x * frameGridSize.y;
-        originalPositionArray = new Vector3[quoidCount];
+        quoidArray = new Quoid[pointCount]; // private int quoidCount => frameGridSize.x * frameGridSize.y;
+        kinectPointArray = new KinectPoint[pointCount];
 
         int quoidIndex;
         for (int x = 0; x < frameGridSize.x; x++)
@@ -92,10 +104,12 @@ public class QuadFlock : MonoBehaviour
             {
                 quoidIndex = x + y * frameGridSize.x;
 
-                Vector3 pos = target.position + new Vector3(x * 1f, 0f, y * 1f);
-                originalPositionArray[quoidIndex] = pos;
+                Vector3 pos = new Vector3(x * 1f, 0f, y * 1f);
 
-                Quaternion rot = Quaternion.Slerp(target.rotation, Random.rotation, 0.3f);
+                kinectPointArray[quoidIndex].cameraSpacePosition = pos; // should be set to kinect tracked body mesh points tomorrow
+                kinectPointArray[quoidIndex].uv_color = Vector2.zero;
+
+                Quaternion rot = Random.rotation;
                 float noise = Random.value * 1000f;
 
                 quoidArray[quoidIndex] = new Quoid(pos, rot.eulerAngles, noise);
@@ -105,14 +119,17 @@ public class QuadFlock : MonoBehaviour
 
     private void InitShader()
     {
-        quoidBuffer = new ComputeBuffer(quoidCount, SIZE_QUOID);
+        quoidBuffer = new ComputeBuffer(pointCount, SIZE_QUOID);
         quoidBuffer.SetData(quoidArray);
 
-        originalPositionBuffer = new ComputeBuffer(quoidCount, 3 * sizeof(float));
-        originalPositionBuffer.SetData(originalPositionArray);
+        kinectPointBuffer = new ComputeBuffer(pointCount, 3 * sizeof(float));
+        kinectPointBuffer.SetData(kinectPointArray);
 
         computeShader.SetBuffer(kernelHandleCSMain, "quoidBuffer", quoidBuffer);
-        computeShader.SetBuffer(kernelHandleCSMain, "originalPositionBuffer", originalPositionBuffer);
+
+
+
+        computeShader.SetBuffer(kernelHandleCSMain, "originalPositionBuffer", kinectPointBuffer);
 
         quoidFlockMaterial.SetBuffer("quoidBuffer", quoidBuffer);
 
@@ -123,7 +140,7 @@ public class QuadFlock : MonoBehaviour
     {
         computeShader.SetInt("frameGridSizeX", frameGridSize.x);
         computeShader.SetInt("frameGridSizeY", frameGridSize.y);
-        computeShader.SetInt("quoidCount", quoidCount);
+        computeShader.SetInt("quoidCount", pointCount);
         computeShader.SetFloat("quadHalfSize", quadHalfSize);
 
         computeShader.SetFloat("rotationSpeed", rotationSpeed);
