@@ -12,6 +12,7 @@ Shader "Random Entity/Point Cloud/QuadFlock"
             Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" }
 			Blend SrcAlpha OneMinusSrcAlpha
 			ZWrite Off
+            Cull Off
 
             CGPROGRAM
             #pragma vertex vert
@@ -28,13 +29,32 @@ Shader "Random Entity/Point Cloud/QuadFlock"
 
 			StructuredBuffer<Vertex> vertexBuffer;
 
+            float2 getUVFromVertexId(uint vertex_id) {
+                if(vertex_id == 0) return float2(0, 0);
+                if(vertex_id == 1) return float2(0, 1);
+                if(vertex_id == 2) return float2(1, 1);
+                if(vertex_id == 3) return float2(0, 0);
+                if(vertex_id == 4) return float2(1, 1);
+                if(vertex_id == 5) return float2(1, 0);
+                return float2(0, 0);
+            }
+
+            float2 UVFromVertexId[] = { 
+                float2(0, 0),
+                float2(0, 1),
+                float2(1, 1),
+                float2(0, 0),
+                float2(1, 1),
+                float2(1, 0)
+            };
+
             struct v2f
             {
                 float4 position : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            sampler2D _CircleTex;
+            sampler2D _CircleAlphaMask;
 
             v2f vert (uint vertex_id : SV_VERTEXID, uint instance_id : SV_INSTANCEID)
             {
@@ -43,15 +63,15 @@ Shader "Random Entity/Point Cloud/QuadFlock"
                 int vertexIndex = instance_id * 6 + vertex_id;
 
                 o.position = UnityObjectToClipPos(float4(vertexBuffer[vertexIndex].position, 1));
-                o.uv = vertexBuffer[vertexIndex].uv;
+                o.uv = getUVFromVertexId(vertex_id); // UVFromVertexId[vertex_id]; // getUVFromVertexId(vertex_id); //vertexBuffer[vertexIndex].uv;
 
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // fixed4 col = tex2D(_CircleTex, i.uv);
-                return float4(0, 1, 1, 1);
+                fixed4 col = tex2D(_CircleAlphaMask, i.uv);
+                return col;
             }
             ENDCG
         }

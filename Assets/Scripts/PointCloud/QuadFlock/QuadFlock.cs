@@ -49,6 +49,14 @@ public class QuadFlock : MonoBehaviour
     private float quadHalfSize => quadSize * 0.5f;
     #endregion
 
+    #region Flocking
+    [SerializeField] private float rotationSpeed = 1f;
+    [SerializeField] private float speed = 1f;
+    [SerializeField] private float speedVariation = 1f;
+    [SerializeField] private float neighbourDistance = 1f;
+    [SerializeField] private Transform target;
+    #endregion
+
     #region Unity runners
     private void Start()
     {
@@ -65,6 +73,9 @@ public class QuadFlock : MonoBehaviour
     }
     private void Update()
     {
+        computeShader.SetFloat("time", Time.time);
+        computeShader.SetFloat("deltaTime", Time.deltaTime);
+
         computeShader.Dispatch(kernelHandleCSMain, groupsX, groupsY, 1);
     }
     private void OnRenderObject()
@@ -148,5 +159,11 @@ public class QuadFlock : MonoBehaviour
         computeShader.SetInt("frameGridSizeY", frameGridSize.y);
         computeShader.SetInt("quoidCount", quoidCount);
         computeShader.SetFloat("quadHalfSize", quadHalfSize);
+
+        computeShader.SetFloat("rotationSpeed", rotationSpeed);
+        computeShader.SetFloat("speed", speed);
+        computeShader.SetFloat("speedVariation", speedVariation);
+        computeShader.SetVector("flockPosition", target.position);
+        computeShader.SetFloat("neighbourDistance", neighbourDistance);
     }
 }

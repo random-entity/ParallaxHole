@@ -345,4 +345,9 @@ MonoBehaviour:
   frameGridSize: {x: 8, y: 8}
   computeShader: {fileID: 7200000, guid: 59f112d4ca46947be9af05b13f055d5e, type: 3}
   quoidFlockMaterial: {fileID: 2100000, guid: 0950ab3bb6e6e44b8aa75331e738d2a4, type: 2}
-  quadSize: 0.1
+  quadSize: 0.5
+  rotationSpeed: 4
+  speed: 6
+  speedVariation: 0.8
+  neighbourDistance: 10
+  target: {fileID: 1825283611}
