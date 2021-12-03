@@ -112,8 +112,8 @@ public class QuadFlock : MonoBehaviour
                 #region Init quoidArray
                 quoidIndex = x + y * frameGridSize.x;
 
-                Vector3 pos = transform.position + new Vector3(x * 1f, 0f, y * 1f);
-                Quaternion rot = Quaternion.Slerp(transform.rotation, Random.rotation, 0.3f);
+                Vector3 pos = target.position + new Vector3(x * 1f, 0f, y * 1f);
+                Quaternion rot = Quaternion.Slerp(target.rotation, Random.rotation, 0.3f);
                 float noise = Random.value * 1000f;
 
                 quoidArray[quoidIndex] = new Quoid(pos, rot.eulerAngles, noise);
@@ -149,7 +149,7 @@ public class QuadFlock : MonoBehaviour
         computeShader.SetBuffer(kernelHandleCSMain, "quoidBuffer", quoidBuffer);
         computeShader.SetBuffer(kernelHandleCSMain, "vertexBuffer", vertexBuffer);
         quoidFlockMaterial.SetBuffer("quoidBuffer", quoidBuffer);
-        quoidFlockMaterial.SetBuffer("vertexBuffer", vertexBuffer);
+        // quoidFlockMaterial.SetBuffer("vertexBuffer", vertexBuffer);
 
         SetComputeShaderProperties();
     }

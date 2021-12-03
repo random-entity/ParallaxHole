@@ -22,32 +22,8 @@ Shader "Random Entity/Point Cloud/QuadFlock"
 
             #pragma target 5.0
 
-            struct Quoid {
-                float3 position;
-                float3 direction;
-                float noise;
-            };
-
-            StructuredBuffer<Quoid> quoidBuffer;
-
-			struct Vertex {
-				float3 position;
-				float2 uv;
-			};
-
-			StructuredBuffer<Vertex> vertexBuffer;
-
-            float2 getUVFromVertexId(uint vertex_id) {
-                if(vertex_id == 0) return float2(0, 0);
-                if(vertex_id == 1) return float2(0, 1);
-                if(vertex_id == 2) return float2(1, 1);
-                if(vertex_id == 3) return float2(0, 0);
-                if(vertex_id == 4) return float2(1, 1);
-                if(vertex_id == 5) return float2(1, 0);
-                return float2(0, 0);
-            }
-
-            float2 UVFromVertexId[] = { 
+            // Helpers
+            static const float2 uvFromVertexId[] = { 
                 float2(0, 0),
                 float2(0, 1),
                 float2(1, 1),
@@ -56,22 +32,61 @@ Shader "Random Entity/Point Cloud/QuadFlock"
                 float2(1, 0)
             };
 
+            static const float4 localPosFromVertexId[] = {
+                float4(-0.5, 0, -0.5, 1),
+                float4(-0.5, 0, 0.5, 1),
+                float4(0.5, 0, 0.5, 1),
+                float4(-0.5, 0, -0.5, 1),
+                float4(0.5, 0, 0.5, 1),
+                float4(0.5, 0, -0.5, 1),
+            };
+
+            float4x4 transform_matrix(float3 pos, float3 dir, float3 up) {
+                float3 zaxis = normalize(dir);
+                float3 xaxis = normalize(cross(up, zaxis));
+                float3 yaxis = cross(zaxis, xaxis);
+
+                return float4x4(
+                    xaxis.x, yaxis.x, zaxis.x, pos.x,
+                    xaxis.y, yaxis.y, zaxis.z, pos.y,
+                    xaxis.z, yaxis.z, zaxis.z, pos.z,
+                    0, 0, 0, 1
+                );
+            }
+
+            // Struct and Buffer
+            struct Quoid {
+                float3 position;
+                float3 direction;
+                float noise;
+            };
+            StructuredBuffer<Quoid> quoidBuffer;
+
+            // Shader Structs
             struct v2f
             {
                 float4 position : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
+            // Properties
             sampler2D _CircleAlphaMask;
+            sampler2D _FishAlphaMask;
 
+            // Shaders
             v2f vert (uint vertex_id : SV_VERTEXID, uint instance_id : SV_INSTANCEID)
             {
                 v2f o;
 
-                int vertexIndex = instance_id * 6 + vertex_id;
+                float2 uv = uvFromVertexId[vertex_id];
+                o.uv = uv;
 
-                o.position = UnityObjectToClipPos(float4(quoidBuffer[instance_id].position + 0.5 * float3(getUVFromVertexId(vertex_id), 0), 1));
-                o.uv = getUVFromVertexId(vertex_id); // UVFromVertexId[vertex_id]; // getUVFromVertexId(vertex_id); //vertexBuffer[vertexIndex].uv;
+                Quoid quoid = quoidBuffer[instance_id];
+                float4 localPos = localPosFromVertexId[vertex_id];
+
+                float4x4 localToWorld = transform_matrix(quoid.position, quoid.direction, float3(0, 1, 0));
+                float4 worldPos = mul(localToWorld, localPos);
+                o.position = UnityWorldToClipPos(worldPos);
 
                 return o;
             }

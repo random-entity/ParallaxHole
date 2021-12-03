@@ -347,7 +347,7 @@ MonoBehaviour:
   quoidFlockMaterial: {fileID: 2100000, guid: 0950ab3bb6e6e44b8aa75331e738d2a4, type: 2}
   quadSize: 0.5
   rotationSpeed: 4
-  speed: 6
+  speed: 4
   speedVariation: 0.8
-  neighbourDistance: 10
+  neighbourDistance: 5
   target: {fileID: 1825283611}

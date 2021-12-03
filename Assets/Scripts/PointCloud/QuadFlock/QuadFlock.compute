@@ -49,14 +49,7 @@ struct Quoid
 	float noise_offset;
 };
 
-struct Vertex
-{
-    float3 position;
-    float2 uv;
-};
-
 RWStructuredBuffer<Quoid> quoidBuffer;
-RWStructuredBuffer<Vertex> vertexBuffer;
 
 // static : config
 uint frameGridSizeX, frameGridSizeY;
@@ -129,31 +122,31 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 	quoidBuffer[quoidIndex] = quoid;
 
 
-	int vertexIndex = quoidIndex * 6;
+	// int vertexIndex = quoidIndex * 6;
 
-	// Triangle 1 : bottom-left, top-left, top-right
-	vertexBuffer[vertexIndex].position.x = quoid.position.x - quadHalfSize;
-	vertexBuffer[vertexIndex].position.y = quoid.position.y;
-	vertexBuffer[vertexIndex].position.z = quoid.position.z - quadHalfSize;
+	// // Triangle 1 : bottom-left, top-left, top-right
+	// vertexBuffer[vertexIndex].position.x = quoid.position.x - quadHalfSize;
+	// vertexBuffer[vertexIndex].position.y = quoid.position.y;
+	// vertexBuffer[vertexIndex].position.z = quoid.position.z - quadHalfSize;
 
-	vertexBuffer[vertexIndex + 1].position.x = quoid.position.x - quadHalfSize;
-	vertexBuffer[vertexIndex + 1].position.y =  quoid.position.y;
-	vertexBuffer[vertexIndex + 1].position.z = quoid.position.z + quadHalfSize;
+	// vertexBuffer[vertexIndex + 1].position.x = quoid.position.x - quadHalfSize;
+	// vertexBuffer[vertexIndex + 1].position.y =  quoid.position.y;
+	// vertexBuffer[vertexIndex + 1].position.z = quoid.position.z + quadHalfSize;
 
-	vertexBuffer[vertexIndex + 2].position.x = quoid.position.x + quadHalfSize;
-	vertexBuffer[vertexIndex + 2].position.y =  quoid.position.y;
-	vertexBuffer[vertexIndex + 2].position.z = quoid.position.z + quadHalfSize;
+	// vertexBuffer[vertexIndex + 2].position.x = quoid.position.x + quadHalfSize;
+	// vertexBuffer[vertexIndex + 2].position.y =  quoid.position.y;
+	// vertexBuffer[vertexIndex + 2].position.z = quoid.position.z + quadHalfSize;
  
-	// Triangle 2 : bottom-left, top-right, bottom-right
-	vertexBuffer[vertexIndex + 3].position.x = quoid.position.x - quadHalfSize;
-	vertexBuffer[vertexIndex + 3].position.y = quoid.position.y;
-	vertexBuffer[vertexIndex + 3].position.z = quoid.position.z - quadHalfSize;
+	// // Triangle 2 : bottom-left, top-right, bottom-right
+	// vertexBuffer[vertexIndex + 3].position.x = quoid.position.x - quadHalfSize;
+	// vertexBuffer[vertexIndex + 3].position.y = quoid.position.y;
+	// vertexBuffer[vertexIndex + 3].position.z = quoid.position.z - quadHalfSize;
 
-	vertexBuffer[vertexIndex + 4].position.x = quoid.position.x + quadHalfSize;
-	vertexBuffer[vertexIndex + 4].position.y =  quoid.position.y;
-	vertexBuffer[vertexIndex + 4].position.z = quoid.position.z + quadHalfSize;
+	// vertexBuffer[vertexIndex + 4].position.x = quoid.position.x + quadHalfSize;
+	// vertexBuffer[vertexIndex + 4].position.y =  quoid.position.y;
+	// vertexBuffer[vertexIndex + 4].position.z = quoid.position.z + quadHalfSize;
 
-	vertexBuffer[vertexIndex + 5].position.x = quoid.position.x + quadHalfSize;
-	vertexBuffer[vertexIndex + 5].position.y =  quoid.position.y;
-	vertexBuffer[vertexIndex + 5].position.z = quoid.position.z - quadHalfSize;
+	// vertexBuffer[vertexIndex + 5].position.x = quoid.position.x + quadHalfSize;
+	// vertexBuffer[vertexIndex + 5].position.y =  quoid.position.y;
+	// vertexBuffer[vertexIndex + 5].position.z = quoid.position.z - quadHalfSize;
 }
