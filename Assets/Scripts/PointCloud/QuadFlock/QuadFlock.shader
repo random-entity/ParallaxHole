@@ -83,7 +83,6 @@ Shader "Random Entity/Point Cloud/QuadFlock"
 
                 Quoid quoid = quoidBuffer[instance_id];
                 float4 localPos = localPosFromVertexId[vertex_id];
-
                 float4x4 localToWorld = transform_matrix(quoid.position, quoid.direction, float3(0, 1, 0));
                 float4 worldPos = mul(localToWorld, localPos);
                 o.position = UnityWorldToClipPos(worldPos);

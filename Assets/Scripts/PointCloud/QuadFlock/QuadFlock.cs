@@ -4,7 +4,6 @@ public class QuadFlock : MonoBehaviour
 {
     #region Structs, Arrays, Buffers
     [SerializeField] private Vector2Int frameGridSize;
-    #region Quoid
     private struct Quoid
     {
         private Vector3 position;
@@ -22,19 +21,6 @@ public class QuadFlock : MonoBehaviour
     private int quoidCount => frameGridSize.x * frameGridSize.y;
     private Quoid[] quoidArray;
     private ComputeBuffer quoidBuffer;
-    #endregion
-
-    #region Vertex
-    private struct Vertex
-    {
-        private Vector3 position;
-        public Vector2 uv;
-    }
-    const int SIZE_VERTEX = 5 * sizeof(float);
-    private int vertexCount => 6 * frameGridSize.x * frameGridSize.y; // 2 * 2 vertices, 6 triangles
-    private Vertex[] vertexArray;
-    private ComputeBuffer vertexBuffer;
-    #endregion
     #endregion
 
     #region Compute shader
@@ -90,26 +76,18 @@ public class QuadFlock : MonoBehaviour
             quoidBuffer.Release();
             quoidBuffer = null;
         }
-        if (vertexBuffer != null)
-        {
-            vertexBuffer.Release();
-            vertexBuffer = null;
-        }
     }
     #endregion
 
     private void InitQuoidsAndVertices()
     {
         quoidArray = new Quoid[quoidCount]; // private int quoidCount => frameGridSize.x * frameGridSize.y;
-        vertexArray = new Vertex[vertexCount];
 
         int quoidIndex;
-        int vertexIndex;
         for (int x = 0; x < frameGridSize.x; x++)
         {
             for (int y = 0; y < frameGridSize.y; y++)
             {
-                #region Init quoidArray
                 quoidIndex = x + y * frameGridSize.x;
 
                 Vector3 pos = target.position + new Vector3(x * 1f, 0f, y * 1f);
@@ -117,23 +95,6 @@ public class QuadFlock : MonoBehaviour
                 float noise = Random.value * 1000f;
 
                 quoidArray[quoidIndex] = new Quoid(pos, rot.eulerAngles, noise);
-                #endregion
-
-                #region Init vertexArray
-                // Set only uvs here (Set Vertex.position in compute shader)
-
-                vertexIndex = 6 * quoidIndex;
-
-                // Triangle 1 : bottom-left, top-left, top-right
-                vertexArray[vertexIndex].uv.Set(0, 0);
-                vertexArray[vertexIndex + 1].uv.Set(0, 1);
-                vertexArray[vertexIndex + 2].uv.Set(1, 1);
-
-                // Triangle 2 : bottom-left, top-right, bottom-right
-                vertexArray[vertexIndex + 3].uv.Set(0, 0);
-                vertexArray[vertexIndex + 4].uv.Set(1, 1);
-                vertexArray[vertexIndex + 5].uv.Set(1, 0);
-                #endregion
             }
         }
     }
@@ -143,13 +104,8 @@ public class QuadFlock : MonoBehaviour
         quoidBuffer = new ComputeBuffer(quoidCount, SIZE_QUOID);
         quoidBuffer.SetData(quoidArray);
 
-        vertexBuffer = new ComputeBuffer(vertexCount, SIZE_VERTEX);
-        vertexBuffer.SetData(vertexArray);
-
         computeShader.SetBuffer(kernelHandleCSMain, "quoidBuffer", quoidBuffer);
-        computeShader.SetBuffer(kernelHandleCSMain, "vertexBuffer", vertexBuffer);
         quoidFlockMaterial.SetBuffer("quoidBuffer", quoidBuffer);
-        // quoidFlockMaterial.SetBuffer("vertexBuffer", vertexBuffer);
 
         SetComputeShaderProperties();
     }

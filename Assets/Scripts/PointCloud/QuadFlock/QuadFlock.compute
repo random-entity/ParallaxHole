@@ -94,7 +94,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 		
 		float3 tempQuoid_position = quoidBuffer[i].position;
 
-		float3 offset = quoid.position - tempQuoid_position;
+		float3 offset = quoid_pos - tempQuoid_position;
 		float dist = max(length(offset), 0.000001);
 		
 		if (dist < neighbourDistance)
@@ -120,33 +120,4 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 	quoid.position += quoid.direction * velocity * deltaTime;
 
 	quoidBuffer[quoidIndex] = quoid;
-
-
-	// int vertexIndex = quoidIndex * 6;
-
-	// // Triangle 1 : bottom-left, top-left, top-right
-	// vertexBuffer[vertexIndex].position.x = quoid.position.x - quadHalfSize;
-	// vertexBuffer[vertexIndex].position.y = quoid.position.y;
-	// vertexBuffer[vertexIndex].position.z = quoid.position.z - quadHalfSize;
-
-	// vertexBuffer[vertexIndex + 1].position.x = quoid.position.x - quadHalfSize;
-	// vertexBuffer[vertexIndex + 1].position.y =  quoid.position.y;
-	// vertexBuffer[vertexIndex + 1].position.z = quoid.position.z + quadHalfSize;
-
-	// vertexBuffer[vertexIndex + 2].position.x = quoid.position.x + quadHalfSize;
-	// vertexBuffer[vertexIndex + 2].position.y =  quoid.position.y;
-	// vertexBuffer[vertexIndex + 2].position.z = quoid.position.z + quadHalfSize;
- 
-	// // Triangle 2 : bottom-left, top-right, bottom-right
-	// vertexBuffer[vertexIndex + 3].position.x = quoid.position.x - quadHalfSize;
-	// vertexBuffer[vertexIndex + 3].position.y = quoid.position.y;
-	// vertexBuffer[vertexIndex + 3].position.z = quoid.position.z - quadHalfSize;
-
-	// vertexBuffer[vertexIndex + 4].position.x = quoid.position.x + quadHalfSize;
-	// vertexBuffer[vertexIndex + 4].position.y =  quoid.position.y;
-	// vertexBuffer[vertexIndex + 4].position.z = quoid.position.z + quadHalfSize;
-
-	// vertexBuffer[vertexIndex + 5].position.x = quoid.position.x + quadHalfSize;
-	// vertexBuffer[vertexIndex + 5].position.y =  quoid.position.y;
-	// vertexBuffer[vertexIndex + 5].position.z = quoid.position.z - quadHalfSize;
 }
