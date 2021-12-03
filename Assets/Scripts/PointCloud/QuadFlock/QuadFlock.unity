@@ -342,12 +342,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b80068c990a846fd834831aec17e5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameGridSize: {x: 8, y: 8}
+  frameGridSize: {x: 32, y: 32}
   computeShader: {fileID: 7200000, guid: 59f112d4ca46947be9af05b13f055d5e, type: 3}
   quoidFlockMaterial: {fileID: 2100000, guid: 0950ab3bb6e6e44b8aa75331e738d2a4, type: 2}
-  quadSize: 0.5
+  quadSize: 0.1
   rotationSpeed: 4
-  speed: 4
+  speed: 6
   speedVariation: 0.8
   neighbourDistance: 5
   target: {fileID: 1825283611}

@@ -50,6 +50,7 @@ struct Quoid
 };
 
 RWStructuredBuffer<Quoid> quoidBuffer;
+StructuredBuffer<float3> originalPositionBuffer;
 
 // static : config
 uint frameGridSizeX, frameGridSizeY;

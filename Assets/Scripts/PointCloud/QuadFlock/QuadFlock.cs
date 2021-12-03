@@ -21,6 +21,8 @@ public class QuadFlock : MonoBehaviour
     private int quoidCount => frameGridSize.x * frameGridSize.y;
     private Quoid[] quoidArray;
     private ComputeBuffer quoidBuffer;
+    private Vector3[] originalPositionArray;
+    private ComputeBuffer originalPositionBuffer;
     #endregion
 
     #region Compute shader
@@ -54,13 +56,12 @@ public class QuadFlock : MonoBehaviour
         groupsX = Mathf.CeilToInt((float)frameGridSize.x / (float)threadsX);
         groupsY = Mathf.CeilToInt((float)frameGridSize.y / (float)threadsY);
 
-        InitQuoidsAndVertices();
+        InitQuoids();
         InitShader();
     }
     private void Update()
     {
-        computeShader.SetFloat("time", Time.time);
-        computeShader.SetFloat("deltaTime", Time.deltaTime);
+        SetComputeShaderDynamicProperties();
 
         computeShader.Dispatch(kernelHandleCSMain, groupsX, groupsY, 1);
     }
@@ -79,9 +80,10 @@ public class QuadFlock : MonoBehaviour
     }
     #endregion
 
-    private void InitQuoidsAndVertices()
+    private void InitQuoids()
     {
         quoidArray = new Quoid[quoidCount]; // private int quoidCount => frameGridSize.x * frameGridSize.y;
+        originalPositionArray = new Vector3[quoidCount];
 
         int quoidIndex;
         for (int x = 0; x < frameGridSize.x; x++)
@@ -91,6 +93,8 @@ public class QuadFlock : MonoBehaviour
                 quoidIndex = x + y * frameGridSize.x;
 
                 Vector3 pos = target.position + new Vector3(x * 1f, 0f, y * 1f);
+                originalPositionArray[quoidIndex] = pos;
+
                 Quaternion rot = Quaternion.Slerp(target.rotation, Random.rotation, 0.3f);
                 float noise = Random.value * 1000f;
 
@@ -104,13 +108,18 @@ public class QuadFlock : MonoBehaviour
         quoidBuffer = new ComputeBuffer(quoidCount, SIZE_QUOID);
         quoidBuffer.SetData(quoidArray);
 
+        originalPositionBuffer = new ComputeBuffer(quoidCount, 3 * sizeof(float));
+        originalPositionBuffer.SetData(originalPositionArray);
+
         computeShader.SetBuffer(kernelHandleCSMain, "quoidBuffer", quoidBuffer);
+        computeShader.SetBuffer(kernelHandleCSMain, "originalPositionBuffer", originalPositionBuffer);
+
         quoidFlockMaterial.SetBuffer("quoidBuffer", quoidBuffer);
 
-        SetComputeShaderProperties();
+        SetComputeShaderStaticProperties();
     }
 
-    private void SetComputeShaderProperties()
+    private void SetComputeShaderStaticProperties()
     {
         computeShader.SetInt("frameGridSizeX", frameGridSize.x);
         computeShader.SetInt("frameGridSizeY", frameGridSize.y);
@@ -122,5 +131,11 @@ public class QuadFlock : MonoBehaviour
         computeShader.SetFloat("speedVariation", speedVariation);
         computeShader.SetVector("flockPosition", target.position);
         computeShader.SetFloat("neighbourDistance", neighbourDistance);
+    }
+
+    private void SetComputeShaderDynamicProperties()
+    {
+        computeShader.SetFloat("time", Time.time);
+        computeShader.SetFloat("deltaTime", Time.deltaTime);
     }
 }

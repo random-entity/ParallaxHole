@@ -10,8 +10,8 @@ Shader "Random Entity/Point Cloud/QuadFlock"
         Pass
         {
             Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" }
-			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite Off
+			// Blend SrcAlpha OneMinusSrcAlpha
+			// ZWrite Off
             Cull Off
 
             CGPROGRAM
