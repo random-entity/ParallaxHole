@@ -98,7 +98,7 @@ public class QuadCloud : MonoBehaviour
     const int SIZE_BOID = 7 * sizeof(float);
     private Boid[] boidArray;
     public ComputeBuffer boidBuffer;
-    private int flockDownSample = 8;
+    [SerializeField] private int flockDownSample = 16;
     private Vector2Int flockGridSize => frameGridSize / flockDownSample;
     private int boidCount => flockGridSize.x * flockGridSize.y;
 
@@ -216,7 +216,7 @@ public class QuadCloud : MonoBehaviour
     void FixedUpdate()
     {
         UpdateKinectData();
-        
+
         SetComputeShaderDynamicProperties();
         computeShader.Dispatch(kernelHandleCSMain, groupsX, groupsY, 1);
 

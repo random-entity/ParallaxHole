@@ -28,16 +28,17 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BoidFactor: 0.1
+    - _BoidFactor: 0.02
     - _ColorHeight: 1080
     - _ColorWidth: 1920
     - _DownSample: 53.04
-    - _PointCloudDownSample: 16.87
+    - _PointCloudDownSample: 22.5
     - _QuadSize: 0.1
     - _SpeedThreshold: 4869.2
+    - _Transparency: 0.267
     m_Colors:
     - _Bounds: {r: 3.18, g: -1.63, b: 1.5, a: 1.56}
     - _Filter: {r: 1.5, g: -0.9, b: 1.2, a: 4}
-    - _HDRTint: {r: 1.4142135, g: 1.4142135, b: 1.4142135, a: 1}
-    - _LookTarget: {r: -0.18288238, g: 0, b: -0.59398144, a: 0}
+    - _HDRTint: {r: 4.237095, g: 4.237095, b: 4.237095, a: 1}
+    - _LookTarget: {r: 0, g: 0.3161184, b: -1, a: 0}
   m_BuildTextureStacks: []

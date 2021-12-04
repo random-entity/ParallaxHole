@@ -294,11 +294,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1303730bca3e08b4ca25165d62dbe30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flockDownSample: 8
   computeShader: {fileID: 7200000, guid: 1d646b5a76b6820439f1722cb53eab36, type: 3}
-  rotationSpeed: 8
-  speed: 6
+  rotationSpeed: 2
+  speed: 4
   speedVariation: 2
-  neighbourDistance: 0.2
+  neighbourDistance: 0.5
   target: {fileID: 737556390}
   quadCloudMaterial: {fileID: 2100000, guid: 3e0e803521907224799c400985f06679, type: 2}
   lookTarget: {fileID: 1640429269}
