@@ -12,6 +12,7 @@ public class QuadCloud : MonoBehaviour
     private ushort[] depthData;
     private Texture2D colorTexture;
     private byte[] colorData;
+    [SerializeField] Transform lookTarget;
 
     private void InitKinect()
     {
@@ -105,6 +106,10 @@ public class QuadCloud : MonoBehaviour
         colorSpacePointBuffer.SetData(colorSpacePointArray);
     }
 
+    private void SetShaderDynamicProperties() {
+        quadCloudMaterial.SetVector("_LookTarget", lookTarget.position);
+    }
+
     #region Unity Runners
     private void Start()
     {
@@ -114,6 +119,7 @@ public class QuadCloud : MonoBehaviour
     void FixedUpdate()
     {
         UpdateKinectData();
+        SetShaderDynamicProperties();
         UpdateArraysAndBuffers();
     }
     private void OnRenderObject()
@@ -150,15 +156,3 @@ public class QuadCloud : MonoBehaviour
     }
     #endregion
 }
-
-
-
-
-// private struct Point
-// {
-//     public Vector3 CameraSpacePosition;
-//     public Vector2 ColorSpacePosition;
-// }
-// const int SIZE_POINT = 5 * sizeof(float);
-// private Point[] pointArray;
-// private ComputeBuffer pointBuffer;

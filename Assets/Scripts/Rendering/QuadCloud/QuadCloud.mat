@@ -30,8 +30,12 @@ Material:
     m_Floats:
     - _ColorHeight: 1080
     - _ColorWidth: 1920
-    - _QuadSize: 0.15
+    - _DownSample: 122.3
+    - _QuadSize: 0.16
+    - _SpeedThreshold: 4869.2
     m_Colors:
-    - _Bounds: {r: 1.33, g: -1.06, b: 0.42, a: 2.87}
+    - _Bounds: {r: 3.18, g: -0.36, b: 1.5, a: 1.44}
     - _Filter: {r: 1.5, g: -0.9, b: 1.2, a: 4}
+    - _HDRTint: {r: 1.4142135, g: 1.4142135, b: 1.4142135, a: 1}
+    - _LookTarget: {r: 0, g: 0, b: -1, a: 0}
   m_BuildTextureStacks: []

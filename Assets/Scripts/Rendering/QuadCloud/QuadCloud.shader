@@ -7,9 +7,13 @@ Shader "Unlit/QuadCloud"
         _QuadSize ("Quad Size", float) = 0.005
 
         _Bounds ("Bounds (maxAbsX, minY, maxY, maxZ)", Vector) = (1.5, -0.9, 1.2, 4)
+        _DownSample ("DownSample", float) = 2
+
+        _LookTarget ("Look Target", Vector) = (0, 0, 0, 0)
 
         _ColorTexture ("Color Frame Texture", 2D) = "white" {}
         _QuadTexture ("Local Quad Texture", 2D) = "white" {}
+        [HDR] _HDRTint("HDR Tint", Color) = (1.0, 1.0, 1.0, 1.0)
     }
     SubShader
     {
@@ -21,6 +25,7 @@ Shader "Unlit/QuadCloud"
             Cull Off
 
             CGPROGRAM
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -28,7 +33,16 @@ Shader "Unlit/QuadCloud"
 
             #pragma target 5.0
 
-            // Helpers
+            float random (float2 seed)
+            {
+                return frac(sin(dot(seed, float2(12.9898, 78.2337))) * 2.5453);
+            }
+            float Unity_RandomRange_float(float2 Seed, float Min, float Max)
+            {
+                float randomno =  frac(sin(dot(Seed, float2(12.9898, 78.233)))*43758.5453);
+                return lerp(Min, Max, randomno);
+            }
+
             static const float2 localQuadUVFromVertexId[] = { 
                 float2(0, 0),
                 float2(0, 1),
@@ -39,12 +53,12 @@ Shader "Unlit/QuadCloud"
             };
 
             static const float3 localPosFromVertexId[] = {
-                float3(-0.5, 0, -0.5),
-                float3(-0.5, 0, 0.5),
-                float3(0.5, 0, 0.5),
-                float3(-0.5, 0, -0.5),
-                float3(0.5, 0, 0.5),
-                float3(0.5, 0, -0.5),
+                float3(-0.5, -0.5, 0),
+                float3(-0.5, 0.5, 0),
+                float3(0.5, 0.5, 0),
+                float3(-0.5, -0.5, 0),
+                float3(0.5, 0.5, 0),
+                float3(0.5, -0.5, 0),
             };
 
             float4x4 transform_matrix(float3 pos, float3 dir, float3 up) {
@@ -80,7 +94,8 @@ Shader "Unlit/QuadCloud"
                 float4 position : SV_POSITION;
                 float2 colorUV : TEXCOORD0;
                 float2 localQuadUV : TEXCOORD1;
-                float3 kinectSpacePos : TEXCOORD2;
+                float doClip : TEXCOORD2;
+                float2 randomSeed : TEXCOORD3;
             };
 
             // Properties
@@ -88,8 +103,11 @@ Shader "Unlit/QuadCloud"
             uniform int _ColorHeight;
             uniform float _QuadSize;
             uniform float4 _Bounds;
+            uniform float _DownSample;
+            uniform float4 _LookTarget;
             uniform sampler2D _ColorTexture;
             uniform sampler2D _QuadTexture;
+            uniform float4 _HDRTint;
 
             // Shaders
             v2f vert (uint vertex_id : SV_VERTEXID, uint instance_id : SV_INSTANCEID)
@@ -101,32 +119,50 @@ Shader "Unlit/QuadCloud"
 
                 CameraSpacePoint camPoint = cameraSpacePointBuffer[instance_id];
                 float3 camSpacePos = float3(camPoint.x, camPoint.y, camPoint.z);
-                o.kinectSpacePos = camSpacePos;
 
                 ColorSpacePoint colPoint = colorSpacePointBuffer[instance_id];
                 float2 colorUV = float2(colPoint.x / _ColorWidth, colPoint.y / _ColorHeight);
                 o.colorUV = colorUV;
 
                 float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
-                float4x4 localToWorld = transform_matrix(camSpacePos, float3(0, 0, -1), float3(0, 1, 0));
+                float4x4 localToWorld = transform_matrix(camSpacePos, _LookTarget.xyz - camSpacePos, float3(0, 1, 0));
                 float4 worldPos = mul(localToWorld, localPos);
                 o.position = UnityWorldToClipPos(worldPos);
+
+                float doClip = 1;
+                if(
+                    abs(camSpacePos.x) > _Bounds.x 
+                    || camSpacePos.y < _Bounds.y 
+                    || camSpacePos.y > _Bounds.z 
+                    || camSpacePos.z > _Bounds.w
+                    || instance_id % _DownSample >= 1
+                    ) {
+                    doClip = -1;
+                }
+                o.doClip = doClip;
+
+                o.randomSeed = float2(
+                    random(float2(sin((float)instance_id / 234.3491), sin((float)instance_id / 1246.4165))),
+                    random(float2(sin((float)instance_id / 941.2356), sin((float)instance_id / 6786.2345)))
+                );
 
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float doClip = 1;
-                if(abs(i.kinectSpacePos.x) > _Bounds.x) doClip = -1;
-                if(i.kinectSpacePos.y < _Bounds.y) doClip = -1;
-                if(i.kinectSpacePos.y > _Bounds.z) doClip = -1;
-                if(i.kinectSpacePos.z > _Bounds.w) doClip = -1;
-                clip(doClip);
+                if(i.doClip < 0) return 0;
+                // clip(i.doClip);
+
+                float2 localQuadUV = i.localQuadUV;
+                float distFromFishHead = 1 - localQuadUV.y;
+
+                localQuadUV.x += pow(distFromFishHead, 2) * 0.2 * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + random(i.randomSeed)) * 1.5));
 
                 float3 pixelColor = tex2D(_ColorTexture, i.colorUV);
-                float4 localColor = tex2D(_QuadTexture, i.localQuadUV);
-                return float4(pixelColor, localColor.a * 0.5);
+                float4 localColor = tex2D(_QuadTexture, localQuadUV);
+
+                return _HDRTint * float4(pixelColor, localColor.a * 0.2);
             }
             ENDCG
         }
