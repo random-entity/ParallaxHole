@@ -12,7 +12,8 @@ public class QuadCloud : MonoBehaviour
     private ushort[] depthData;
     private Texture2D colorTexture;
     private byte[] colorData;
-    [SerializeField] Transform lookTarget;
+    [SerializeField] private Transform lookTarget;
+    [SerializeField] private Flock flock;
 
     private void InitKinect()
     {
@@ -82,6 +83,10 @@ public class QuadCloud : MonoBehaviour
     private ComputeBuffer colorSpacePointBuffer;
     #endregion
 
+    #region Flocking
+
+    #endregion
+
     #region Rendering
     [SerializeField] private Material quadCloudMaterial;
     #endregion
@@ -93,6 +98,7 @@ public class QuadCloud : MonoBehaviour
 
         quadCloudMaterial.SetBuffer("cameraSpacePointBuffer", cameraSpacePointBuffer);
         quadCloudMaterial.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
+        quadCloudMaterial.SetBuffer("boidBuffer", flock.boidBuffer);
 
         quadCloudMaterial.SetTexture("_ColorTexture", colorTexture);
     }
@@ -106,7 +112,8 @@ public class QuadCloud : MonoBehaviour
         colorSpacePointBuffer.SetData(colorSpacePointArray);
     }
 
-    private void SetShaderDynamicProperties() {
+    private void SetShaderDynamicProperties()
+    {
         quadCloudMaterial.SetVector("_LookTarget", lookTarget.position);
     }
 

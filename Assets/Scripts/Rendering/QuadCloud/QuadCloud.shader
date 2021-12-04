@@ -88,6 +88,13 @@ Shader "Unlit/QuadCloud"
             };
             StructuredBuffer<ColorSpacePoint> colorSpacePointBuffer;
 
+            struct Boid {
+                float3 position;
+                float3 direction;
+                float noise;
+            };
+            StructuredBuffer<Boid> boidBuffer;
+
             // Shader Structs
             struct v2f
             {
@@ -120,15 +127,6 @@ Shader "Unlit/QuadCloud"
                 CameraSpacePoint camPoint = cameraSpacePointBuffer[instance_id];
                 float3 camSpacePos = float3(camPoint.x, camPoint.y, camPoint.z);
 
-                ColorSpacePoint colPoint = colorSpacePointBuffer[instance_id];
-                float2 colorUV = float2(colPoint.x / _ColorWidth, colPoint.y / _ColorHeight);
-                o.colorUV = colorUV;
-
-                float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
-                float4x4 localToWorld = transform_matrix(camSpacePos, _LookTarget.xyz - camSpacePos, float3(0, 1, 0));
-                float4 worldPos = mul(localToWorld, localPos);
-                o.position = UnityWorldToClipPos(worldPos);
-
                 float doClip = 1;
                 if(
                     abs(camSpacePos.x) > _Bounds.x 
@@ -141,6 +139,18 @@ Shader "Unlit/QuadCloud"
                 }
                 o.doClip = doClip;
 
+                ColorSpacePoint colPoint = colorSpacePointBuffer[instance_id];
+                float2 colorUV = float2(colPoint.x / _ColorWidth, colPoint.y / _ColorHeight);
+                o.colorUV = colorUV;
+
+                Boid boid = boidBuffer[instance_id / 64];
+                camSpacePos += 100 * boid.position;
+
+                float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
+                float4x4 localToWorld = transform_matrix(camSpacePos, _LookTarget.xyz - camSpacePos, float3(0, 1, 0));
+                float4 worldPos = mul(localToWorld, localPos);
+                o.position = UnityWorldToClipPos(worldPos);
+
                 o.randomSeed = float2(
                     random(float2(sin((float)instance_id / 234.3491), sin((float)instance_id / 1246.4165))),
                     random(float2(sin((float)instance_id / 941.2356), sin((float)instance_id / 6786.2345)))
@@ -151,13 +161,14 @@ Shader "Unlit/QuadCloud"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                if(i.doClip < 0) return 0;
-                // clip(i.doClip);
+                clip(i.doClip);
 
                 float2 localQuadUV = i.localQuadUV;
-                float distFromFishHead = 1 - localQuadUV.y;
 
-                localQuadUV.x += pow(distFromFishHead, 2) * 0.2 * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + random(i.randomSeed)) * 1.5));
+                float distFromFishHead = 1 - localQuadUV.y;
+                float swish = 0.5 * (distFromFishHead - 0.4); // pow(distFromFishHead, 2)
+
+                localQuadUV.x += 0.2 * swish * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + random(i.randomSeed)) * 1.5));
 
                 float3 pixelColor = tex2D(_ColorTexture, i.colorUV);
                 float4 localColor = tex2D(_QuadTexture, localQuadUV);
