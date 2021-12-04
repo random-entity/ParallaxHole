@@ -45,6 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveSourcePrefab: {fileID: 2761851027120644302, guid: 79e48ec23b4b647df8aaea1add9c1d47, type: 3}
   headPositionManager: {fileID: 0}
-  headSpeedThreshold: 0.5
+  headSpeedThreshold: 0.05
   speedCheckInterval: 0.025
   waterMeshRenderer: {fileID: 0}

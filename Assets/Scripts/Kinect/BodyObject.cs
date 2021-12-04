@@ -7,6 +7,7 @@ public class BodyObject : MonoBehaviour
     public Kinect.Body body;
     private Dictionary<Kinect.JointType, Transform> jointTransforms;
     [SerializeField] private Material jointMaterial, boneMaterial;
+    [SerializeField] private GameObject jointObjectPrefab;
     [SerializeField] private float jointScale;
     [SerializeField] private bool doRenderJoints;
 
@@ -38,7 +39,7 @@ public class BodyObject : MonoBehaviour
 
         for (Kinect.JointType jointType = Kinect.JointType.SpineBase; jointType <= Kinect.JointType.ThumbRight; jointType++)
         {
-            GameObject jointObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            GameObject jointObject = Instantiate(jointObjectPrefab);
             jointObject.GetComponent<MeshRenderer>().material = jointMaterial;
 
             bool isHead = (int)jointType == 3;
@@ -49,7 +50,7 @@ public class BodyObject : MonoBehaviour
                 jointObject.GetComponent<MeshRenderer>().material.color = Color.red;
             }
 
-            LineRenderer lineRenderer = jointObject.AddComponent<LineRenderer>();
+            LineRenderer lineRenderer = jointObject.GetComponent<LineRenderer>();
             lineRenderer.material = boneMaterial;
             lineRenderer.positionCount = 2;
             lineRenderer.startWidth = 0.0125f;

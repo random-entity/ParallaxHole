@@ -45,5 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
   boneMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
+  jointObjectPrefab: {fileID: 7173783691077371215, guid: df3fe74bf9b0b0d4c90e1dc074ae27d2, type: 3}
   jointScale: 0.05
   doRenderJoints: 1

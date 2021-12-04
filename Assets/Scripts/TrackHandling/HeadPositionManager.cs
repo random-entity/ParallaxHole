@@ -17,6 +17,7 @@ public class HeadPositionManager : MonoBehaviour
     public float GetSpeed()
     {
         Vector3 deltaPos = HeadPositionKinectSpace - prevHeadPositionKinectSpace;
+        
         return deltaPos.magnitude / Time.fixedDeltaTime;
     }
     public Vector3 GetHeadPositionUnityWorldSpace()
@@ -27,7 +28,10 @@ public class HeadPositionManager : MonoBehaviour
     {
         simPlayer.GetComponent<PlayerMovement>().enabled = !simPlayerFollowRealHead;
 
-        prevHeadPositionKinectSpace = HeadPositionKinectSpace;
+        // prevHeadPositionKinectSpace = HeadPositionKinectSpace;
+        prevHeadPositionKinectSpace.x = HeadPositionKinectSpace.x;
+        prevHeadPositionKinectSpace.y = HeadPositionKinectSpace.y;
+        prevHeadPositionKinectSpace.z = HeadPositionKinectSpace.z;
 
         if (useRealKinect)
         {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4366753, g: 0.48427093, b: 0.5645238, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1141,7 +1141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &871106661
 Transform:
   m_ObjectHideFlags: 0
@@ -1791,7 +1791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1154549492
 Transform:
   m_ObjectHideFlags: 0
@@ -2247,12 +2247,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1547836017}
   m_Layer: 0
-  m_Name: Viewable Objects
+  m_Name: Test Viewable Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1547836017
 Transform:
   m_ObjectHideFlags: 0
@@ -2305,10 +2305,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a512b3cadc860d42951db49e39d1f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRealKinect: 0
+  useRealKinect: 1
   kinectBodyTracker: {fileID: 289206668}
   simulationHeadTracker: {fileID: 1046560092}
-  simPlayerFollowRealHead: 0
+  simPlayerFollowRealHead: 1
   simPlayer: {fileID: 458348830}
   simPlayerCamera: {fileID: 595297771}
   unityRealKinectTransform: {fileID: 1154549492}
@@ -2568,6 +2568,10 @@ PrefabInstance:
       propertyPath: waterMeshRenderer
       value: 
       objectReference: {fileID: 223302250}
+    - target: {fileID: 5907464037183020244, guid: 30bd3ae1f023b4eb69a5a512e886936d, type: 3}
+      propertyPath: headSpeedThreshold
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 5907464037183020244, guid: 30bd3ae1f023b4eb69a5a512e886936d, type: 3}
       propertyPath: headPositionManager
       value: 
