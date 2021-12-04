@@ -7,9 +7,11 @@ Shader "Unlit/QuadCloud"
         _QuadSize ("Quad Size", float) = 0.005
 
         _Bounds ("Bounds (maxAbsX, minY, maxY, maxZ)", Vector) = (1.5, -0.9, 1.2, 4)
-        _DownSample ("DownSample", float) = 2
+        _PointCloudDownSample ("PointCloud DownSample", float) = 2
 
         _LookTarget ("Look Target", Vector) = (0, 0, 0, 0)
+
+        _BoidFactor ("Boid Factor", float) = 1
 
         _ColorTexture ("Color Frame Texture", 2D) = "white" {}
         _QuadTexture ("Local Quad Texture", 2D) = "white" {}
@@ -110,8 +112,10 @@ Shader "Unlit/QuadCloud"
             uniform int _ColorHeight;
             uniform float _QuadSize;
             uniform float4 _Bounds;
-            uniform float _DownSample;
+            uniform float _PointCloudDownSample;
             uniform float4 _LookTarget;
+            uniform float _BoidFactor;
+            uniform int _FlockDownSample;
             uniform sampler2D _ColorTexture;
             uniform sampler2D _QuadTexture;
             uniform float4 _HDRTint;
@@ -133,7 +137,7 @@ Shader "Unlit/QuadCloud"
                     || camSpacePos.y < _Bounds.y 
                     || camSpacePos.y > _Bounds.z 
                     || camSpacePos.z > _Bounds.w
-                    || instance_id % _DownSample >= 1
+                    || instance_id % _PointCloudDownSample >= 1
                     ) {
                     doClip = -1;
                 }
@@ -143,8 +147,8 @@ Shader "Unlit/QuadCloud"
                 float2 colorUV = float2(colPoint.x / _ColorWidth, colPoint.y / _ColorHeight);
                 o.colorUV = colorUV;
 
-                Boid boid = boidBuffer[instance_id / 64];
-                camSpacePos += 100 * boid.position;
+                Boid boid = boidBuffer[instance_id / (_FlockDownSample * _FlockDownSample)];
+                camSpacePos += _BoidFactor * boid.position;
 
                 float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
                 float4x4 localToWorld = transform_matrix(camSpacePos, _LookTarget.xyz - camSpacePos, float3(0, 1, 0));
