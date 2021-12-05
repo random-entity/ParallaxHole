@@ -1,9 +1,11 @@
-Shader "Random Entity/PointCloud"
+Shader "Random Entity/Point Cloud/PointCloud"
 {
     Properties
     {
         _DepthTexture ("Depth Texture", 2D) = "white" {}
         _ColorTexture ("Color Texture", 2D) = "white" {}
+
+        _PointSize ("Point Size", Range(1, 100)) = 10
 
         _Pitch ("Pitch", Float) = 0.01
         _DepthScale ("Depth Scale", Range(0, 2)) = 1
@@ -38,10 +40,12 @@ Shader "Random Entity/PointCloud"
                 float4 vertex : SV_POSITION;
                 float4 col : COLOR;
                 float3 kinectSpacePos : TEXCOORD0;
+                float psize : PSIZE;
             };
 
             sampler2D _DepthTexture;
             sampler2D _ColorTexture;
+            uniform float _PointSize;
             float _Pitch;
             float _DepthScale;
             float4 _Bounds;
@@ -61,6 +65,8 @@ Shader "Random Entity/PointCloud"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.col = tex2Dlod(_ColorTexture, float4(v.uv_color, 0, 0));
                 o.kinectSpacePos = v.vertex.xyz;
+
+                o.psize = _PointSize;
                                 
                 return o;
             }

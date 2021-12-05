@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
-public class TubeGenerator : MonoBehaviour
+public class TubeMeshGenerator : MonoBehaviour
 {
     private Mesh tubeMesh;
     [SerializeField] private int res;

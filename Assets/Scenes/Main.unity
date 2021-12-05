@@ -725,7 +725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &705507994
 Light:
   m_ObjectHideFlags: 0
@@ -2247,7 +2247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1547836017}
   m_Layer: 0
-  m_Name: Viewable Objects
+  m_Name: Test Viewable Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2568,6 +2568,10 @@ PrefabInstance:
       propertyPath: waterMeshRenderer
       value: 
       objectReference: {fileID: 223302250}
+    - target: {fileID: 5907464037183020244, guid: 30bd3ae1f023b4eb69a5a512e886936d, type: 3}
+      propertyPath: headSpeedThreshold
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 5907464037183020244, guid: 30bd3ae1f023b4eb69a5a512e886936d, type: 3}
       propertyPath: headPositionManager
       value: 
