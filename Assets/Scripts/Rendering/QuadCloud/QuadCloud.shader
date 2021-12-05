@@ -7,13 +7,16 @@ Shader "Unlit/QuadCloud"
         _QuadSize ("Quad Size", float) = 0.005
 
         _Bounds ("Bounds (maxAbsX, minY, maxY, maxZ)", Vector) = (1.5, -0.9, 1.2, 4)
-        _DownSample ("DownSample", float) = 2
+        _PointCloudDownSample ("PointCloud DownSample", float) = 2
 
         _LookTarget ("Look Target", Vector) = (0, 0, 0, 0)
+
+        _BoidFactor ("Boid Factor", float) = 1
 
         _ColorTexture ("Color Frame Texture", 2D) = "white" {}
         _QuadTexture ("Local Quad Texture", 2D) = "white" {}
         [HDR] _HDRTint("HDR Tint", Color) = (1.0, 1.0, 1.0, 1.0)
+        _Transparency ("Transparency", Range(0, 1)) = 0.4
     }
     SubShader
     {
@@ -53,12 +56,12 @@ Shader "Unlit/QuadCloud"
             };
 
             static const float3 localPosFromVertexId[] = {
-                float3(-0.5, -0.5, 0),
-                float3(-0.5, 0.5, 0),
-                float3(0.5, 0.5, 0),
-                float3(-0.5, -0.5, 0),
-                float3(0.5, 0.5, 0),
-                float3(0.5, -0.5, 0),
+                float3(-0.5, 0, -0.5),
+                float3(-0.5, 0, 0.5),
+                float3(0.5, 0, 0.5),
+                float3(-0.5, 0, -0.5),
+                float3(0.5, 0, 0.5),
+                float3(0.5, 0, -0.5),
             };
 
             float4x4 transform_matrix(float3 pos, float3 dir, float3 up) {
@@ -102,7 +105,7 @@ Shader "Unlit/QuadCloud"
                 float2 colorUV : TEXCOORD0;
                 float2 localQuadUV : TEXCOORD1;
                 float doClip : TEXCOORD2;
-                float2 randomSeed : TEXCOORD3;
+                float randomValue : TEXCOORD3;
             };
 
             // Properties
@@ -110,51 +113,65 @@ Shader "Unlit/QuadCloud"
             uniform int _ColorHeight;
             uniform float _QuadSize;
             uniform float4 _Bounds;
-            uniform float _DownSample;
+            uniform float _PointCloudDownSample;
             uniform float4 _LookTarget;
+            uniform float _BoidFactor;
+            uniform int _FlockDownSample;
             uniform sampler2D _ColorTexture;
             uniform sampler2D _QuadTexture;
             uniform float4 _HDRTint;
+            uniform float _Transparency;
 
             // Shaders
             v2f vert (uint vertex_id : SV_VERTEXID, uint instance_id : SV_INSTANCEID)
             {
-                v2f o;
-
-                float2 localQuadUV = localQuadUVFromVertexId[vertex_id];
-                o.localQuadUV = localQuadUV;
-
+                v2f o = (v2f)0;
+                
                 CameraSpacePoint camPoint = cameraSpacePointBuffer[instance_id];
                 float3 camSpacePos = float3(camPoint.x, camPoint.y, camPoint.z);
+                
+                o.randomValue = random(
+                    float2(
+                        random(float2(sin((float)instance_id / 234.3491), sin((float)instance_id / 1246.4165))),
+                        random(float2(sin((float)instance_id / 941.2356), sin((float)instance_id / 6786.2345)))
+                    )
+                );
 
-                float doClip = 1;
                 if(
                     abs(camSpacePos.x) > _Bounds.x 
                     || camSpacePos.y < _Bounds.y 
                     || camSpacePos.y > _Bounds.z 
                     || camSpacePos.z > _Bounds.w
-                    || instance_id % _DownSample >= 1
-                    ) {
-                    doClip = -1;
+                    || o.randomValue > (1.0 / _PointCloudDownSample)
+                    ) {                    
+                    o.doClip = -1;
+                    return o;
                 }
-                o.doClip = doClip;
+                o.doClip = 1;
 
                 ColorSpacePoint colPoint = colorSpacePointBuffer[instance_id];
                 float2 colorUV = float2(colPoint.x / _ColorWidth, colPoint.y / _ColorHeight);
                 o.colorUV = colorUV;
 
-                Boid boid = boidBuffer[instance_id / 64];
-                camSpacePos += 100 * boid.position;
+                float2 localQuadUV = localQuadUVFromVertexId[vertex_id];
+                o.localQuadUV = localQuadUV;
+
+                Boid boid = boidBuffer[instance_id / (_FlockDownSample * _FlockDownSample)];
+                camSpacePos += _BoidFactor * boid.position;
 
                 float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
-                float4x4 localToWorld = transform_matrix(camSpacePos, _LookTarget.xyz - camSpacePos, float3(0, 1, 0));
+                float4x4 localToWorld = transform_matrix(
+                    camSpacePos, 
+                    /*float3(
+                        normalize(boid.direction).x, 
+                        normalize(_LookTarget - camSpacePos).y, 
+                        normalize(boid.direction).z
+                    )*/
+                    boid.direction,
+                    float3(0, 1, 0)
+                );
                 float4 worldPos = mul(localToWorld, localPos);
                 o.position = UnityWorldToClipPos(worldPos);
-
-                o.randomSeed = float2(
-                    random(float2(sin((float)instance_id / 234.3491), sin((float)instance_id / 1246.4165))),
-                    random(float2(sin((float)instance_id / 941.2356), sin((float)instance_id / 6786.2345)))
-                );
 
                 return o;
             }
@@ -168,12 +185,12 @@ Shader "Unlit/QuadCloud"
                 float distFromFishHead = 1 - localQuadUV.y;
                 float swish = 0.5 * (distFromFishHead - 0.4); // pow(distFromFishHead, 2)
 
-                localQuadUV.x += 0.2 * swish * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + random(i.randomSeed)) * 1.5));
+                localQuadUV.x += 0.2 * swish * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + i.randomValue) * 2.5));
 
                 float3 pixelColor = tex2D(_ColorTexture, i.colorUV);
                 float4 localColor = tex2D(_QuadTexture, localQuadUV);
 
-                return _HDRTint * float4(pixelColor, localColor.a * 0.2);
+                return _HDRTint * float4(pixelColor, localColor.a * _Transparency);
             }
             ENDCG
         }

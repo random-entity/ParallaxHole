@@ -52,9 +52,8 @@ struct Boid
 RWStructuredBuffer<Boid> boidBuffer;
 
 // static : config
-uint frameGridSizeX, frameGridSizeY;
+uint flockGridSizeX, flockGridSizeY;
 int boidCount;
-float quadHalfSize;
 
 // static : flocking
 float rotationSpeed;
@@ -70,10 +69,10 @@ float deltaTime;
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    if(id.x >= frameGridSizeX) return;
-    if(id.y >= frameGridSizeY) return;
+    if(id.x >= flockGridSizeX) return;
+    if(id.y >= flockGridSizeY) return;
 
-    uint boidIndex = id.x + id.y * frameGridSizeX;
+    uint boidIndex = id.x + id.y * flockGridSizeX;
     
     Boid boid = boidBuffer[boidIndex];
 
