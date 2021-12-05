@@ -265,58 +265,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &737556388
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 737556390}
-  - component: {fileID: 737556389}
-  m_Layer: 0
-  m_Name: QuadCloud
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &737556389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737556388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1303730bca3e08b4ca25165d62dbe30d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flockDownSample: 8
-  computeShader: {fileID: 7200000, guid: 1d646b5a76b6820439f1722cb53eab36, type: 3}
-  rotationSpeed: 2
-  speed: 4
-  speedVariation: 2
-  neighbourDistance: 0.5
-  target: {fileID: 737556390}
-  quadCloudMaterial: {fileID: 2100000, guid: 3e0e803521907224799c400985f06679, type: 2}
-  lookTarget: {fileID: 1640429269}
---- !u!4 &737556390
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737556388}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &757426962
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,3 +363,64 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8253163124152515103, guid: ddc6d1369a37aae4d80894adb4e604bc, type: 3}
   m_PrefabInstance: {fileID: 9899199}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8271216930531454504
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8271216929909250444, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_Name
+      value: QuadCloud
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250445, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: lookTarget
+      value: 
+      objectReference: {fileID: 1640429269}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8271216929909250446, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf1dcad09c7a9a241ac7d00749bd9d22, type: 3}

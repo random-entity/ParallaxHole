@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9192499001077845529
+--- !u!1 &8271216929909250444
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9192499001077845528}
-  - component: {fileID: 9192499001077845527}
-  m_Layer: 7
-  m_Name: BodyObject
+  - component: {fileID: 8271216929909250446}
+  - component: {fileID: 8271216929909250445}
+  m_Layer: 0
+  m_Name: QuadCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9192499001077845528
+--- !u!4 &8271216929909250446
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9192499001077845529}
+  m_GameObject: {fileID: 8271216929909250444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,20 +31,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9192499001077845527
+--- !u!114 &8271216929909250445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9192499001077845529}
+  m_GameObject: {fileID: 8271216929909250444}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b327b3ac608ec02478fa7f9cd037be6b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1303730bca3e08b4ca25165d62dbe30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jointMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
-  boneMaterial: {fileID: 2100000, guid: 18e8b1015791f774c9bf30c795cd57c7, type: 2}
-  jointObjectPrefab: {fileID: 7173783691077371215, guid: df3fe74bf9b0b0d4c90e1dc074ae27d2, type: 3}
-  jointScale: 0.05
-  doRenderJoints: 0
+  flockDownSample: 8
+  computeShader: {fileID: 7200000, guid: 1d646b5a76b6820439f1722cb53eab36, type: 3}
+  rotationSpeed: 2
+  speed: 4
+  speedVariation: 2
+  neighbourDistance: 0.5
+  target: {fileID: 8271216929909250446}
+  quadCloudMaterial: {fileID: 2100000, guid: 3e0e803521907224799c400985f06679, type: 2}
+  lookTarget: {fileID: 0}

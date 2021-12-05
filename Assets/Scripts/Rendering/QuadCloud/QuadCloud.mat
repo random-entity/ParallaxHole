@@ -24,21 +24,22 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _QuadTexture:
-        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 2800000, guid: 9d80c56b97a1b4375b34d46255c9197e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BoidFactor: 0
+    - _BoidFactor: 0.01
     - _ColorHeight: 1080
     - _ColorWidth: 1920
     - _DownSample: 53.04
-    - _PointCloudDownSample: 5.7
-    - _QuadSize: 0.02
+    - _PointCloudDownSample: 1.4
+    - _QuadSize: 0.04
     - _SpeedThreshold: 4869.2
-    - _Transparency: 0.267
+    - _Transparency: 0.228
     m_Colors:
-    - _Bounds: {r: 3.18, g: -1.63, b: 1.5, a: 1.56}
+    - _Bounds: {r: 1, g: -3.18, b: 3.17, a: 4.02}
     - _Filter: {r: 1.5, g: -0.9, b: 1.2, a: 4}
     - _HDRTint: {r: 4.237095, g: 4.237095, b: 4.237095, a: 1}
-    - _LookTarget: {r: -0.6823492, g: -0.55017424, b: 1.1404676, a: 0}
+    - _KinectPosition: {r: 0, g: -1.22, b: -1.62, a: 0}
+    - _LookTarget: {r: 0, g: 1.28, b: 1.62, a: 0}
   m_BuildTextureStacks: []

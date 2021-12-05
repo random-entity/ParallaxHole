@@ -2,6 +2,7 @@ Shader "Unlit/QuadCloud"
 {
     Properties
     {
+        _KinectPosition ("Kinect Position", Vector) = (0, 0, 0, 1)
         _ColorWidth ("Color Frame Width", int) = 1920
         _ColorHeight("Color Frame Height", int) = 1080
         _QuadSize ("Quad Size", float) = 0.005
@@ -109,6 +110,7 @@ Shader "Unlit/QuadCloud"
             };
 
             // Properties
+            uniform float4 _KinectPosition;
             uniform int _ColorWidth;
             uniform int _ColorHeight;
             uniform float _QuadSize;
@@ -128,7 +130,7 @@ Shader "Unlit/QuadCloud"
                 v2f o = (v2f)0;
                 
                 CameraSpacePoint camPoint = cameraSpacePointBuffer[instance_id];
-                float3 camSpacePos = float3(camPoint.x, camPoint.y, camPoint.z);
+                float3 camSpacePos = float3(-camPoint.x, camPoint.y, camPoint.z);
                 
                 o.randomValue = random(
                     float2(
@@ -161,7 +163,7 @@ Shader "Unlit/QuadCloud"
 
                 float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
                 float4x4 localToWorld = transform_matrix(
-                    camSpacePos, 
+                    camSpacePos + _KinectPosition.xyz, 
                     /*float3(
                         normalize(boid.direction).x, 
                         normalize(_LookTarget - camSpacePos).y, 

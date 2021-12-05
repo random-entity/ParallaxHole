@@ -4,6 +4,7 @@ using Windows.Kinect;
 public class QuadCloud : MonoBehaviour
 {
     #region Kinect
+    [SerializeField] private Transform unityRealKinect;
     public int ColorWidth { get; private set; }
     public int ColorHeight { get; private set; }
     private KinectSensor sensor;
@@ -184,6 +185,7 @@ public class QuadCloud : MonoBehaviour
         colorSpacePointBuffer = new ComputeBuffer(colorSpacePointArray.Length, 2 * sizeof(float));
         // boidBuffer = new ComputeBuffer()
 
+        quadCloudMaterial.SetVector("_KinectPosition", unityRealKinect.position);
         quadCloudMaterial.SetBuffer("cameraSpacePointBuffer", cameraSpacePointBuffer);
         quadCloudMaterial.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
         quadCloudMaterial.SetBuffer("boidBuffer", boidBuffer);
