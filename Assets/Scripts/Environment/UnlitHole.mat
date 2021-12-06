@@ -7,26 +7,19 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hole
-  m_Shader: {fileID: 4800000, guid: f2f008048408e4709b688214a834d5c5, type: 3}
+  m_Name: UnlitHole
+  m_Shader: {fileID: 4800000, guid: 77434fd8dc71ce648850461889d5ea92, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3001
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b720bb61d9a7b4d8892df78b1e1acf27, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Floats:
     - _BoundRadius: 1
-    - _Glossiness: 1
-    - _Metallic: 1
-    m_Colors:
-    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    m_Colors: []
   m_BuildTextureStacks: []

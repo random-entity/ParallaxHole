@@ -1,5 +1,5 @@
 //NOTE: Undefine this if you need to move the plane at runtime
-//#define PRECALC_PLANE
+#define PRECALC_PLANE
 
 using UnityEngine;
 

@@ -4,6 +4,9 @@ using Windows.Kinect;
 public class QuadCloud : MonoBehaviour
 {
     #region Kinect
+    [SerializeField] private Transform cloudOriginKinect;
+    [SerializeField] private HeadPositionManager headPositionManager;
+    [SerializeField] private float morphDistanceClose, morphDistanceFar;
     public int ColorWidth { get; private set; }
     public int ColorHeight { get; private set; }
     private KinectSensor sensor;
@@ -81,7 +84,7 @@ public class QuadCloud : MonoBehaviour
     private ComputeBuffer colorSpacePointBuffer;
     #endregion
 
-    #region Flocking
+    #region Flock
     private struct Boid
     {
         private Vector3 position;
@@ -113,16 +116,16 @@ public class QuadCloud : MonoBehaviour
     [SerializeField] private float speed = 6f;
     [SerializeField] private float speedVariation = 0.8f;
     [SerializeField] private float neighbourDistance = 1f;
+    [SerializeField] private float spawnRadius = 1f;
     [SerializeField] private Transform target;
     #endregion
     #endregion
 
     #region Rendering
     [SerializeField] private Material quadCloudMaterial;
-    [SerializeField] private Transform lookTarget;
     #endregion
 
-    #region Flocking Methods
+    #region Flock Methods
     private void InitBoidsAndComputeShader()
     {
         kernelHandleCSMain = computeShader.FindKernel("CSMain");
@@ -142,7 +145,7 @@ public class QuadCloud : MonoBehaviour
             {
                 boidIndex = x + y * flockGridSize.x;
 
-                Vector3 pos = Random.insideUnitSphere;
+                Vector3 pos = Random.insideUnitSphere * spawnRadius;
                 Quaternion rot = Random.rotation;
                 float noise = Random.value * 1000f;
 
@@ -184,6 +187,7 @@ public class QuadCloud : MonoBehaviour
         colorSpacePointBuffer = new ComputeBuffer(colorSpacePointArray.Length, 2 * sizeof(float));
         // boidBuffer = new ComputeBuffer()
 
+        quadCloudMaterial.SetVector("_CloudOriginKinect", cloudOriginKinect.position);
         quadCloudMaterial.SetBuffer("cameraSpacePointBuffer", cameraSpacePointBuffer);
         quadCloudMaterial.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
         quadCloudMaterial.SetBuffer("boidBuffer", boidBuffer);
@@ -203,7 +207,18 @@ public class QuadCloud : MonoBehaviour
 
     private void SetShaderDynamicProperties()
     {
-        quadCloudMaterial.SetVector("_LookTarget", lookTarget.position);
+        quadCloudMaterial.SetVector("_LookTarget", cloudOriginKinect.TransformPoint(headPositionManager.GetHeadPositionKinectSpace()));
+        quadCloudMaterial.SetFloat("_MorphFactor", getMorphFactor());
+    }
+
+    private float getMorphFactor() // close = 0 = fish, far = 1 = human
+    {
+        Vector3 headPos = headPositionManager.GetHeadPositionUnityWorldSpace();
+        float headDistFromCenter = Mathf.Sqrt(headPos.x * headPos.x + headPos.z * headPos.z);
+        float lerpFactor = (headDistFromCenter - morphDistanceClose) / (morphDistanceFar - morphDistanceClose);
+        float morphFactor = Mathf.SmoothStep(0f, 1f, lerpFactor);
+        Debug.Log("head Dist = " + headDistFromCenter + ", morphFactor = " + morphFactor);
+        return morphFactor;
     }
 
     #region Unity Runners

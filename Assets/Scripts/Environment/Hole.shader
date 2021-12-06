@@ -1,4 +1,4 @@
-Shader "Random Entity/Hole"
+Shader "Random Entity/_Landfill/Hole"
 {
     Properties
     {
@@ -47,13 +47,15 @@ Shader "Random Entity/Hole"
         {
             clip(length(IN.worldPos) > _BoundRadius ? 1 : -1);
 
-            fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-            o.Albedo = c.rgb;
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
-            o.Alpha = c.a;
+            o.Albedo = 0;
+            o.Alpha = 1;
+            // fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+            // o.Albedo = c.rgb;
+            // o.Metallic = _Metallic;
+            // o.Smoothness = _Glossiness;
+            // o.Alpha = c.a;
         }
         ENDCG
     }
-    FallBack "Diffuse"
+    // FallBack "Diffuse"
 }

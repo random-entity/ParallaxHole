@@ -4,25 +4,25 @@ Shader "Unlit/QuadCloud"
     {
         _ColorWidth ("Color Frame Width", int) = 1920
         _ColorHeight("Color Frame Height", int) = 1080
-        _QuadSize ("Quad Size", float) = 0.005
-
-        _Bounds ("Bounds (maxAbsX, minY, maxY, maxZ)", Vector) = (1.5, -0.9, 1.2, 4)
-        _PointCloudDownSample ("PointCloud DownSample", float) = 2
-
-        _LookTarget ("Look Target", Vector) = (0, 0, 0, 0)
-
-        _BoidFactor ("Boid Factor", float) = 1
-
         _ColorTexture ("Color Frame Texture", 2D) = "white" {}
-        _QuadTexture ("Local Quad Texture", 2D) = "white" {}
+
+        _QuadConfig ("Quad Config: x = FishQuadSize, y = HumanQuadSize, z = FishOpacity, w = HumanOpacity)", Vector) = (0.15, 0.01, 0.5, 1)
+        _QuadFishMask ("Local Quad Fish Texture", 2D) = "white" {}
+        _QuadHumanMask ("Local Quad Human Texture", 2D) = "white" {}
         [HDR] _HDRTint("HDR Tint", Color) = (1.0, 1.0, 1.0, 1.0)
-        _Transparency ("Transparency", Range(0, 1)) = 0.4
+
+        _CloudOriginKinect ("Kinect Position", Vector) = (0, 0, 0, 1)
+        _Bounds ("Bounds (maxAbsX, minY, maxY, maxZ)", Vector) = (1.5, -0.9, 1.2, 4)
+
+        _PointCloudDownSample ("PointCloud DownSample (x = fish, y = human)", Vector) = (16, 2, 0, 0)
+        _LookTarget ("Look Target", Vector) = (0, 0, 0, 1)
+        _MorphFactor ("Morph Factor", Range(0, 1)) = 0.5
     }
     SubShader
     {
         Pass
         {
-            Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" }
+            Tags { "Queue"="Opaque" "RenderType"="Opaque" "IgnoreProjector"="True" }
 			Blend SrcAlpha OneMinusSrcAlpha
 			ZWrite Off
             Cull Off
@@ -111,16 +111,21 @@ Shader "Unlit/QuadCloud"
             // Properties
             uniform int _ColorWidth;
             uniform int _ColorHeight;
-            uniform float _QuadSize;
-            uniform float4 _Bounds;
-            uniform float _PointCloudDownSample;
-            uniform float4 _LookTarget;
-            uniform float _BoidFactor;
-            uniform int _FlockDownSample;
             uniform sampler2D _ColorTexture;
-            uniform sampler2D _QuadTexture;
+
+            uniform float4 _QuadConfig;
+            uniform sampler2D _QuadFishMask;
+            uniform sampler2D _QuadHumanMask;
             uniform float4 _HDRTint;
-            uniform float _Transparency;
+
+            uniform float4 _CloudOriginKinect;
+            uniform float4 _Bounds;
+
+            uniform float4 _PointCloudDownSample;
+            uniform float4 _LookTarget;
+            uniform float _MorphFactor;
+
+            uniform int _FlockDownSample;
 
             // Shaders
             v2f vert (uint vertex_id : SV_VERTEXID, uint instance_id : SV_INSTANCEID)
@@ -128,8 +133,18 @@ Shader "Unlit/QuadCloud"
                 v2f o = (v2f)0;
                 
                 CameraSpacePoint camPoint = cameraSpacePointBuffer[instance_id];
-                float3 camSpacePos = float3(camPoint.x, camPoint.y, camPoint.z);
+                float3 camSpacePos = float3(-camPoint.x, camPoint.y, camPoint.z);
                 
+                if(
+                    abs(camSpacePos.x) > _Bounds.x 
+                    || camSpacePos.y < _Bounds.y 
+                    || camSpacePos.y > _Bounds.z 
+                    || camSpacePos.z > _Bounds.w
+                    ) {                    
+                    o.doClip = -1;
+                    return o;
+                }
+
                 o.randomValue = random(
                     float2(
                         random(float2(sin((float)instance_id / 234.3491), sin((float)instance_id / 1246.4165))),
@@ -137,16 +152,12 @@ Shader "Unlit/QuadCloud"
                     )
                 );
 
-                if(
-                    abs(camSpacePos.x) > _Bounds.x 
-                    || camSpacePos.y < _Bounds.y 
-                    || camSpacePos.y > _Bounds.z 
-                    || camSpacePos.z > _Bounds.w
-                    || o.randomValue > (1.0 / _PointCloudDownSample)
-                    ) {                    
+                float downSample = lerp(_PointCloudDownSample.x, _PointCloudDownSample.y, _MorphFactor);
+                if(o.randomValue > 1.0 / downSample) {                    
                     o.doClip = -1;
                     return o;
                 }
+
                 o.doClip = 1;
 
                 ColorSpacePoint colPoint = colorSpacePointBuffer[instance_id];
@@ -156,20 +167,26 @@ Shader "Unlit/QuadCloud"
                 float2 localQuadUV = localQuadUVFromVertexId[vertex_id];
                 o.localQuadUV = localQuadUV;
 
-                Boid boid = boidBuffer[instance_id / (_FlockDownSample * _FlockDownSample)];
-                camSpacePos += _BoidFactor * boid.position;
+                float quadSize = lerp(_QuadConfig.x, _QuadConfig.y, _MorphFactor);
+                float4 localPos = float4(quadSize * localPosFromVertexId[vertex_id], 1);
 
-                float4 localPos = float4(_QuadSize * localPosFromVertexId[vertex_id], 1);
+                Boid boid = boidBuffer[instance_id / (_FlockDownSample * _FlockDownSample)];
+                
+                // camSpacePos = lerp(boid.position, camSpacePos, _MorphFactor);
+                camSpacePos += boid.position * 0.075 * (1 - _MorphFactor);
+
+                float3 boidForward = normalize(boid.direction);
+                float3 up = _LookTarget.xyz - camSpacePos;
+                float3 right = cross(boidForward, up);
+                float3 finalDirection = normalize(cross(up, right));
+                float3 direction = normalize(lerp(boidForward, finalDirection, _MorphFactor));
+
                 float4x4 localToWorld = transform_matrix(
-                    camSpacePos, 
-                    /*float3(
-                        normalize(boid.direction).x, 
-                        normalize(_LookTarget - camSpacePos).y, 
-                        normalize(boid.direction).z
-                    )*/
-                    boid.direction,
+                    camSpacePos + _CloudOriginKinect.xyz, 
+                    direction,
                     float3(0, 1, 0)
                 );
+
                 float4 worldPos = mul(localToWorld, localPos);
                 o.position = UnityWorldToClipPos(worldPos);
 
@@ -184,13 +201,19 @@ Shader "Unlit/QuadCloud"
 
                 float distFromFishHead = 1 - localQuadUV.y;
                 float swish = 0.5 * (distFromFishHead - 0.4); // pow(distFromFishHead, 2)
-
-                localQuadUV.x += 0.2 * swish * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + i.randomValue) * 2.5));
+                float uvXDispacement = 0.2 * swish * sin(6.28 * (distFromFishHead * 1.5 + (_Time.y + i.randomValue) * 2.5));
+                uvXDispacement = lerp(uvXDispacement, 0, _MorphFactor);
+                localQuadUV.x += uvXDispacement;
 
                 float3 pixelColor = tex2D(_ColorTexture, i.colorUV);
-                float4 localColor = tex2D(_QuadTexture, localQuadUV);
 
-                return _HDRTint * float4(pixelColor, localColor.a * _Transparency);
+                float localFishAlpha = tex2D(_QuadFishMask, localQuadUV).a;
+                float localHumanAlpha = tex2D(_QuadHumanMask, localQuadUV).a;
+                float localAlpha = lerp(localFishAlpha, localHumanAlpha, _MorphFactor);
+
+                float opacity = lerp(_QuadConfig.z, _QuadConfig.w, _MorphFactor);
+
+                return _HDRTint * float4(pixelColor, localAlpha * opacity);
             }
             ENDCG
         }
