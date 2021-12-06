@@ -173,7 +173,7 @@ Shader "Unlit/QuadCloud"
                 Boid boid = boidBuffer[instance_id / (_FlockDownSample * _FlockDownSample)];
                 
                 // camSpacePos = lerp(boid.position, camSpacePos, _MorphFactor);
-                camSpacePos += boid.position * 0.075 * (1 - _MorphFactor);
+                camSpacePos += boid.position * 0.1 * (1 - _MorphFactor);
 
                 float3 boidForward = normalize(boid.direction);
                 float3 up = _LookTarget.xyz - camSpacePos;
