@@ -1,4 +1,4 @@
-Shader "Random Entity/Landfill/Hole"
+Shader "Random Entity/_Landfill/Hole"
 {
     Properties
     {

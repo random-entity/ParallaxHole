@@ -11,27 +11,30 @@ public class HeadPositionManager : MonoBehaviour
     [SerializeField] private Transform simPlayerCamera;
     [SerializeField] private Transform unityRealKinectTransform;
     [SerializeField] private Transform projectionCamera;
-    public Vector3 HeadPositionKinectSpace { get; private set; }
+    private Vector3 headPositionKinectSpace;
     private Vector3 prevHeadPositionKinectSpace;
 
     public float GetSpeed()
     {
-        Vector3 deltaPos = HeadPositionKinectSpace - prevHeadPositionKinectSpace;
+        Vector3 deltaPos = headPositionKinectSpace - prevHeadPositionKinectSpace;
         
         return deltaPos.magnitude / Time.fixedDeltaTime;
     }
     public Vector3 GetHeadPositionUnityWorldSpace()
     {
-        return unityRealKinectTransform.TransformPoint(HeadPositionKinectSpace);
+        return unityRealKinectTransform.TransformPoint(headPositionKinectSpace);
+    }
+    public Vector3 GetHeadPositionKinectSpace() {
+        return headPositionKinectSpace;
     }
     private void FixedUpdate()
     {
         simPlayer.GetComponent<PlayerMovement>().enabled = !simPlayerFollowRealHead;
 
         // prevHeadPositionKinectSpace = HeadPositionKinectSpace;
-        prevHeadPositionKinectSpace.x = HeadPositionKinectSpace.x;
-        prevHeadPositionKinectSpace.y = HeadPositionKinectSpace.y;
-        prevHeadPositionKinectSpace.z = HeadPositionKinectSpace.z;
+        prevHeadPositionKinectSpace.x = headPositionKinectSpace.x;
+        prevHeadPositionKinectSpace.y = headPositionKinectSpace.y;
+        prevHeadPositionKinectSpace.z = headPositionKinectSpace.z;
 
         if (useRealKinect)
         {
@@ -39,11 +42,11 @@ public class HeadPositionManager : MonoBehaviour
 
             if (headPositionKinectSpaceCandidate != Vector3.zero)
             {
-                HeadPositionKinectSpace = headPositionKinectSpaceCandidate;
+                headPositionKinectSpace = headPositionKinectSpaceCandidate;
 
                 if (simPlayerFollowRealHead)
                 {
-                    simPlayer.position = simulationHeadTracker.transform.TransformPoint(HeadPositionKinectSpace) + Vector3.up;
+                    simPlayer.position = simulationHeadTracker.transform.TransformPoint(headPositionKinectSpace) + Vector3.up;
                     simPlayerCamera.LookAt(new Vector3(10f, 0f, 0f));
                 }
             }
@@ -52,7 +55,7 @@ public class HeadPositionManager : MonoBehaviour
         {
             simPlayer.GetComponent<PlayerMovement>().enabled = true;
 
-            HeadPositionKinectSpace = simulationHeadTracker.GetHeadPositionKinectSpace();
+            headPositionKinectSpace = simulationHeadTracker.GetHeadPositionKinectSpace();
         }
 
         projectionCamera.position = GetHeadPositionUnityWorldSpace();

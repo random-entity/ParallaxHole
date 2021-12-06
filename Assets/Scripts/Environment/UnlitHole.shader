@@ -1,4 +1,4 @@
-Shader "Unlit/UnlitHole"
+Shader "Random Entity/UnlitHole"
 {
     Properties
     {
