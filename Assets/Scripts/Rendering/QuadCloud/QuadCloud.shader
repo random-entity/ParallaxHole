@@ -22,7 +22,7 @@ Shader "Unlit/QuadCloud"
     {
         Pass
         {
-            Tags { "Queue"="Opaque" "RenderType"="Opaque" "IgnoreProjector"="True" }
+            Tags { "RenderType"="Opaque" "IgnoreProjector"="True" }
 			Blend SrcAlpha OneMinusSrcAlpha
 			ZWrite Off
             Cull Off

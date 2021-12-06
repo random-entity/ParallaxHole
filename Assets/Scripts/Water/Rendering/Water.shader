@@ -126,7 +126,7 @@ Shader "Random Entity/Water"
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            clip(1 - IN.distanceFromCenterWorld);
+            // clip(1 - IN.distanceFromCenterWorld);
 
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
