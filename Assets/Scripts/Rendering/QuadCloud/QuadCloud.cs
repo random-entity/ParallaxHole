@@ -123,6 +123,9 @@ public class QuadCloud : MonoBehaviour
 
     #region Rendering
     [SerializeField] private Material quadCloudMaterial;
+    
+    // Test
+    public static MaterialPropertyBlock properties;
     #endregion
 
     #region Flock Methods
@@ -192,8 +195,16 @@ public class QuadCloud : MonoBehaviour
         quadCloudMaterial.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
         quadCloudMaterial.SetBuffer("boidBuffer", boidBuffer);
         quadCloudMaterial.SetInt("_FlockDownSample", flockDownSample);
-
         quadCloudMaterial.SetTexture("_ColorTexture", colorTexture);
+
+        properties = new MaterialPropertyBlock();
+
+        properties.SetVector("_CloudOriginKinect", cloudOriginKinect.position);
+        properties.SetBuffer("cameraSpacePointBuffer", cameraSpacePointBuffer);
+        properties.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
+        properties.SetBuffer("boidBuffer", boidBuffer);
+        properties.SetInt("_FlockDownSample", flockDownSample);
+        properties.SetTexture("_ColorTexture", colorTexture);
     }
 
     private void UpdateArraysAndBuffers()
@@ -209,6 +220,9 @@ public class QuadCloud : MonoBehaviour
     {
         quadCloudMaterial.SetVector("_LookTarget", cloudOriginKinect.TransformPoint(headPositionManager.GetHeadPositionKinectSpace()));
         quadCloudMaterial.SetFloat("_MorphFactor", getMorphFactor());
+
+        properties.SetVector("_LookTarget", cloudOriginKinect.TransformPoint(headPositionManager.GetHeadPositionKinectSpace()));
+        properties.SetFloat("_MorphFactor", getMorphFactor());
     }
 
     private float getMorphFactor() // close = 0 = fish, far = 1 = human
@@ -217,7 +231,6 @@ public class QuadCloud : MonoBehaviour
         float headDistFromCenter = Mathf.Sqrt(headPos.x * headPos.x + headPos.z * headPos.z);
         float lerpFactor = (headDistFromCenter - morphDistanceClose) / (morphDistanceFar - morphDistanceClose);
         float morphFactor = Mathf.SmoothStep(0f, 1f, lerpFactor);
-        Debug.Log("head Dist = " + headDistFromCenter + ", morphFactor = " + morphFactor);
         return morphFactor;
     }
 
@@ -240,8 +253,8 @@ public class QuadCloud : MonoBehaviour
     }
     private void OnRenderObject()
     {
-        quadCloudMaterial.SetPass(0);
-        Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, 512 * 424);
+        // quadCloudMaterial.SetPass(0);
+        // Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, 512 * 424);
     }
     private void OnDestroy()
     {

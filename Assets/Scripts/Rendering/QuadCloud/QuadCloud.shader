@@ -24,7 +24,7 @@ Shader "Unlit/QuadCloud"
         {
             Tags { "RenderType"="Opaque" "IgnoreProjector"="True" }
 			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite Off
+			// ZWrite Off
             Cull Off
 
             CGPROGRAM

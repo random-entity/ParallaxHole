@@ -59,7 +59,7 @@ Material:
     - _Filter: {r: 1.5, g: -0.9, b: 1.2, a: 4}
     - _HDRTint: {r: 5.656854, g: 5.656854, b: 5.656854, a: 1}
     - _KinectPosition: {r: 0, g: -1.22, b: -1.62, a: 0}
-    - _LookTarget: {r: 0, g: -1.73, b: -1.62, a: 0}
+    - _LookTarget: {r: 0.09652351, g: -1.5598934, b: -0.9848146, a: 0}
     - _PointCloudDownSample: {r: 32, g: 1, b: 0, a: 0}
     - _QuadConfig: {r: 0.15, g: 0.04, b: 0.5, a: 1}
   m_BuildTextureStacks: []
