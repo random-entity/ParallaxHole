@@ -121,10 +121,6 @@ public class QuadCloud : MonoBehaviour
     #endregion
     #endregion
 
-    #region Rendering
-    [SerializeField] private Material quadCloudMaterial;
-    #endregion
-
     #region Flock Methods
     private void InitBoidsAndComputeShader()
     {
@@ -181,19 +177,28 @@ public class QuadCloud : MonoBehaviour
     }
     #endregion
 
+    #region Rendering
+    public static MaterialPropertyBlock materialPropertyBlock;
+    #endregion
+
     private void InitMaterialShader()
     {
         cameraSpacePointBuffer = new ComputeBuffer(cameraSpacePointArray.Length, 3 * sizeof(float));
         colorSpacePointBuffer = new ComputeBuffer(colorSpacePointArray.Length, 2 * sizeof(float));
-        // boidBuffer = new ComputeBuffer()
 
-        quadCloudMaterial.SetVector("_CloudOriginKinect", cloudOriginKinect.position);
-        quadCloudMaterial.SetBuffer("cameraSpacePointBuffer", cameraSpacePointBuffer);
-        quadCloudMaterial.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
-        quadCloudMaterial.SetBuffer("boidBuffer", boidBuffer);
-        quadCloudMaterial.SetInt("_FlockDownSample", flockDownSample);
+        materialPropertyBlock = new MaterialPropertyBlock();
 
-        quadCloudMaterial.SetTexture("_ColorTexture", colorTexture);
+        materialPropertyBlock.SetInt("_ColorWidth", ColorWidth);
+        materialPropertyBlock.SetInt("_ColorHeight", ColorHeight);
+        materialPropertyBlock.SetTexture("_ColorTexture", colorTexture);
+
+        materialPropertyBlock.SetVector("_CloudOriginKinect", cloudOriginKinect.position);
+
+        materialPropertyBlock.SetBuffer("cameraSpacePointBuffer", cameraSpacePointBuffer);
+        materialPropertyBlock.SetBuffer("colorSpacePointBuffer", colorSpacePointBuffer);
+        materialPropertyBlock.SetBuffer("boidBuffer", boidBuffer);
+
+        materialPropertyBlock.SetInt("_FlockDownSample", flockDownSample);
     }
 
     private void UpdateArraysAndBuffers()
@@ -205,10 +210,17 @@ public class QuadCloud : MonoBehaviour
         colorSpacePointBuffer.SetData(colorSpacePointArray);
     }
 
-    private void SetShaderDynamicProperties()
+    private void SetMaterialShaderDynamicProperties()
     {
-        quadCloudMaterial.SetVector("_LookTarget", cloudOriginKinect.TransformPoint(headPositionManager.GetHeadPositionKinectSpace()));
-        quadCloudMaterial.SetFloat("_MorphFactor", getMorphFactor());
+        // quadCloudMaterial.SetVector("_LookTarget", cloudOriginKinect.TransformPoint(headPositionManager.GetHeadPositionKinectSpace()));
+        // quadCloudMaterial.SetFloat("_MorphFactor", getMorphFactor());
+
+        materialPropertyBlock.SetVector("_LookTarget", cloudOriginKinect.TransformPoint(headPositionManager.GetHeadPositionKinectSpace()));
+        materialPropertyBlock.SetFloat("_MorphFactor", getMorphFactor());
+
+        // materialPropertyBlock.SetTexture("_ColorTexture", colorTexture);
+
+
     }
 
     private float getMorphFactor() // close = 0 = fish, far = 1 = human
@@ -217,7 +229,6 @@ public class QuadCloud : MonoBehaviour
         float headDistFromCenter = Mathf.Sqrt(headPos.x * headPos.x + headPos.z * headPos.z);
         float lerpFactor = (headDistFromCenter - morphDistanceClose) / (morphDistanceFar - morphDistanceClose);
         float morphFactor = Mathf.SmoothStep(0f, 1f, lerpFactor);
-        Debug.Log("head Dist = " + headDistFromCenter + ", morphFactor = " + morphFactor);
         return morphFactor;
     }
 
@@ -235,14 +246,14 @@ public class QuadCloud : MonoBehaviour
         SetComputeShaderDynamicProperties();
         computeShader.Dispatch(kernelHandleCSMain, groupsX, groupsY, 1);
 
-        SetShaderDynamicProperties();
+        SetMaterialShaderDynamicProperties();
         UpdateArraysAndBuffers();
     }
-    private void OnRenderObject()
-    {
-        quadCloudMaterial.SetPass(0);
-        Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, 512 * 424);
-    }
+    // private void OnRenderObject()
+    // {
+    //     // quadCloudMaterial.SetPass(0);
+    //     // Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, 512 * 424);
+    // }
     private void OnDestroy()
     {
         if (reader != null)
