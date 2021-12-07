@@ -35,13 +35,13 @@ Material:
     - _NormalizedTimeToOneMeter: 0.2
     - _ProgressToOneMeter: 0.2
     - _Radius: 1
-    - _RefractionStrength: 0.025
+    - _RefractionStrength: 0.0075
     - _SineWaveAmp: 0.15
     - _SineWaveDistanceDamp: 8
     - _SineWaveHeightScale: 40
     - _SineWaveLength: 0.2
     - _SineWaveSpeed: 0.5
-    - _WaterFogDensity: 0.53
+    - _WaterFogDensity: 0.25
     - _WaterSurfaceY: -0.25
     - _WaveAmp: 0.59
     - _WaveMix: 0

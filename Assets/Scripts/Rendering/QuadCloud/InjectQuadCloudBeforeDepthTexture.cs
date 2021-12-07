@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Camera))]
-public class InjectQuadCloudToPipeline : MonoBehaviour
+public class InjectQuadCloudBeforeDepthTexture : MonoBehaviour
 {
     private Camera cam;
     private CommandBuffer commandBuffer;
@@ -12,7 +12,7 @@ public class InjectQuadCloudToPipeline : MonoBehaviour
     private void OnEnable()
     {
         cam = GetComponent<Camera>();
-        cameraEvent = CameraEvent.BeforeDepthTexture;
+        cameraEvent = CameraEvent.AfterForwardOpaque;
     }
 
     private void OnDisable()
@@ -22,7 +22,7 @@ public class InjectQuadCloudToPipeline : MonoBehaviour
 
     private void OnPreRender()
     {
-        // UpdateCommandBuffer();
+        UpdateCommandBuffer();
     }
 
     private void InitCommandBuffer()
@@ -31,7 +31,7 @@ public class InjectQuadCloudToPipeline : MonoBehaviour
         {
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "QuadCloudInjection";
-            commandBuffer.DrawProcedural(Matrix4x4.identity, quadCloudMaterial, 0, MeshTopology.Triangles, 6, 512 * 424, QuadCloud.properties);
+            commandBuffer.DrawProcedural(Matrix4x4.identity, quadCloudMaterial, 0, MeshTopology.Triangles, 6, 512 * 424, QuadCloud.materialPropertyBlock);
 
             cam.AddCommandBuffer(cameraEvent, commandBuffer);
 
@@ -43,12 +43,16 @@ public class InjectQuadCloudToPipeline : MonoBehaviour
         }
     }
 
-    // private void UpdateCommandBuffer()
-    // {
-    //     if(commandBuffer == null) {
+    private void UpdateCommandBuffer()
+    {
+        if (commandBuffer == null)
+        {
+            InitCommandBuffer();
+        }
 
-    //     }
-    // }
+        commandBuffer.Clear();
+        commandBuffer.DrawProcedural(Matrix4x4.identity, quadCloudMaterial, 0, MeshTopology.Triangles, 6, 512 * 424, QuadCloud.materialPropertyBlock);
+    }
 
     private void ClearCommandBuffer()
     {

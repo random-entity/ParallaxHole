@@ -1,22 +1,22 @@
-Shader "Unlit/QuadCloud"
+Shader "Random Entity/Point Cloud/QuadCloud"
 {
     Properties
     {
-        _ColorWidth ("Color Frame Width", int) = 1920
-        _ColorHeight("Color Frame Height", int) = 1080
+        // _ColorWidth ("Color Frame Width", int) = 1920
+        // _ColorHeight("Color Frame Height", int) = 1080
         _ColorTexture ("Color Frame Texture", 2D) = "white" {}
 
-        _QuadConfig ("Quad Config: x = FishQuadSize, y = HumanQuadSize, z = FishOpacity, w = HumanOpacity)", Vector) = (0.15, 0.01, 0.5, 1)
+        _QuadConfig ("Quad Config: x = FishQuadSize, y = HumanQuadSize, z = FishOpacity, w = HumanOpacity)", Vector) = (0.125, 0.01, 0.5, 1)
         _QuadFishMask ("Local Quad Fish Texture", 2D) = "white" {}
         _QuadHumanMask ("Local Quad Human Texture", 2D) = "white" {}
         [HDR] _HDRTint("HDR Tint", Color) = (1.0, 1.0, 1.0, 1.0)
 
-        _CloudOriginKinect ("Kinect Position", Vector) = (0, 0, 0, 1)
+        // _CloudOriginKinect ("Kinect Position", Vector) = (0, 0, 0, 1)
         _Bounds ("Bounds (maxAbsX, minY, maxY, maxZ)", Vector) = (1.5, -0.9, 1.2, 4)
 
         _PointCloudDownSample ("PointCloud DownSample (x = fish, y = human)", Vector) = (16, 2, 0, 0)
-        _LookTarget ("Look Target", Vector) = (0, 0, 0, 1)
-        _MorphFactor ("Morph Factor", Range(0, 1)) = 0.5
+        // _LookTarget ("Look Target", Vector) = (0, 0, 0, 1)
+        // _MorphFactor ("Morph Factor", Range(0, 1)) = 0.5
     }
     SubShader
     {
@@ -24,7 +24,7 @@ Shader "Unlit/QuadCloud"
         {
             Tags { "RenderType"="Opaque" "IgnoreProjector"="True" }
 			Blend SrcAlpha OneMinusSrcAlpha
-			// ZWrite Off
+			ZWrite Off
             Cull Off
 
             CGPROGRAM
@@ -173,7 +173,7 @@ Shader "Unlit/QuadCloud"
                 Boid boid = boidBuffer[instance_id / (_FlockDownSample * _FlockDownSample)];
                 
                 // camSpacePos = lerp(boid.position, camSpacePos, _MorphFactor);
-                camSpacePos += boid.position * 0.1 * (1 - _MorphFactor);
+                camSpacePos += boid.position * 0.15 * (1 - _MorphFactor);
 
                 float3 boidForward = normalize(boid.direction);
                 float3 up = _LookTarget.xyz - camSpacePos;
