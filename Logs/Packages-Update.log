@@ -1,0 +1,9 @@
+
+=== Wed Dec  8 03:05:04 2021
+
+Packages were changed.
+Update Mode: mergeDefaultDependencies
+
+The following packages were added:
+  com.unity.burst@1.4.11
+  com.unity.mathematics@1.2.1

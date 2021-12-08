@@ -1,0 +1,558 @@
+Using pre-set license
+Built from '2020.3/staging' branch; Version is '2020.3.20f1 (41c4e627c95f) revision 4310246'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Home; OS build 19042.1348; Version 2009; 64bit' Language: 'ko' Physical Memory: 16190 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2020.3.20f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/user/Documents/Tek/ParallaxHole
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+56332
+Successfully changed project path to: C:/Users/user/Documents/Tek/ParallaxHole
+C:/Users/user/Documents/Tek/ParallaxHole
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 19.95 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.20f1 (41c4e627c95f)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.20f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/user/Documents/Tek/ParallaxHole/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1660 SUPER (ID=0x21c4)
+    Vendor:   
+    VRAM:     5991 MB
+    Driver:   27.21.14.6663
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.20f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.20f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56060
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001442 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 20.69 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.764 seconds
+Domain Reload Profiling:
+	ReloadAssembly (764ms)
+		BeginReloadAssembly (40ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (303ms)
+			LoadAssemblies (38ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (112ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (24ms)
+			SetupLoadedEditorAssemblies (113ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (21ms)
+				BeforeProcessingInitializeOnLoad (10ms)
+				ProcessInitializeOnLoadAttributes (59ms)
+				ProcessInitializeOnLoadMethodAttributes (21ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.002336 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.25 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.714 seconds
+Domain Reload Profiling:
+	ReloadAssembly (715ms)
+		BeginReloadAssembly (109ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (15ms)
+		EndReloadAssembly (560ms)
+			LoadAssemblies (62ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (191ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (29ms)
+			SetupLoadedEditorAssemblies (208ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (4ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (0ms)
+				BeforeProcessingInitializeOnLoad (56ms)
+				ProcessInitializeOnLoadAttributes (139ms)
+				ProcessInitializeOnLoadMethodAttributes (3ms)
+				AfterProcessingInitializeOnLoad (5ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
+Refreshing native plugins compatible for Editor in 0.25 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1126 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 59.9 MB.
+System memory in use after: 60.0 MB.
+
+Unloading 15 unused Assets to reduce memory usage. Loaded Objects now: 1568.
+Total: 2.074700 ms (FindLiveObjects: 0.112900 ms CreateObjectMapping: 0.029900 ms MarkObjects: 1.880000 ms  DeleteObjects: 0.051100 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/Scenes/DiggerTest.unity
+  artifactKey: Guid(3c5571f4da7bbd0438096b08b5ff3640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/DiggerTest.unity using Guid(3c5571f4da7bbd0438096b08b5ff3640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8165767953296305d2a2f216742a1fb') in 0.011080 seconds 
+  Import took 0.012729 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.002481 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.42 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.251 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1252ms)
+		BeginReloadAssembly (107ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (28ms)
+		EndReloadAssembly (1083ms)
+			LoadAssemblies (73ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (213ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (26ms)
+			SetupLoadedEditorAssemblies (706ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (4ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (0ms)
+				BeforeProcessingInitializeOnLoad (57ms)
+				ProcessInitializeOnLoadAttributes (636ms)
+				ProcessInitializeOnLoadMethodAttributes (3ms)
+				AfterProcessingInitializeOnLoad (5ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.28 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1394 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 76.8 MB.
+System memory in use after: 76.9 MB.
+
+Unloading 12 unused Assets to reduce memory usage. Loaded Objects now: 1849.
+Total: 2.153000 ms (FindLiveObjects: 0.125600 ms CreateObjectMapping: 0.042100 ms MarkObjects: 1.971400 ms  DeleteObjects: 0.013300 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.006527 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.29 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+[ScriptCompilation] NOT recompiling all scripts because this is an import worker process. Reason to compile was: Define symbols changed
+Mono: successfully reloaded assembly
+- Completed reload, in  0.754 seconds
+Domain Reload Profiling:
+	ReloadAssembly (754ms)
+		BeginReloadAssembly (94ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (28ms)
+		EndReloadAssembly (616ms)
+			LoadAssemblies (61ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (192ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (26ms)
+			SetupLoadedEditorAssemblies (266ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (4ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (0ms)
+				BeforeProcessingInitializeOnLoad (55ms)
+				ProcessInitializeOnLoadAttributes (199ms)
+				ProcessInitializeOnLoadMethodAttributes (3ms)
+				AfterProcessingInitializeOnLoad (5ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Platform modules already initialized, skipping
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Hidden/Digger/URP/Terrain/Lit (Base Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Nature/Terrain/Digger/Cuttable-Triplanar': dependency 'AddPassShader' shader 'Hidden/TerrainEngine/Splatmap/Digger/Cuttable-Triplanar-AddPass' not found
+Shader 'Nature/Terrain/Digger/Cuttable-Triplanar': dependency 'BaseMapGenShader' shader 'Hidden/TerrainEngine/Splatmap/Digger/Cuttable-Triplanar-BaseGen' not found
+Shader 'Digger/URP/Mesh-Pass2': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'AddPassShader' shader 'Digger/URP/Terrain/Lit (Add Pass)' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapShader' shader 'Digger/URP/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Terrain/Lit (Add Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass0': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'TerrainShader' shader 'Universal Render Pipeline/Terrain/Lit' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'AddPassShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Add Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Mesh-Pass1': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass3': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass1': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass3': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Digger/URP/Mesh-Pass2': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit (Add Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapShader' shader 'Digger/URP/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Hidden/Digger/URP/Terrain/Lit (Base Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Shader 'Digger/URP/Mesh-Pass0': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'TerrainShader' shader 'Universal Render Pipeline/Terrain/Lit' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'AddPassShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Add Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Terrain/Lit (Add Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Refreshing native plugins compatible for Editor in 0.29 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1469 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 97.0 MB.
+System memory in use after: 86.3 MB.
+
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 1915.
+Total: 4.619300 ms (FindLiveObjects: 0.139200 ms CreateObjectMapping: 0.039800 ms MarkObjects: 2.032800 ms  DeleteObjects: 2.406700 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 116.801795 seconds.
+  path: Assets/Digger/README.txt
+  artifactKey: Guid(fa96d574fc5e842c7afb24ae28cf4747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/README.txt using Guid(fa96d574fc5e842c7afb24ae28cf4747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '39aac4d7fbefc0fe9ba45d792c8a7eb0') in 0.028596 seconds 
+  Import took 0.030952 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.661742 seconds.
+  path: Assets/Digger/Digger Documentation.pdf
+  artifactKey: Guid(cf871bd04bc5246d8a613e37888fb149) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Digger Documentation.pdf using Guid(cf871bd04bc5246d8a613e37888fb149) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '14407b417bd1bd49bb4ec2b82768f12d') in 0.008526 seconds 
+  Import took 0.012052 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.707440 seconds.
+  path: Assets/Digger/Misc
+  artifactKey: Guid(bf335b30a0da24b5593220a0fe98528f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc using Guid(bf335b30a0da24b5593220a0fe98528f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd42db1e1d6b5aad051fc977e439c36fe') in 0.007141 seconds 
+  Import took 0.009903 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.374735 seconds.
+  path: Assets/Digger/Demo
+  artifactKey: Guid(876d38a9e073e45b3b8cb9e3ff987209) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Demo using Guid(876d38a9e073e45b3b8cb9e3ff987209) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fdc136b71e0e665d8d4f41f418728a41') in 0.006037 seconds 
+  Import took 0.008491 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.633205 seconds.
+  path: Assets/Digger/Demo/simple-scene.unity
+  artifactKey: Guid(efef01aa7dcf441a28c611d40d62b50d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Demo/simple-scene.unity using Guid(efef01aa7dcf441a28c611d40d62b50d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'db1babfa87f3fb30f591360b119fcb36') in 0.005524 seconds 
+  Import took 0.008090 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 54.521914 seconds.
+  path: Assets/Digger/Demo/Demo Terrain.asset
+  artifactKey: Guid(352ac76e464a14f82b27cce4cab9022f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Demo/Demo Terrain.asset using Guid(352ac76e464a14f82b27cce4cab9022f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'de3ca867520e30c4f9240bc844b88bbf') in 0.043657 seconds 
+  Import took 0.045630 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.002449 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.28 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+[ScriptCompilation] NOT recompiling all scripts because this is an import worker process. Reason to compile was: Define symbols changed
+Mono: successfully reloaded assembly
+- Completed reload, in  0.733 seconds
+Domain Reload Profiling:
+	ReloadAssembly (733ms)
+		BeginReloadAssembly (87ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (3ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (26ms)
+		EndReloadAssembly (603ms)
+			LoadAssemblies (60ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (188ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (25ms)
+			SetupLoadedEditorAssemblies (259ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (4ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (0ms)
+				BeforeProcessingInitializeOnLoad (55ms)
+				ProcessInitializeOnLoadAttributes (192ms)
+				ProcessInitializeOnLoadMethodAttributes (3ms)
+				AfterProcessingInitializeOnLoad (5ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Platform modules already initialized, skipping
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Hidden/Digger/URP/Terrain/Lit (Base Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Digger/URP/Mesh-Pass2': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit (Add Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapShader' shader 'Digger/URP/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Mesh-Pass0': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'TerrainShader' shader 'Universal Render Pipeline/Terrain/Lit' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'AddPassShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Add Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Mesh-Pass1': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass3': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Hidden/Digger/URP/Terrain/Lit (Base Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Hidden/Digger/URP/Terrain/Lit (Base Pass)' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Mesh/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Digger/URP/Mesh-Pass2': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass3': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass0': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'TerrainShader' shader 'Universal Render Pipeline/Terrain/Lit' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'AddPassShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Add Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Mesh-Pass0': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Mesh-Pass1': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapShader' shader 'Hidden/HDRP/TerrainLit_Basemap' not found
+Shader 'Digger/HDRP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/HDRP/TerrainLit_BasemapGen' not found
+Shader 'Digger/URP/Terrain/Lit': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit (Add Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapShader' shader 'Digger/URP/Terrain/Lit (Base Pass)' not found
+Shader 'Digger/URP/Terrain/Lit': dependency 'BaseMapGenShader' shader 'Hidden/Universal Render Pipeline/Terrain/Lit (Basemap Gen)' not found
+Shader 'Digger/URP/Terrain/Lit (Add Pass)': fallback shader 'Hidden/Universal Render Pipeline/FallbackError' not found
+Refreshing native plugins compatible for Editor in 0.28 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1468 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 97.1 MB.
+System memory in use after: 86.2 MB.
+
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 1919.
+Total: 4.726600 ms (FindLiveObjects: 0.130400 ms CreateObjectMapping: 0.041500 ms MarkObjects: 2.020100 ms  DeleteObjects: 2.533900 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 211.506630 seconds.
+  path: Assets/Digger/Sources/Digger
+  artifactKey: Guid(3a4a96e07afe04cad89f08693782e18e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Sources/Digger using Guid(3a4a96e07afe04cad89f08693782e18e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd02d926a33d71f7dee707f1bd4b423e3') in 0.010284 seconds 
+  Import took 0.012550 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.000270 seconds.
+  path: Assets/Digger/Demo/Editor
+  artifactKey: Guid(93f473040af0a421883626313469f13b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Demo/Editor using Guid(93f473040af0a421883626313469f13b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ec5d234aaadcd7fd9d910608043c7f56') in 0.005086 seconds 
+  Import took 0.006986 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.910873 seconds.
+  path: Assets/Digger/Demo/DirtLayer.terrainlayer
+  artifactKey: Guid(5254a2672ae194b228033c789d8c7483) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Demo/DirtLayer.terrainlayer using Guid(5254a2672ae194b228033c789d8c7483) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '71ff1638101ec371be60ee30ea6ecf9c') in 0.054241 seconds 
+  Import took 0.056394 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000133 seconds.
+  path: Assets/Digger/Misc/Textures/Dirt_004_COLOR.png
+  artifactKey: Guid(b4da824f5b4b043c7bc921d2dea78c4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Dirt_004_COLOR.png using Guid(b4da824f5b4b043c7bc921d2dea78c4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2be4b55570792e904e0d977a886d15ee') in 0.040364 seconds 
+  Import took 0.042783 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000150 seconds.
+  path: Assets/Digger/Misc/Textures/Dirt_004_NORM.png
+  artifactKey: Guid(dc048730062ed41f3b91a5e85ad21a26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Dirt_004_NORM.png using Guid(dc048730062ed41f3b91a5e85ad21a26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9702eb94bf7c610583fae9b8830e87ef') in 0.017466 seconds 
+  Import took 0.020177 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 28.502076 seconds.
+  path: Assets/Digger/Misc/Textures/Grass_001_COLOR.png
+  artifactKey: Guid(187a9cbbdb313414a96fed488123c31c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Grass_001_COLOR.png using Guid(187a9cbbdb313414a96fed488123c31c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e4bc0bfcd92f38e88dcb117c35564b21') in 0.009120 seconds 
+  Import took 0.011822 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000186 seconds.
+  path: Assets/Digger/Misc/Textures/Rough_rock_019_COLOR.png
+  artifactKey: Guid(4eadcc55dbc734dd0a3dc14999a572cc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Rough_rock_019_COLOR.png using Guid(4eadcc55dbc734dd0a3dc14999a572cc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ae30ab25143b096c64e9312f06b53905') in 0.010210 seconds 
+  Import took 0.012237 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000193 seconds.
+  path: Assets/Digger/Misc/Textures/Sand 002_COLOR.png
+  artifactKey: Guid(bce1ec8748bec4a0fa21b52f14826bd7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Sand 002_COLOR.png using Guid(bce1ec8748bec4a0fa21b52f14826bd7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4771ecf0cfcf0d030aef1b25451a953c') in 0.010516 seconds 
+  Import took 0.012904 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000220 seconds.
+  path: Assets/Digger/Misc/Textures/Pebles_001_COLOR.png
+  artifactKey: Guid(7b0f63dbb90dd4a1aa84185fab284731) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Pebles_001_COLOR.png using Guid(7b0f63dbb90dd4a1aa84185fab284731) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c756d07a2bcd25483c6c5a799f3aca5b') in 0.010775 seconds 
+  Import took 0.014381 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000168 seconds.
+  path: Assets/Digger/Misc/Textures/Ground_Dirt_005_COLOR.png
+  artifactKey: Guid(159ce40681cf148b4829df993d1a0c6c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Ground_Dirt_005_COLOR.png using Guid(159ce40681cf148b4829df993d1a0c6c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e7999fba3c0be19e1e85c7f26d0eeea1') in 0.009668 seconds 
+  Import took 0.012049 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000237 seconds.
+  path: Assets/Digger/Misc/Textures/Stone_Floor_002_COLOR.png
+  artifactKey: Guid(516eadeb98d204df8a7c362b386a639b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Misc/Textures/Stone_Floor_002_COLOR.png using Guid(516eadeb98d204df8a7c362b386a639b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1d203b91aa5209fcb7468aca48e56d4d') in 0.009780 seconds 
+  Import took 0.013445 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 79.352666 seconds.
+  path: Assets/Digger/Shaders
+  artifactKey: Guid(d9a97cbabce12489db0607aed9b588d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Shaders using Guid(d9a97cbabce12489db0607aed9b588d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '58a790197a9190b05f6b7ff5b0f88a37') in 0.005527 seconds 
+  Import took 0.009412 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.648778 seconds.
+  path: Assets/Digger/Shaders/DiggerURP_10_11.unitypackage
+  artifactKey: Guid(f6b562c46f5374084ac4d0b98ad48ba8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Digger/Shaders/DiggerURP_10_11.unitypackage using Guid(f6b562c46f5374084ac4d0b98ad48ba8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51cb1f0047e5af703a21ce3eb2199067') in 0.008434 seconds 
+  Import took 0.011062 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
